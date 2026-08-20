@@ -2,7 +2,7 @@
 
 A retro TV-themed React application that lets users explore global and Kenyan history by selecting any date. Features Wikipedia events, NASA APOD, curated Kenyan milestones, and localStorage persistence. Built as Phase 1 of a 3-phase capstone project.
 
-![Zamani App Screenshot](./src/assets/hero.png)
+![Zamani App Screenshot](./client/src/assets/hero.png)
 
 ## Live Demo
 
