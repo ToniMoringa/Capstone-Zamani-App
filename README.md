@@ -27,19 +27,26 @@ pnpm install
 # Start local development server
 pnpm dev
 
-🌐 ##Live Demo
-View Live Production App on Vercel
-
 The application will be available at http://localhost:5173.
-## APIs & Data Sources
+
+### APIs & Data Sources
 
 This application dynamically fetches data from external web services and a local curated dataset.
 
-| Data Source | Endpoint / File | Purpose |
-| :--- | :--- | :--- |
-| **Wikipedia (On This Day)** | `https://en.wikipedia.org/api/rest_v1/feed/onthisday/all/{MM}/{DD}` | Fetches global historical events, births, and deaths for the selected date. |
-| **NASA APOD** | `https://api.nasa.gov/planetary/apod?date={YYYY-MM-DD}` | Retrieves official NASA imagery and descriptions as visual historical artifacts. |
-| **Local Kenya Dataset** | `client/src/api/kenyaData.js` | Provides 20+ curated Kenyan historical milestones when "Kenya Mode" is active. |
+#### Data Source
+- **Wikipedia (On This Day)**  
+  - Endpoint / File  
+    - `https://en.wikipedia.org/api/rest_v1/feed/onthisday/all/{MM}/{DD}`  
+  - Purpose  
+    - Fetches global historical events, births, and deaths for the selected date.  
+
+- **NASA APOD**  
+  - URL: `https://api.nasa.gov/planetary/apod?date={YYYY-MM-DD}`  
+  - Purpose: Retrieves official NASA imagery and descriptions as visual historical artifacts.  
+
+- **Local Kenya Dataset**  
+  - File: `client/src/api/kenyaData.js`  
+  - Purpose: Provides 20+ curated Kenyan historical milestones when "Kenya Mode" is active.
 
 ### Challenges & Known Bugs
 #API Rate Limiting: The NASA APOD API relies on a public DEMO_KEY, which imposes strict hourly rate limits if users cycle rapidly through multiple dates. Graceful error-handling components were built to display fallback UI elements if rate limits are exceeded.
