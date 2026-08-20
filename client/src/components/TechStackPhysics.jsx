@@ -14,7 +14,6 @@ const TechStackPhysics = () => {
   useEffect(() => {
     if (!sceneRef.current) return;
 
-    // 1. Setup Engine & Renderer (UNCHANGED)
     const engine = Matter.Engine.create();
     const render = Matter.Render.create({
       element: sceneRef.current,
@@ -28,7 +27,6 @@ const TechStackPhysics = () => {
       }
     });
 
-    // 2. Boundaries (UNCHANGED)
     const width = sceneRef.current.clientWidth;
     const height = 400;
     const wallOptions = { isStatic: true, render: { visible: false } };
@@ -37,7 +35,6 @@ const TechStackPhysics = () => {
     const leftWall = Matter.Bodies.rectangle(-30, height / 2, 60, height, wallOptions);
     const rightWall = Matter.Bodies.rectangle(width + 30, height / 2, 60, height, wallOptions);
 
-    // 3. Create Bodies (UNCHANGED)
     const bodies = techItems.map((text) => {
       const x = Math.random() * (width - 150) + 75;
       const y = -Math.random() * 500 - 50;
@@ -55,9 +52,6 @@ const TechStackPhysics = () => {
       });
     });
 
-    // --- NEW CODE STARTS HERE ---
-    
-    // 4. Create Mouse Constraint (Makes it draggable)
     const mouse = Matter.Mouse.create(render.canvas);
     const mouseConstraint = Matter.MouseConstraint.create(engine, {
       mouse: mouse,
@@ -67,15 +61,10 @@ const TechStackPhysics = () => {
       }
     });
 
-    // Important: Sync mouse coordinates with the renderer
     render.mouse = mouse;
 
-    // Add the mouseConstraint to the world ALONGSIDE the walls and bodies
     Matter.World.add(engine.world, [ground, leftWall, rightWall, ...bodies, mouseConstraint]);
-    
-    // --- NEW CODE ENDS HERE ---
 
-    // 5. The Loop: Sync Physics to React State (UNCHANGED)
     const runner = Matter.Runner.create();
     
     Matter.Events.on(engine, 'afterUpdate', () => {
@@ -92,7 +81,6 @@ const TechStackPhysics = () => {
     Matter.Render.run(render);
     Matter.Runner.run(runner, engine);
 
-    // Cleanup (UNCHANGED)
     return () => {
       Matter.Render.stop(render);
       Matter.Runner.stop(runner);
@@ -103,7 +91,6 @@ const TechStackPhysics = () => {
 
   return (
     <div ref={sceneRef} style={{ width: '100%', height: '400px', position: 'relative', overflow: 'hidden' }}>
-      {/* Overlay Layer */}
       {pillPositions.map((pos) => (
         <div
           key={pos.id}
@@ -112,13 +99,13 @@ const TechStackPhysics = () => {
             left: pos.x,
             top: pos.y,
             transform: `translate(-50%, -50%) rotate(${pos.angle}rad)`,
-            pointerEvents: 'none', // Crucial: lets clicks pass through to canvas
+            pointerEvents: 'none',
             fontFamily: "'Space Mono', monospace",
             fontSize: '0.85rem',
             color: '#e2e8f0',
             whiteSpace: 'nowrap',
             fontWeight: 600,
-            userSelect: 'none', // Prevents text highlighting while dragging
+            userSelect: 'none',
             textShadow: '0 2px 4px rgba(0,0,0,0.5)'
           }}
         >

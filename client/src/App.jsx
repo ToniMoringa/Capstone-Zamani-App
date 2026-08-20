@@ -12,7 +12,6 @@ export default function App() {
     <Router>
       <CapsuleProvider>
         <div className="app">
-          {/* Hidden SVG Filter for CRT Convex Glass Lens Distortion */}
           <svg
             style={{
               position: 'absolute',
@@ -37,10 +36,10 @@ export default function App() {
               />
             </filter>
           </svg>
-          
+
           <div className="crt-overlay"></div>
           <div className="film-grain"></div>
-          
+
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/capsule/:date/:mode" element={<Capsule />} />

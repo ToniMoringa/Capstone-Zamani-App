@@ -3,7 +3,7 @@
    ======================================== */
 @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;600;900&display=swap');
 
-/* FIX: Added '*' selector which was missing */
+
 * {
   margin: 0;
   padding: 0;

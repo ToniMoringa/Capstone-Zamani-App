@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import TVFrame from '../components/TVFrame';
-import TechStackPhysics from '../components/TechStackPhysics'; // <--- ADD THIS LINE
+import TechStackPhysics from '../components/TechStackPhysics';
 import '../styles/about.css';
 
 const About = () => {
@@ -25,11 +25,16 @@ const About = () => {
 
         <section className="about-section">
           <h2>Tech Stack</h2>
-          <p style={{ fontSize: '0.9rem', color: '#e7b07c', marginBottom: '1rem' }}>
+          <p
+            style={{
+              fontSize: '0.9rem',
+              color: '#e7b07c',
+              marginBottom: '1rem',
+            }}
+          >
             DRAG & THROW — EVERY TAG HERE RUNS IN PRODUCTION
           </p>
-          
-          {/* The Physics Component */}
+
           <TechStackPhysics />
         </section>
 

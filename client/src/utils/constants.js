@@ -1,8 +1,3 @@
-/**
- * Application Constants
- * Centralized configuration values and defaults
- */
-
 // API Configuration
 export const API_CONFIG = {
   WIKIPEDIA_BASE:

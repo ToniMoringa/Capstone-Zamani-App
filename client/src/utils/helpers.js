@@ -1,9 +1,4 @@
 /**
- * Utility Helper Functions
- * Common functions used across the application
- */
-
-/**
  * Format date for display
  * @param {string|Date} date - Date to format
  * @param {string} format - Format type ('full', 'short', 'iso')
@@ -11,20 +6,20 @@
  */
 export const formatDate = (date, format = 'full') => {
   const dateObj = typeof date === 'string' ? new Date(date) : date;
-  
+
   switch (format) {
     case 'full':
       return dateObj.toLocaleDateString('en-US', {
         weekday: 'long',
         year: 'numeric',
         month: 'long',
-        day: 'numeric'
+        day: 'numeric',
       });
     case 'short':
       return dateObj.toLocaleDateString('en-US', {
         month: 'short',
         day: 'numeric',
-        year: 'numeric'
+        year: 'numeric',
       });
     case 'iso':
       return dateObj.toISOString().split('T')[0];
@@ -42,7 +37,7 @@ export const extractMonthDay = (dateString) => {
   const date = new Date(dateString);
   return {
     month: date.getMonth() + 1, // JavaScript months are 0-indexed
-    day: date.getDate()
+    day: date.getDate(),
   };
 };
 
@@ -103,7 +98,7 @@ export const getRelativeTime = (date) => {
   const now = new Date();
   const diffTime = Math.abs(now - dateObj);
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-  
+
   if (diffDays === 0) return 'Today';
   if (diffDays === 1) return 'Yesterday';
   if (diffDays < 7) return `${diffDays} days ago`;

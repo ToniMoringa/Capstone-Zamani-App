@@ -1,0 +1,64 @@
+[33mcommit 51d33c10196d4cf416f8a858c78d62757812bc0f[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;33mtag: [m[1;33mv1.0-phase1[m[33m)[m
+Merge: a16c8a0 d86336d
+Author: Toni Moringa <your-moriil@example.com>
+Date:   Thu Aug 20 07:57:43 2026 +0300
+
+    release: merge all features into main
+
+[33mcommit a16c8a0f5a9c9190f23233043f084d1d8bac2b63[m
+Author: Toni Moringa <your-moriil@example.com>
+Date:   Thu Aug 20 07:57:43 2026 +0300
+
+    chore: initialize project with base configuration
+
+[33mcommit d86336df59a59d80e83d4a155f4cc4a3d52ecc89[m[33m ([m[1;32mdevelopment[m[33m)[m
+Merge: 03abdf7 6f1c368
+Author: Toni Moringa <your-moriil@example.com>
+Date:   Thu Aug 20 07:57:43 2026 +0300
+
+    merge: complete app core
+
+[33mcommit 03abdf7ddfe604b5fc89fac63f31c9059496360b[m
+Merge: b59e9ae c5ff400
+Author: Toni Moringa <your-moriil@example.com>
+Date:   Thu Aug 20 07:57:43 2026 +0300
+
+    merge: add API modules
+
+[33mcommit 6f1c3682e3763476693ceaa5cdbb85e90cfe6e84[m[33m ([m[1;32mfeature/app-core[m[33m)[m
+Author: Toni Moringa <your-moriil@example.com>
+Date:   Thu Aug 20 07:57:43 2026 +0300
+
+    feat: complete application components, context, and pages
+
+[33mcommit b59e9ae222c2f723c9ee1ae04a2646ed69b178d6[m
+Merge: 2e9196a 5c01c44
+Author: Toni Moringa <your-moriil@example.com>
+Date:   Thu Aug 20 07:57:43 2026 +0300
+
+    merge: integrate styles
+
+[33mcommit c5ff400eccc7b0c05324b0c07522ef62a333daa0[m[33m ([m[1;32mfeature/api-integration[m[33m)[m
+Author: Toni Moringa <your-moriil@example.com>
+Date:   Thu Aug 20 07:57:43 2026 +0300
+
+    feat: integrate Wikipedia and NASA APIs
+
+[33mcommit 2e9196a4107157e226505f1e2bc74f1cb167e395[m
+Merge: a16c8a0 e926082
+Author: Toni Moringa <your-moriil@example.com>
+Date:   Thu Aug 20 07:57:43 2026 +0300
+
+    merge: integrate retro TV frame
+
+[33mcommit 5c01c44345718a4f312c57e2c4fb52e5dfec45cc[m[33m ([m[1;32mfeature/global-styling[m[33m)[m
+Author: Toni Moringa <your-moriil@example.com>
+Date:   Thu Aug 20 07:57:43 2026 +0300
+
+    style: add global glassmorphic design system
+
+[33mcommit e926082042ceec2855f110ade6430ba9f9df5504[m[33m ([m[1;32mfeature/tv-frame[m[33m)[m
+Author: Toni Moringa <your-moriil@example.com>
+Date:   Thu Aug 20 07:57:43 2026 +0300
+
+    feat: implement retro TV frame component

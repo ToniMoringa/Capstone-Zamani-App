@@ -10,11 +10,6 @@ import { getKenyaEventsByDate } from '../api/kenyaData';
 import { extractMonthDay, formatDate } from '../utils/helpers';
 import '../styles/capsule.css';
 
-/**
- * CapsuleDisplay Component
- * Fetches and renders time capsule content based on date and mode.
- * Handles Global (Wiki + NASA) and Kenya (Local events + Wiki) modes.
- */
 const CapsuleDisplay = () => {
   const { date, mode } = useParams();
   const [loading, setLoading] = useState(true);
@@ -22,40 +17,39 @@ const CapsuleDisplay = () => {
   const [data, setData] = useState({
     wiki: { events: [], births: [] },
     nasa: null,
-    kenya: []
+    kenya: [],
   });
 
   useEffect(() => {
     const loadCapsuleData = async () => {
       setLoading(true);
       setError(null);
-      
+
       try {
         const { month, day } = extractMonthDay(date);
-        
+
         // Parallel fetching for performance
         const promises = [
           fetchWikipediaEvents(month, day),
           mode === 'global' ? fetchNASAAPOD(date) : Promise.resolve(null),
-          mode === 'kenya' ? Promise.resolve(getKenyaEventsByDate(date)) : Promise.resolve([])
+          mode === 'kenya'
+            ? Promise.resolve(getKenyaEventsByDate(date))
+            : Promise.resolve([]),
         ];
 
         const [wikiRes, nasaRes, kenyaRes] = await Promise.all(promises);
 
-        // Check for critical errors in Wikipedia response
         if (wikiRes.error) throw new Error(wikiRes.error);
 
         setData({
           wiki: wikiRes,
           nasa: nasaRes,
-          kenya: kenyaRes || []
+          kenya: kenyaRes || [],
         });
-
       } catch (err) {
         console.error('Capsule fetch error:', err);
         setError(err.message || 'Failed to load capsule data');
       } finally {
-        // Artificial delay for smooth "tuning in" effect
         setTimeout(() => setLoading(false), 800);
       }
     };
@@ -80,14 +74,17 @@ const CapsuleDisplay = () => {
   if (error) {
     return (
       <TVFrame brand="ZAMANI BROADCAST">
-        <ErrorMessage message={error} onRetry={() => window.location.reload()} />
+        <ErrorMessage
+          message={error}
+          onRetry={() => window.location.reload()}
+        />
       </TVFrame>
     );
   }
 
-  const hasNoData = 
-    data.wiki.events.length === 0 && 
-    data.wiki.births.length === 0 && 
+  const hasNoData =
+    data.wiki.events.length === 0 &&
+    data.wiki.births.length === 0 &&
     (mode === 'kenya' ? data.kenya.length === 0 : !data.nasa?.url);
 
   return (
@@ -105,27 +102,25 @@ const CapsuleDisplay = () => {
           </div>
         </header>
 
-        {/* Empty State */}
         {hasNoData && (
           <div className="empty-state">
             <p>NO SIGNAL DETECTED FOR THIS DATE</p>
-            <p className="subtext">Try selecting another date or switching modes.</p>
+            <p className="subtext">
+              Try selecting another date or switching modes.
+            </p>
           </div>
         )}
 
-        {/* Content Grid */}
         {!hasNoData && (
           <div className="capsule-grid">
-            
-            {/* NASA Section (Global Mode Only) */}
             {mode === 'global' && data.nasa?.url && (
               <section className="nasa-section">
                 <h2 className="section-title">ASTRONOMY PICTURE OF THE DAY</h2>
                 <div className="nasa-card">
                   <div className="image-wrapper">
-                    <img 
-                      src={data.nasa.url} 
-                      alt={data.nasa.title} 
+                    <img
+                      src={data.nasa.url}
+                      alt={data.nasa.title}
                       loading="lazy"
                     />
                   </div>
