@@ -6,7 +6,7 @@ const WIKI_API = 'https://en.wikipedia.org/api/rest_v1/feed/onthisday/all';
 export const fetchCapsuleData = async (dateStr, mode = 'global') => {
   try {
     const localRes = await axios.get(`${BASE_URL}/capsules/`, {
-      params: { date: dateStr },
+      params: { date: dateStr }
     });
 
     const localData = Array.isArray(localRes.data) ? localRes.data : [];
