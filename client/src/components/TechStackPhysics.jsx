@@ -31,6 +31,7 @@ const TechStackPhysics = () => {
     const height = 400;
     const wallOptions = { isStatic: true, render: { visible: false } };
     
+    // Walls to keep them in the TV screen area mostly
     const ground = Matter.Bodies.rectangle(width / 2, height + 30, width, 60, wallOptions);
     const leftWall = Matter.Bodies.rectangle(-30, height / 2, 60, height, wallOptions);
     const rightWall = Matter.Bodies.rectangle(width + 30, height / 2, 60, height, wallOptions);
@@ -67,7 +68,31 @@ const TechStackPhysics = () => {
 
     const runner = Matter.Runner.create();
     
+    // --- RESPAWN LOGIC START ---
     Matter.Events.on(engine, 'afterUpdate', () => {
+      const centerX = width / 2;
+      const centerY = height / 2;
+      const respawnThreshold = 600; // Distance from center to trigger respawn
+
+      bodies.forEach(body => {
+        const dist = Math.hypot(body.position.x - centerX, body.position.y - centerY);
+        
+        // If thrown too far OR fell below the ground significantly
+        if (dist > respawnThreshold || body.position.y > height + 100) {
+          // Reset position to top of screen
+          Matter.Body.setPosition(body, {
+            x: Math.random() * (width - 150) + 75,
+            y: -50
+          });
+          
+          // Reset velocity and angle so it falls nicely again
+          Matter.Body.setVelocity(body, { x: 0, y: 0 });
+          Matter.Body.setAngularVelocity(body, 0);
+          Matter.Body.setAngle(body, 0);
+        }
+      });
+
+      // Update React state for rendering text labels
       const positions = bodies.map(body => ({
         id: body.label,
         x: body.position.x,
@@ -76,6 +101,7 @@ const TechStackPhysics = () => {
       }));
       setPillPositions(positions);
     });
+    // --- RESPAWN END ---
 
     Matter.Engine.run(engine);
     Matter.Render.run(render);

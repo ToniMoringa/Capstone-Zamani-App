@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import TVFrame from '../components/TVFrame';
 import TechStackPhysics from '../components/TechStackPhysics';
 import '../styles/about.css';
@@ -25,16 +24,9 @@ const About = () => {
 
         <section className="about-section">
           <h2>Tech Stack</h2>
-          <p
-            style={{
-              fontSize: '0.9rem',
-              color: '#e7b07c',
-              marginBottom: '1rem',
-            }}
-          >
-            DRAG & THROW — EVERY TAG HERE RUNS IN PRODUCTION
+          <p style={{ fontSize: '0.9rem', color: '#e7b07c', marginBottom: '1rem' }}>
+            DRAG & THROW 
           </p>
-
           <TechStackPhysics />
         </section>
 
@@ -45,7 +37,7 @@ const About = () => {
               <span className="phase-tag">PHASE 1</span>
               <p>React Frontend + External APIs</p>
             </div>
-            <div className="phase-item">
+            <div className="phase-item current">
               <span className="phase-tag">PHASE 2</span>
               <p>Flask Backend + PostgreSQL Database</p>
             </div>
@@ -55,12 +47,6 @@ const About = () => {
             </div>
           </div>
         </section>
-
-        <div className="about-footer">
-          <Link to="/" className="back-link">
-            ← RETURN TO BROADCAST
-          </Link>
-        </div>
       </div>
     </TVFrame>
   );
