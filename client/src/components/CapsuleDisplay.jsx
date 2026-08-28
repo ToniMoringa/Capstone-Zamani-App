@@ -73,6 +73,7 @@ const CapsuleDisplay = () => {
   }
 
   const hasNoData = data.events.length === 0 && data.births.length === 0;
+  const primaryEvent = data.events[0] || null;
 
   return (
     <TVFrame brand={`ZAMANI • ${mode.toUpperCase()} MODE`}>
@@ -80,7 +81,7 @@ const CapsuleDisplay = () => {
         <header className="capsule-header">
           <div className="header-meta">
             <span className="broadcast-tag">ON THIS DAY</span>
-            <SaveButton date={date} mode={mode} />
+            <SaveButton date={date} mode={mode} currentEvent={primaryEvent} />
           </div>
           <h1 className="capsule-date">{formatDate(date, 'full')}</h1>
           <div className="mode-indicator">
