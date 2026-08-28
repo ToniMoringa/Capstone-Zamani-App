@@ -56,7 +56,7 @@ This application uses a custom Flask REST API replacing public Wikipedia/NASA en
 
 ## Known Issues & Scope Notes
 
-- **Authentication:** Per approved Phase 2 pitch, user authentication is scoped for Phase 3. The `user_id` column exists in the Capsules table as a foreign key placeholder. Current MVP focuses on backend infrastructure, relational data modeling, and full CRUD operations without user ownership.
+- **Authentication:** Phase 2 pitch, user authentication is scoped for Phase 3. The `user_id` column exists in the Capsules table as a foreign key placeholder. Current MVP focuses on backend infrastructure, relational data modeling, and full CRUD operations without user ownership.
 - **Kenya Archive Coverage:** Phase 2 MVP includes 10+ verified Kenyan historical milestones (Independence Day, Madaraka Day, Gen Z Protests, etc.). Dates without seeded records display an honest "No Signal Detected" state rather than falling back to global Wikipedia data. This preserves the integrity of the Kenya Archive as a curated collection. Expanded coverage and user-contributed entries are planned for Phase 3 alongside authentication.
 - **NASA APOD Rate Limiting:** The NASA API relies on a public DEMO_KEY with strict hourly limits. Graceful error handling displays fallback UI when rate limits are exceeded.
 - **CRT Overlay:** SVG physics-based warp (`<feTurbulence>`) uses `pointer-events: none` to prevent scanline layer from blocking mouse interactions.
