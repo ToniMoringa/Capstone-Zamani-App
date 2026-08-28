@@ -1,13 +1,12 @@
+import { fetchCapsuleData } from '../api/wikipedia';
+import { fetchVisualArtifact } from '../api/nasa';
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import TVFrame from './TVFrame';
 import LoadingSpinner from './LoadingSpinner';
 import ErrorMessage from './ErrorMessage';
 import SaveButton from './SaveButton';
-import { fetchWikipediaEvents } from '../api/wikipedia';
-import { fetchNASAAPOD } from '../api/nasa';
-import { getKenyaEventsByDate } from '../api/kenyaData';
-import { extractMonthDay, formatDate } from '../utils/helpers';
+import { formatDate } from '../utils/helpers';
 import '../styles/capsule.css';
 
 const CapsuleDisplay = () => {
@@ -15,40 +14,33 @@ const CapsuleDisplay = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [data, setData] = useState({
-    wiki: { events: [], births: [] },
-    nasa: null,
-    kenya: [],
+    events: [],
+    births: [],
+    visual: null,
   });
 
   useEffect(() => {
     const loadCapsuleData = async () => {
       setLoading(true);
       setError(null);
-
       try {
-        const { month, day } = extractMonthDay(date);
+        const capsuleData = await fetchCapsuleData(date, mode);
 
-        // Parallel fetching for performance
-        const promises = [
-          fetchWikipediaEvents(month, day),
-          mode === 'global' ? fetchNASAAPOD(date) : Promise.resolve(null),
-          mode === 'kenya'
-            ? Promise.resolve(getKenyaEventsByDate(date))
-            : Promise.resolve([]),
-        ];
+        if (capsuleData.source === 'error') {
+          throw new Error(capsuleData.error || 'Archive unavailable');
+        }
 
-        const [wikiRes, nasaRes, kenyaRes] = await Promise.all(promises);
-
-        if (wikiRes.error) throw new Error(wikiRes.error);
+        const allItems = [...capsuleData.events, ...capsuleData.births];
+        const visual = await fetchVisualArtifact(allItems);
 
         setData({
-          wiki: wikiRes,
-          nasa: nasaRes,
-          kenya: kenyaRes || [],
+          events: capsuleData.events,
+          births: capsuleData.births,
+          visual: visual,
         });
       } catch (err) {
-        console.error('Capsule fetch error:', err);
-        setError(err.message || 'Failed to load capsule data');
+        console.error('Broadcast Error:', err);
+        setError(err.message || 'Signal Lost: Unable to retrieve archive.');
       } finally {
         setTimeout(() => setLoading(false), 800);
       }
@@ -57,7 +49,6 @@ const CapsuleDisplay = () => {
     if (date) loadCapsuleData();
   }, [date, mode]);
 
-  // Render Loading State
   if (loading) {
     return (
       <TVFrame brand="ZAMANI BROADCAST">
@@ -70,7 +61,6 @@ const CapsuleDisplay = () => {
     );
   }
 
-  // Render Error State
   if (error) {
     return (
       <TVFrame brand="ZAMANI BROADCAST">
@@ -82,15 +72,11 @@ const CapsuleDisplay = () => {
     );
   }
 
-  const hasNoData =
-    data.wiki.events.length === 0 &&
-    data.wiki.births.length === 0 &&
-    (mode === 'kenya' ? data.kenya.length === 0 : !data.nasa?.url);
+  const hasNoData = data.events.length === 0 && data.births.length === 0;
 
   return (
     <TVFrame brand={`ZAMANI • ${mode.toUpperCase()} MODE`}>
       <div className="capsule-container">
-        {/* Header Section */}
         <header className="capsule-header">
           <div className="header-meta">
             <span className="broadcast-tag">ON THIS DAY</span>
@@ -104,78 +90,75 @@ const CapsuleDisplay = () => {
 
         {hasNoData && (
           <div className="empty-state">
-            <p>NO SIGNAL DETECTED FOR THIS DATE</p>
+            <p>NO SIGNAL DETECTED</p>
             <p className="subtext">
-              Try selecting another date or switching modes.
+              {mode === 'kenya'
+                ? 'No Kenyan records found for this date in our archive.'
+                : 'Try selecting another date or switching modes.'}
             </p>
           </div>
         )}
 
         {!hasNoData && (
           <div className="capsule-grid">
-            {mode === 'global' && data.nasa?.url && (
+            {data.visual?.url && (
               <section className="nasa-section">
-                <h2 className="section-title">ASTRONOMY PICTURE OF THE DAY</h2>
+                <h2 className="section-title">VISUAL ARTIFACT</h2>
                 <div className="nasa-card">
                   <div className="image-wrapper">
                     <img
-                      src={data.nasa.url}
-                      alt={data.nasa.title}
+                      src={data.visual.url}
+                      alt={data.visual.title}
                       loading="lazy"
+                      referrerPolicy={
+                        data.visual.referrerPolicy || 'no-referrer'
+                      }
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                        e.target.parentElement.innerHTML =
+                          '<div class="placeholder-text">IMAGE UNAVAILABLE</div>';
+                      }}
                     />
                   </div>
                   <div className="nasa-info">
-                    <h3>{data.nasa.title}</h3>
-                    <p className="explanation">{data.nasa.explanation}</p>
-                    {data.nasa.copyright && (
-                      <span className="copyright">© {data.nasa.copyright}</span>
-                    )}
+                    <h3>{data.visual.title}</h3>
+                    <p className="explanation">{data.visual.explanation}</p>
                   </div>
                 </div>
               </section>
             )}
 
-            {/* Kenya Events Section (Kenya Mode Only) */}
-            {mode === 'kenya' && data.kenya.length > 0 && (
-              <section className="kenya-section">
-                <h2 className="section-title">KENYAN HISTORY</h2>
-                <div className="events-list">
-                  {data.kenya.map((event, idx) => (
-                    <article key={idx} className="event-card kenya-card">
-                      <span className="event-category">{event.category}</span>
-                      <h3>{event.title}</h3>
-                      <p>{event.description}</p>
-                    </article>
-                  ))}
-                </div>
-              </section>
-            )}
-
-            {/* Wikipedia Events */}
-            {data.wiki.events.length > 0 && (
+            {data.events.length > 0 && (
               <section className="wiki-section">
                 <h2 className="section-title">HISTORICAL EVENTS</h2>
                 <div className="events-list">
-                  {data.wiki.events.slice(0, 5).map((event, idx) => (
+                  {data.events.slice(0, 5).map((event, idx) => (
                     <article key={idx} className="event-card">
-                      <span className="event-year">{event.year}</span>
-                      <p className="event-text">{event.text}</p>
+                      <span className="event-year">
+                        {event.year || event.date}
+                      </span>
+                      <p className="event-text">
+                        {event.text || event.description}
+                      </p>
                     </article>
                   ))}
                 </div>
               </section>
             )}
 
-            {/* Famous Births */}
-            {data.wiki.births.length > 0 && (
+            {data.births.length > 0 && (
               <section className="births-section">
                 <h2 className="section-title">NOTABLE BIRTHS</h2>
                 <div className="births-grid">
-                  {data.wiki.births.slice(0, 6).map((person, idx) => (
+                  {data.births.slice(0, 6).map((person, idx) => (
                     <div key={idx} className="birth-card">
-                      <span className="birth-year">{person.year}</span>
-                      <strong>{person.name}</strong>
-                      <p className="birth-desc">{person.text}</p>
+                      <span className="birth-year">
+                        {person.year || person.date}
+                      </span>
+                      <strong>{person.name || person.title}</strong>
+                      <p className="birth-desc">
+                        {person.text || person.description}
+                      </p>
                     </div>
                   ))}
                 </div>

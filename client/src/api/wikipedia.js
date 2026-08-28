@@ -1,54 +1,41 @@
 import axios from 'axios';
 
-/**
- * Wikipedia API Module (Public Action API Endpoint)
- * Fetches "On This Day" events and births reliably without strict auth headers.
- */
-const WIKIPEDIA_BASE_URL = 'https://en.wikipedia.org/w/api.php';
+const FLASK_API = 'http://localhost:5000/api/v1/capsules/';
+const WIKI_API = 'https://en.wikipedia.org/api/rest_v1/feed/onthisday/all';
 
-export const fetchWikipediaEvents = async (month, day) => {
+export const fetchCapsuleData = async (dateStr, mode = 'global') => {
   try {
-    // Using Wikipedia's standard public action API for On This Day
-    const response = await axios.get(WIKIPEDIA_BASE_URL, {
-      params: {
-        action: 'query',
-        format: 'json',
-        prop: 'extracts',
-        // Note: Wikipedia's feed API is cleaner for structured onthisday events
-        origin: '*',
-      },
-    });
+    const localRes = await axios.get(`${FLASK_API}?date=${dateStr}`);
+    const localData = Array.isArray(localRes.data) ? localRes.data : [];
+    
+    if (localData.length > 0) {
+      return {
+        events: localData.filter(c => c.category === 'event'),
+        births: localData.filter(c => c.category === 'birth'),
+        source: 'local_db'
+      };
+    }
 
-    // Fallback/direct fetch from the reliable Wikimedia feeds endpoint
-    const feedResponse = await axios.get(
-      `https://en.wikipedia.org/api/rest_v1/feed/onthisday/events/${month}/${day}`,
-    );
+    if (mode === 'kenya') {
+      return { events: [], births: [], source: 'empty_kenya' };
+    }
 
-    const birthsResponse = await axios.get(
-      `https://en.wikipedia.org/api/rest_v1/feed/onthisday/births/${month}/${day}`,
-    );
-
-    const events = (feedResponse.data.events || []).map((event) => ({
-      year: event.year,
-      text: event.text,
-      pages: event.pages || [],
-    }));
-
-    const births = (birthsResponse.data.births || []).map((birth) => ({
-      year: birth.year,
-      name: birth.text,
-      text: birth.text,
-      pages: birth.pages || [],
-    }));
-
-    return { events, births };
-  } catch (error) {
-    console.error('Wikipedia API Error:', error);
-
+    const [, month, day] = dateStr.split('-');
+    const wikiRes = await axios.get(`${WIKI_API}/${month}/${day}`);
+    
     return {
-      events: [],
-      births: [],
-      error: 'Failed to load Wikipedia data',
+      events: wikiRes.data?.events || [],
+      births: wikiRes.data?.births || [],
+      source: 'wikipedia_fallback'
+    };
+
+  } catch (error) {
+    console.error('Capsule Fetch Error:', error);
+    return { 
+      events: [], 
+      births: [], 
+      source: 'error', 
+      error: error.response?.data?.message || error.message || 'Network Error' 
     };
   }
 };
