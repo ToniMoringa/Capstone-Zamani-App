@@ -63,7 +63,7 @@ This application uses a custom Flask REST API replacing public Wikipedia/NASA en
 
 ## Project Roadmap
 
-- ꪜ**Phase 1:** React frontend + external APIs (Wikipedia, NASA)
+-  ꪜ**Phase 1:** React frontend + external APIs (Wikipedia, NASA)
 - ꪜ **Phase 2:** Flask backend + PostgreSQL database + Full CRUD + Retro TV UI polish _(Current)_
 - ⌛︎ **Phase 3:** JWT authentication + user-owned capsules + personal archive dashboard
 
