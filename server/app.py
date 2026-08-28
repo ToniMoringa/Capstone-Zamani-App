@@ -3,6 +3,7 @@ from flask_cors import CORS
 from config import init_db, db
 from routes.capsules import capsules_bp
 from routes.tags import tags_bp
+from seed import seed_database
 
 def create_app():
     app = Flask(__name__)
