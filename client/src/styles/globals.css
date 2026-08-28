@@ -1,8 +1,4 @@
-/* ========================================
-   GLOBAL STYLES & ACCESSIBILITY OVERHAUL
-   ======================================== */
 @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;600;900&display=swap');
-
 
 * {
   margin: 0;
@@ -15,9 +11,23 @@ body {
   background-color: #000000;
   color: #ffffff;
   min-height: 100vh;
-  overflow: hidden;
   width: 100vw;
   font-size: 1.15rem;
+  overflow-x: hidden;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.3);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 255, 255, 0.4);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 255, 255, 0.7);
 }
 
 .app {
@@ -27,7 +37,6 @@ body {
   position: relative;
   background-color: #000000;
   width: 100vw;
-  height: 100vh;
 }
 
 .home-page {
@@ -44,7 +53,6 @@ body {
   background-color: #000000;
   z-index: 99999;
 }
-
 .home-page h1 {
   font-size: clamp(3rem, 7vw, 6.5rem);
   font-weight: 900;
@@ -53,7 +61,6 @@ body {
   color: #ffffff;
   text-transform: uppercase;
 }
-
 .tagline {
   font-size: 1.2rem;
   opacity: 1;
@@ -63,7 +70,6 @@ body {
   text-transform: uppercase;
   font-weight: 700;
 }
-
 .home-content {
   max-width: 550px;
   width: 100%;
@@ -93,7 +99,6 @@ body {
   transition: all 0.2s ease;
   cursor: pointer;
 }
-
 .mode-btn:hover,
 .quick-btn:hover,
 .date-picker-input:hover,
@@ -106,7 +111,6 @@ body {
   color: #ffffff !important;
   box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
 }
-
 .mode-btn.active,
 .quick-btn.active {
   background: #38bdf8 !important;
@@ -125,7 +129,6 @@ span,
   opacity: 1 !important;
   font-size: 1.1rem !important;
 }
-
 .section-title,
 .broadcast-tag,
 .subtitle,
@@ -145,7 +148,6 @@ span,
   background-size: 100% 4px;
   z-index: 9999;
 }
-
 .film-grain {
   position: fixed;
   top: 0;
@@ -160,28 +162,83 @@ span,
 }
 
 @keyframes noise-shift {
-  0% { transform: translate(0, 0); }
-  33% { transform: translate(-8%, -12%); }
-  66% { transform: translate(10%, 4%); }
-  100% { transform: translate(-4%, 10%); }
+  0% {
+    transform: translate(0, 0);
+  }
+  33% {
+    transform: translate(-8%, -12%);
+  }
+  66% {
+    transform: translate(10%, 4%);
+  }
+  100% {
+    transform: translate(-4%, 10%);
+  }
 }
-
-/* Netflix Style Animations (Cleaned Up) */
 @keyframes netflix-slam {
-  0% { opacity: 0; transform: scale(0.8); filter: blur(10px); }
-  40% { opacity: 1; transform: scale(1.1); filter: blur(0); }
-  100% { opacity: 1; transform: scale(1); filter: blur(0); }
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+    filter: blur(10px);
+  }
+  40% {
+    opacity: 1;
+    transform: scale(1.1);
+    filter: blur(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0);
+  }
 }
-
 @keyframes netflix-exit {
-  0% { opacity: 1; transform: scale(1); filter: blur(0); }
-  100% { opacity: 0; transform: scale(1.5); filter: blur(20px); }
+  0% {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.5);
+    filter: blur(20px);
+  }
+}
+.animate-netflix-slam {
+  animation: netflix-slam 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.animate-netflix-exit {
+  animation: netflix-exit 0.8s ease-in forwards;
 }
 
-.animate-netflix-slam { 
-  animation: netflix-slam 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; 
-}
-
-.animate-netflix-exit { 
-  animation: netflix-exit 0.8s ease-in forwards; 
+@media (max-width: 768px) {
+  .nav-arrow {
+    display: flex !important;
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 16px !important;
+    bottom: 20px !important;
+    right: 20px !important;
+    left: auto !important;
+    top: auto !important;
+    transform: none !important;
+  }
+  .nav-arrow-left {
+    right: 60px !important;
+  }
+  #zamani-orb {
+    width: 20px !important;
+    height: 20px !important;
+    border-width: 1px !important;
+  }
+  .home-page h1 {
+    font-size: 2.5rem;
+  }
+  .tagline {
+    font-size: 0.9rem;
+  }
+  .about-container {
+    padding: 1rem;
+    gap: 1.5rem;
+  }
 }

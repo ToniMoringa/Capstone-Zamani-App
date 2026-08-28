@@ -13,8 +13,10 @@
 .about-header {
   border-bottom: 2px solid rgba(255, 255, 255, 0.2);
   padding-bottom: 1.5rem;
+  position: relative;
 }
 
+/* BROADCAST GLOW TITLE */
 .about-header h1 {
   font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(2.2rem, 4vw, 3.2rem);
@@ -22,6 +24,11 @@
   letter-spacing: -0.02em;
   color: #ffffff;
   margin-bottom: 0.5rem;
+  /* Multi-layered text shadow 4 CRT bloom effect */
+  text-shadow: 
+    0 0 10px rgba(255, 255, 255, 0.8),
+    0 0 20px rgba(56, 189, 248, 0.6),
+    0 0 40px rgba(56, 189, 248, 0.4);
 }
 
 .subtitle {
@@ -29,6 +36,7 @@
   font-family: 'Space Mono', monospace;
   font-size: 1.15rem;
   font-weight: 700;
+  text-shadow: 0 0 8px rgba(56, 189, 248, 0.5);
 }
 
 .about-section h2 {
@@ -73,6 +81,7 @@
   border-color: #38bdf8;
   color: #ffffff;
   transform: translateY(-2px);
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
 }
 
 .phase-timeline {
@@ -117,6 +126,7 @@
   box-shadow: 0 0 15px rgba(56, 189, 248, 0.6);
 }
 
+/* ACTIVE SIGNAL PHASE CONTAINER */
 .phase-content {
   background: rgba(0, 0, 0, 0.4);
   border: 1px solid rgba(255, 255, 255, 0.25);
@@ -126,10 +136,25 @@
   backdrop-filter: blur(8px);
 }
 
+/* Enhanced hover state with luminous border glow */
 .phase-item:hover .phase-content {
   border-color: #38bdf8;
   background: rgba(56, 189, 248, 0.15);
   transform: translateX(4px);
+  box-shadow: 
+    0 0 20px rgba(56, 189, 248, 0.2),
+    inset 0 0 10px rgba(56, 189, 248, 0.1);
+}
+
+/* Specific styling to make Phase 2 look like it's currently processing */
+.phase-item:nth-child(2) .phase-content {
+  border-color: rgba(56, 189, 248, 0.6);
+  background: linear-gradient(
+    135deg, 
+    rgba(56, 189, 248, 0.1) 0%, 
+    rgba(0, 0, 0, 0.4) 100%
+  );
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.15);
 }
 
 .phase-tag {
@@ -179,4 +204,5 @@
 
 .back-link:hover {
   color: #38bdf8;
+  text-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
 }
