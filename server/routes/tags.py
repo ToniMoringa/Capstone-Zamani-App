@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
-from ..config import db
-from ..models import Tag
+from config import db
+from models import Tag
 
 tags_bp = Blueprint('tags', __name__)
 

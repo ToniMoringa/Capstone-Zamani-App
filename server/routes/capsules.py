@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from datetime import date as dt_date
-from ..config import db
-from ..models import Capsule, Tag
+from config import db
+from models import Capsule, Tag
 
 capsules_bp = Blueprint('capsules', __name__)
 

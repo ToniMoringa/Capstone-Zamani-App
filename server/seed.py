@@ -1,6 +1,6 @@
 from datetime import date
-from .config import db
-from .models import Capsule, Tag
+from config import db
+from models import Capsule, Tag
 
 KENYAN_BIRTHS = [
     {
@@ -144,7 +144,7 @@ def seed_database():
     print(f"✔ Seeded {len(KENYAN_BIRTHS)} births and {len(HISTORICAL_EVENTS)} events")
 
 if __name__ == '__main__':
-    from .app import create_app
+    from app import create_app
     app = create_app()
     with app.app_context():
         seed_database()

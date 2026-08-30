@@ -1,5 +1,5 @@
 from datetime import datetime
-from .config import db
+from config import db
 
 # Association table for Capsule 
 capsule_tags = db.Table('capsule_tags',
