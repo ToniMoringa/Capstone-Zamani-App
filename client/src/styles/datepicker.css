@@ -25,20 +25,20 @@
   transition: all 0.3s ease;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  border-radius: 12px;
+  border-radius: 4px;
 }
 
 .mode-btn:hover {
   border-color: #38bdf8;
   color: #ffffff;
-  background: rgba(56, 189, 248, 0.2);
+  background: rgba(56, 189, 248, 0.18);
 }
 
 .mode-btn.active {
   background: #38bdf8 !important;
   color: #000000 !important;
   border-color: #38bdf8 !important;
-  box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
 }
 
 .date-picker-input {
@@ -56,12 +56,12 @@
   transition: all 0.3s ease;
   width: 100%;
   max-width: 380px;
-  border-radius: 12px;
+  border-radius: 4px;
 }
 
 .date-picker-input:hover {
   border-color: #38bdf8;
-  background: rgba(56, 189, 248, 0.15);
+  background: rgba(56, 189, 248, 0.14);
 }
 
 .date-icon {
@@ -146,7 +146,7 @@
 }
 
 .retro-calendar .react-datepicker__day:hover {
-  background: rgba(56, 189, 248, 0.3) !important;
+  background: rgba(56, 189, 248, 0.25) !important;
   color: #ffffff !important;
   border-radius: 8px !important;
 }
@@ -193,13 +193,13 @@
   cursor: pointer;
   transition: all 0.3s ease;
   text-transform: uppercase;
-  border-radius: 12px;
+  border-radius: 4px;
 }
 
 .quick-btn:hover {
   border-color: #38bdf8;
   color: #ffffff;
-  background: rgba(56, 189, 248, 0.2);
+  background: rgba(56, 189, 248, 0.18);
 }
 
 .selected-date-display {
@@ -238,5 +238,112 @@
   .date-picker-input,
   .picker-wrapper {
     max-width: 100%;
+  }
+}
+/* Zamani television control treatment */
+.home-picker-panel .date-picker-container {
+  align-items: flex-start;
+  gap: 0.72rem;
+  padding: 0;
+}
+
+.home-picker-panel .mode-toggle {
+  width: 100%;
+  gap: 0.45rem;
+  margin: 0;
+}
+
+.home-picker-panel .mode-btn,
+.home-picker-panel .quick-btn,
+.home-picker-panel .date-picker-input {
+  min-height: 42px;
+  border-radius: 3px;
+  background: rgba(0, 24, 40, 0.72);
+  border-color: rgba(255,255,255,0.24);
+  color: #ffffff;
+  box-shadow: inset 0 1px rgba(255,255,255,0.04);
+}
+
+.home-picker-panel .mode-btn {
+  flex: 1;
+  padding: 0.62rem 0.85rem;
+  font-size: 0.78rem;
+}
+
+.home-picker-panel .mode-btn.active {
+  color: #000000 !important;
+  background: #38bdf8 !important;
+  border-color: #38bdf8 !important;
+  box-shadow: 0 0 14px rgba(56,189,248,0.18);
+}
+
+.home-picker-panel .picker-wrapper {
+  width: 100%;
+  max-width: 100%;
+}
+
+.home-picker-panel .date-picker-input {
+  width: 100%;
+  max-width: 100%;
+  padding: 0.72rem 0.9rem;
+  font-size: clamp(0.78rem, 1.2vw, 0.9rem);
+}
+
+.home-picker-panel .quick-dates {
+  justify-content: flex-start;
+  gap: 0.45rem;
+}
+
+.home-picker-panel .quick-btn {
+  min-height: 36px;
+  padding: 0.48rem 0.75rem;
+  font-size: 0.68rem;
+}
+
+.home-picker-panel .selected-date-display {
+  padding: 0.55rem 0 0;
+  text-align: left;
+  border-top-color: rgba(255,255,255,0.14);
+}
+
+.home-picker-panel .display-label {
+  margin-bottom: 0.15rem;
+  color: #38bdf8 !important;
+  font-size: 0.58rem !important;
+}
+
+.home-picker-panel .display-date {
+  color: #ffffff !important;
+  font-size: 0.78rem !important;
+}
+
+@media (max-width: 760px) {
+  .home-picker-panel .mode-toggle { flex-direction: row; }
+  .home-picker-panel .mode-btn { width: auto; }
+  .home-picker-panel .selected-date-display { display: none; }
+}
+
+
+@media (max-width: 767px) {
+  .home-picker-panel .date-picker-container {
+    gap: 0.5rem;
+  }
+
+  .home-picker-panel .mode-btn {
+    min-height: 38px;
+    padding: 0.48rem 0.55rem;
+    font-size: 0.66rem;
+  }
+
+  .home-picker-panel .date-picker-input {
+    min-height: 40px;
+    padding: 0.58rem 0.68rem;
+    font-size: 0.72rem;
+  }
+
+  .home-picker-panel .quick-btn {
+    min-height: 34px;
+    padding: 0.42rem 0.58rem;
+    font-size: 0.58rem;
   }
 }

@@ -1,151 +1,709 @@
 /* ========================================
-   TV FRAME COMPONENT STYLES
-   CRT Lens Curvature & Distortion
+   ZAMANI — RETRO CRT SHELL
+   Original black / white / cyan palette
    ======================================== */
 
+:root {
+  --zamani-black: #000000;
+  --zamani-panel: #090909;
+  --zamani-panel-raised: #171717;
+  --zamani-grey: #8b8b8b;
+  --zamani-white: #ffffff;
+  --zamani-cyan: #38bdf8;
+  --zamani-screen-blue: #00a2ed;
+  --zamani-screen-deep: #003f66;
+}
+
 .tv-perspective-container {
-  perspective: 1200px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   width: 100vw;
-  height: 100vh;
-  margin: 0;
-  padding: 0;
-  background-color: #000000;
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: clamp(0.55rem, 1.7vw, 1.35rem);
+  background:
+    radial-gradient(circle at 50% 18%, rgba(56, 189, 248, 0.09), transparent 28%),
+    #000000;
   overflow: hidden;
+  perspective: 1400px;
 }
 
 .tv-frame {
   position: relative;
-  width: 100vw;
-  height: 100vh;
-  max-width: 100%;
-  max-height: 100%;
-  background: #000000;
-  border: 16px solid #020202;
-  border-radius: 28px;
-  display: flex;
-  flex-direction: column;
+  width: min(1180px, 98vw);
+  height: min(900px, 97dvh);
+  min-height: min(620px, 96dvh);
+  padding: clamp(1rem, 2.2vw, 1.8rem) clamp(1rem, 2.5vw, 2.1rem) clamp(0.85rem, 1.6vw, 1.25rem);
+  border: 1px solid #202020;
+  border-radius: 28px 28px 40px 40px;
+  background:
+    linear-gradient(90deg, transparent 0 7%, rgba(255, 255, 255, 0.025) 13%, transparent 20%),
+    linear-gradient(180deg, #242424 0%, #151515 48%, #080808 100%);
   box-shadow:
-    inset 0 0 70px rgba(0, 0, 0, 0.95),
-    0 0 50px rgba(0, 0, 0, 1);
+    inset 0 1px 0 rgba(255, 255, 255, 0.09),
+    inset 0 -20px 36px rgba(0, 0, 0, 0.72),
+    0 32px 70px rgba(0, 0, 0, 0.72);
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 0.65rem;
   overflow: hidden;
 }
 
-@media (min-width: 1024px) {
-  .tv-frame {
-    border-width: 24px;
-    border-radius: 36px;
-  }
+.tv-cabinet-highlight {
+  position: absolute;
+  inset: 7px 9% auto;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.14), transparent);
+  pointer-events: none;
+}
+
+.tv-model-row {
+  min-height: 28px;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0 0.7rem;
+  color: rgba(255, 255, 255, 0.64);
+  font-size: clamp(0.65rem, 0.95vw, 0.78rem);
+  font-weight: 700;
+  letter-spacing: 0.17em;
+  text-transform: uppercase;
+}
+
+.tv-model-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--zamani-cyan);
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.7);
+}
+
+.tv-model-number {
+  margin-left: auto;
+  opacity: 0.42;
+  letter-spacing: 0.12em;
+}
+
+.tv-screen-bezel {
+  min-height: 0;
+  padding: clamp(0.65rem, 1.2vw, 0.95rem);
+  border-radius: 25px;
+  background: linear-gradient(145deg, #020202, #111111 46%, #000000);
+  box-shadow:
+    inset 0 0 0 2px #000000,
+    inset 0 0 28px rgba(0, 0, 0, 0.96),
+    0 3px 13px rgba(0, 0, 0, 0.72);
 }
 
 .tv-screen {
   position: relative;
   width: 100%;
   height: 100%;
-  flex-grow: 1;
-  background: #00a2ed;
-  border-radius: 16px;
+  min-height: 0;
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  /* Added CRT Power-On Animation */
-  animation: turn-on 0.4s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+  border-radius: 32px / 24px;
+  background: #000000;
+  box-shadow:
+    inset 0 0 65px rgba(0, 0, 0, 0.72),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  isolation: isolate;
 }
 
-@keyframes turn-on {
+.tv-on .tv-screen {
+  background:
+    radial-gradient(circle at 77% 17%, rgba(255, 255, 255, 0.09), transparent 28%),
+    linear-gradient(145deg, var(--zamani-screen-deep) 0%, #006da4 56%, var(--zamani-screen-blue) 115%);
+  animation: tv-turn-on 0.48s cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+
+@keyframes tv-turn-on {
   0% {
-    transform: scale(1, 0.005);
+    transform: scale(1, 0.006);
     opacity: 0;
-    filter: brightness(30);
+    filter: brightness(18);
   }
-  60% {
-    transform: scale(1, 0.005);
+  56% {
+    transform: scale(1, 0.006);
     opacity: 1;
   }
   100% {
-    transform: scale(1, 1);
+    transform: scale(1);
     opacity: 1;
     filter: brightness(1);
   }
 }
 
-/* Scanlines overlay */
-.tv-screen::before {
-  content: ' ';
-  display: block;
+.tv-off-screen,
+.tv-boot-sequence {
   position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  text-align: center;
+  z-index: 10;
+  background: #010101;
+  color: rgba(255, 255, 255, 0.48);
+  font-family: 'Space Mono', monospace;
+}
+
+.tv-off-screen {
+  gap: 0.45rem;
+}
+
+.tv-off-screen p,
+.tv-off-screen span {
+  color: rgba(255, 255, 255, 0.42) !important;
+  font-size: 0.68rem !important;
+  letter-spacing: 0.18em;
+}
+
+.tv-off-screen p {
+  color: rgba(255, 255, 255, 0.68) !important;
+  font-weight: 700;
+}
+
+.standby-pixel {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  margin-bottom: 0.45rem;
+  background: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.55);
+}
+
+.tv-boot-sequence {
+  overflow: hidden;
+  background: #000000;
+}
+
+.boot-static {
+  position: absolute;
+  inset: 0;
+  opacity: 0.36;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.96' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: boot-static-shift 140ms steps(2) infinite;
+}
+
+.boot-beam {
+  position: absolute;
+  left: 5%;
+  right: 5%;
+  top: 50%;
+  height: 2px;
+  background: #ffffff;
+  box-shadow: 0 0 16px 5px rgba(255, 255, 255, 0.72);
+  animation: boot-beam 1.65s ease-in-out both;
+}
+
+.boot-copy {
+  position: relative;
+  z-index: 3;
+  display: grid;
+  gap: 0.2rem;
+  padding: 1rem 1.25rem;
+  background: rgba(0, 0, 0, 0.58);
+  opacity: 0;
+  animation: boot-copy 1.65s ease both;
+}
+
+.boot-copy strong {
+  color: #ffffff;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(1.8rem, 5vw, 3.6rem);
+  letter-spacing: 0.08em;
+}
+
+.boot-copy span {
+  color: var(--zamani-cyan) !important;
+  font-size: clamp(0.62rem, 1.3vw, 0.82rem) !important;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+}
+
+.boot-copy small {
+  margin-top: 0.5rem;
+  color: rgba(255, 255, 255, 0.64);
+  font-size: 0.58rem;
+  letter-spacing: 0.16em;
+}
+
+@keyframes boot-static-shift {
+  0% { transform: translate(0, 0) scale(1.05); }
+  50% { transform: translate(-3%, 2%) scale(1.08); }
+  100% { transform: translate(2%, -3%) scale(1.05); }
+}
+
+@keyframes boot-beam {
+  0% { opacity: 0; transform: scaleX(0.04); }
+  15% { opacity: 1; transform: scaleX(0.28); }
+  42% { transform: scaleX(1); }
+  58% { opacity: 1; transform: scaleY(1); }
+  82% { opacity: 0.8; transform: scaleY(160); }
+  100% { opacity: 0; transform: scaleY(260); }
+}
+
+@keyframes boot-copy {
+  0%, 48% { opacity: 0; transform: scale(0.96); }
+  58%, 90% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; }
+}
+
+.tv-screen-header {
+  position: absolute;
+  z-index: 30;
   top: 0;
   left: 0;
-  bottom: 0;
   right: 0;
-  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
-  background-size: 100% 3px;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.7rem clamp(1rem, 2.2vw, 1.8rem);
+  pointer-events: none;
+}
+
+.screen-back-button {
+  width: 32px;
+  height: 32px;
+  flex: 0 0 32px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.26);
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.32);
+  color: #ffffff;
+  font: inherit;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: border-color 150ms ease, background 150ms ease, transform 150ms ease;
+}
+
+.screen-back-button:hover,
+.screen-back-button:focus-visible {
+  border-color: var(--zamani-cyan);
+  background: rgba(56, 189, 248, 0.16);
+  outline: none;
+  transform: translateX(-2px);
+}
+
+.screen-page-label {
+  color: rgba(255, 255, 255, 0.9) !important;
+  font-size: clamp(0.58rem, 1vw, 0.72rem) !important;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
+}
+
+.tv-screen-glow {
+  position: absolute;
+  inset: 0;
   z-index: 1;
   pointer-events: none;
-}
-
-/* Glass vignette with pulse */
-.tv-screen::after {
-  content: ' ';
-  display: block;
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  background: radial-gradient(
-    circle at center,
-    transparent 50%,
-    rgba(0, 0, 0, 0.6) 85%,
-    rgba(0, 0, 0, 0.95) 100%
-  );
-  z-index: 2;
-  pointer-events: none;
-  animation: vignette-pulse 4s ease-in-out infinite alternate;
-}
-
-@keyframes vignette-pulse {
-  0% {
-    opacity: 0.8;
-  }
-  100% {
-    opacity: 1;
-  }
+  background:
+    linear-gradient(112deg, rgba(255, 255, 255, 0.08), transparent 25% 72%, rgba(255, 255, 255, 0.025)),
+    radial-gradient(ellipse at center, transparent 58%, rgba(0, 0, 0, 0.48) 100%);
 }
 
 .tv-content {
   position: relative;
-  z-index: 10;
+  z-index: 4;
   width: 100%;
   height: 100%;
-  padding: 1.5rem;
+  min-height: 0;
+  padding: clamp(3.6rem, 7vh, 4.9rem) clamp(1.2rem, 3vw, 2.6rem) clamp(1.2rem, 2.5vw, 2.2rem);
   color: #ffffff;
-  font-family: 'Space Mono', monospace;
   overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  scrollbar-width: thin;
+  scrollbar-color: var(--zamani-cyan) transparent;
 }
 
-@media (min-width: 768px) {
-  .tv-content {
-    padding: 2rem 3rem;
+/* VHS layers are deliberately children of .tv-screen so the effect never escapes the glass. */
+.tv-vhs-effects {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.vhs-noise,
+.vhs-tracking-line,
+.vhs-scanlines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.vhs-noise {
+  inset: -18%;
+  opacity: 0.055;
+  mix-blend-mode: screen;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.95' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  animation: vhs-noise-shift 430ms steps(3) infinite;
+}
+
+.vhs-scanlines {
+  opacity: 0.32;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 2px,
+    rgba(0, 0, 0, 0.19) 3px,
+    rgba(0, 0, 0, 0.19) 4px
+  );
+}
+
+.vhs-tracking-line {
+  height: 12%;
+  top: -16%;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(255, 255, 255, 0.07),
+    rgba(255, 255, 255, 0.16),
+    transparent
+  );
+  animation: vhs-track 6.5s linear infinite;
+}
+
+@keyframes vhs-noise-shift {
+  0% { transform: translate(0, 0); }
+  33% { transform: translate(-5%, 3%); }
+  66% { transform: translate(3%, -4%); }
+  100% { transform: translate(-2%, 4%); }
+}
+
+@keyframes vhs-track {
+  0%, 58% { transform: translateY(0); opacity: 0; }
+  61% { opacity: 0.7; }
+  75% { transform: translateY(980%); opacity: 0.24; }
+  76%, 100% { transform: translateY(980%); opacity: 0; }
+}
+
+.tv-console {
+  display: grid;
+  grid-template-columns: minmax(150px, 0.34fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(0.8rem, 2vw, 1.6rem);
+  padding: 0.1rem 0.5rem 0;
+}
+
+.tv-brand {
+  color: #d7d7d7;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(1.6rem, 3.2vw, 2.55rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-align: center;
+  text-shadow: 0 2px 0 #000000;
+}
+
+.tv-controls {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(62px, 1fr)) auto auto;
+  align-items: stretch;
+  gap: 0.38rem;
+  padding: 0.42rem;
+  border: 1px solid #181818;
+  background: linear-gradient(180deg, #151515, #080808);
+  box-shadow: inset 0 1px 6px rgba(0, 0, 0, 0.9);
+}
+
+.tv-control-button,
+.tv-power-button {
+  min-height: 45px;
+  border: 1px solid #030303;
+  border-top-color: #3a3a3a;
+  border-radius: 3px;
+  background: linear-gradient(180deg, #2d2d2d, #171717);
+  color: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 2px 0 #000000, inset 0 1px rgba(255, 255, 255, 0.05);
+  cursor: pointer;
+  transition: transform 120ms ease, background 120ms ease, color 120ms ease, box-shadow 120ms ease;
+}
+
+.tv-control-button {
+  display: grid;
+  place-items: center;
+  gap: 0.08rem;
+  padding: 0.35rem 0.4rem;
+}
+
+.tv-control-button:hover:not(:disabled),
+.tv-control-button:focus-visible:not(:disabled) {
+  color: #ffffff;
+  border-color: rgba(56, 189, 248, 0.56);
+  background: linear-gradient(180deg, #363636, #1c1c1c);
+  outline: none;
+  box-shadow: 0 2px 0 #000000, 0 0 13px rgba(56, 189, 248, 0.16);
+}
+
+.tv-control-button:active:not(:disabled) {
+  transform: translateY(2px);
+  box-shadow: none;
+}
+
+.tv-control-button.active:not(:disabled) {
+  color: #000000;
+  border-color: #58c9fb;
+  background: linear-gradient(180deg, #67cdf9, var(--zamani-cyan));
+  box-shadow: 0 2px 0 #006995, 0 0 15px rgba(56, 189, 248, 0.28);
+}
+
+.tv-control-button:disabled {
+  cursor: default;
+  opacity: 0.34;
+}
+
+.control-short {
+  color: inherit !important;
+  font-size: 0.68rem !important;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+}
+
+.control-label {
+  color: inherit !important;
+  font-size: 0.55rem !important;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  opacity: 0.78 !important;
+}
+
+.tv-status {
+  min-width: 45px;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 0.18rem;
+  color: rgba(255, 255, 255, 0.48);
+  font-size: 0.5rem;
+  letter-spacing: 0.1em;
+}
+
+.status-light {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #242424;
+  box-shadow: inset 0 0 2px #000000;
+}
+
+.status-on {
+  background: var(--zamani-cyan);
+  box-shadow: 0 0 8px var(--zamani-cyan), 0 0 16px rgba(56, 189, 248, 0.52);
+}
+
+.status-booting {
+  background: #ffffff;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+  animation: status-blink 280ms steps(2) infinite;
+}
+
+.status-copy {
+  color: rgba(255, 255, 255, 0.48) !important;
+  font-size: 0.48rem !important;
+}
+
+@keyframes status-blink {
+  50% { opacity: 0.2; }
+}
+
+.tv-power-button {
+  width: 48px;
+  border-radius: 50%;
+  color: rgba(255, 255, 255, 0.66);
+  font-size: 1.22rem;
+}
+
+.tv-power-button:hover:not(:disabled),
+.tv-power-button:focus-visible:not(:disabled) {
+  color: var(--zamani-cyan);
+  outline: none;
+  box-shadow: 0 2px 0 #000000, 0 0 12px rgba(56, 189, 248, 0.3);
+}
+
+.tv-power-button.powered {
+  color: var(--zamani-cyan);
+}
+
+.tv-power-button:disabled {
+  cursor: wait;
+  opacity: 0.55;
+}
+
+/* Tablet keeps the television casing, but compresses the physical controls. */
+@media (min-width: 768px) and (max-width: 980px) {
+  .tv-frame {
+    width: 98vw;
+    height: min(900px, 96dvh);
+    min-height: min(600px, 96dvh);
+  }
+
+  .tv-console {
+    grid-template-columns: 130px minmax(0, 1fr);
+  }
+
+  .control-label {
+    display: none;
+  }
+
+  .tv-controls {
+    grid-template-columns: repeat(5, minmax(50px, 1fr)) auto auto;
   }
 }
 
-.tv-brand,
-.tv-footer,
-.bottom-branding {
-  position: relative;
-  z-index: 10;
-  text-align: center;
-  font-size: 0.65rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: #ffffff;
-  opacity: 0.95;
-  padding: 0.3rem 0;
+/*
+  Mobile becomes a portable retro receiver instead of squeezing a full TV cabinet
+  into a phone-shaped viewport.
+*/
+@media (max-width: 767px) {
+  .tv-perspective-container {
+    min-height: 100dvh;
+    padding: 0;
+    background: #000000;
+    overflow: hidden;
+  }
+
+  .tv-frame {
+    width: 100vw;
+    height: 100dvh;
+    min-height: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: #000000;
+    box-shadow: none;
+    grid-template-rows: minmax(0, 1fr) auto;
+    gap: 0;
+  }
+
+  .tv-cabinet-highlight,
+  .tv-model-row {
+    display: none;
+  }
+
+  .tv-screen-bezel {
+    min-height: 0;
+    padding: 0;
+    border-radius: 0;
+    background: #000000;
+    box-shadow: none;
+  }
+
+  .tv-screen {
+    border-radius: 0;
+    box-shadow: inset 0 0 42px rgba(0, 0, 0, 0.58);
+  }
+
+  .tv-on .tv-screen {
+    background:
+      linear-gradient(rgba(0, 0, 0, 0.18), rgba(0, 0, 0, 0.04)),
+      linear-gradient(155deg, #003e65 0%, #006c9f 58%, #0096db 100%);
+  }
+
+  .tv-screen-header {
+    min-height: 54px;
+    padding: max(0.75rem, env(safe-area-inset-top)) 0.9rem 0.65rem;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.42), transparent);
+  }
+
+  .screen-back-button {
+    width: 34px;
+    height: 34px;
+    flex-basis: 34px;
+  }
+
+  .screen-page-label {
+    font-size: 0.62rem !important;
+  }
+
+  .tv-content {
+    padding: calc(max(0.75rem, env(safe-area-inset-top)) + 3.4rem) 0.9rem 1.2rem;
+  }
+
+  .tv-console {
+    position: relative;
+    z-index: 40;
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+    padding: 0.45rem 0.5rem max(0.45rem, env(safe-area-inset-bottom));
+    border-top: 1px solid rgba(56, 189, 248, 0.32);
+    background:
+      linear-gradient(180deg, #121212, #050505 70%),
+      #000000;
+    box-shadow: 0 -8px 22px rgba(0, 0, 0, 0.4);
+  }
+
+  .tv-brand {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.28em;
+    color: rgba(255, 255, 255, 0.7);
+    text-align: left;
+    padding-left: 0.15rem;
+  }
+
+  .tv-brand::after {
+    content: ' // PORTABLE RECEIVER';
+    color: var(--zamani-cyan);
+    font-size: 0.52rem;
+    letter-spacing: 0.1em;
+  }
+
+  .tv-controls {
+    grid-template-columns: repeat(5, minmax(0, 1fr)) 42px;
+    gap: 0.24rem;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .tv-control-button,
+  .tv-power-button {
+    min-height: 42px;
+  }
+
+  .tv-control-button {
+    min-width: 0;
+    padding: 0.2rem;
+  }
+
+  .control-label,
+  .tv-status {
+    display: none;
+  }
+
+  .control-short {
+    font-size: 0.58rem !important;
+    letter-spacing: 0.04em;
+  }
+
+  .tv-power-button {
+    width: 42px;
+    min-width: 42px;
+  }
+
+  .tv-off-screen p,
+  .tv-off-screen span {
+    font-size: 0.58rem !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tv-on .tv-screen,
+  .boot-static,
+  .boot-beam,
+  .boot-copy,
+  .vhs-noise,
+  .vhs-tracking-line,
+  .status-booting {
+    animation: none !important;
+  }
 }

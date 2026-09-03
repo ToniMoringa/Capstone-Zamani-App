@@ -38,3 +38,8 @@
     display: none;
   }
 }
+
+/* Navigation now lives on the television console. */
+.nav-arrow {
+  display: none !important;
+}

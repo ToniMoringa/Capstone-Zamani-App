@@ -1,0 +1,4700 @@
+This file is a merged representation of the entire codebase, combined into a single document by Repomix.
+
+<file_summary>
+This section contains a summary of this file.
+
+<purpose>
+This file contains a packed representation of the entire repository's contents.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+</purpose>
+
+<file_format>
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Repository files (if enabled)
+5. Multiple file entries, each consisting of:
+  - File path as an attribute
+  - Full contents of the file
+</file_format>
+
+<usage_guidelines>
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+</usage_guidelines>
+
+<notes>
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+- Files are sorted by Git change count (files with more changes are at the bottom)
+</notes>
+
+</file_summary>
+
+<directory_structure>
+client/
+  public/
+    audio/
+      button-press .wav:Zone.Identifier
+      button-press.wav
+      tuning.wav
+      tuning.wav:Zone.Identifier
+    favicon.svg
+    heart-blue.ico
+    icons.svg
+  src/
+    api/
+      capsules.js
+      kenyaData.js
+      nasa.js
+      wikipedia.js
+    assets/
+      hero.png
+      react.svg
+      vite.svg
+    components/
+      CapsuleDisplay.jsx
+      DatePicker.jsx
+      ErrorMessage.jsx
+      LoadingSpinner.jsx
+      OrbCursor.jsx
+      SaveButton.jsx
+      TechStackPhysics.jsx
+      TVFrame.jsx
+    context/
+      CapsuleContext.jsx
+      TVSystemContext.jsx
+    hooks/
+      useOrbCursor.js
+      useRetroAudio.js
+    pages/
+      About.jsx
+      Capsule.jsx
+      Home.jsx
+      Saved.jsx
+    styles/
+      about.css
+      capsule.css
+      datepicker.css
+      error.css
+      globals.css
+      loading.css
+      saved.css
+      tv.css
+    utils/
+      constants.js
+      helpers.js
+    App.css
+    App.jsx
+    main.jsx
+  .gitignore
+  eslint.config.js
+  index.html
+  package.json
+  README.md
+  vercel.json
+  vite.config.js
+server/
+  routes/
+    __init__.py
+    capsules.py
+    tags.py
+  __init__.py
+  app.py
+  config.py
+  models.py
+  seed.py
+.gitignore
+README.md
+requirements.txt
+</directory_structure>
+
+<files>
+This section contains the contents of the repository's files.
+
+<file path="client/src/context/TVSystemContext.jsx">
+import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
+
+const TVSystemContext = createContext(null);
+
+export const TVSystemProvider = ({ children }) => {
+  const [powerState, setPowerState] = useState('off');
+  const [vhsEnabled, setVhsEnabled] = useState(true);
+  const bootTimerRef = useRef(null);
+
+  useEffect(() => {
+    return () => {
+      if (bootTimerRef.current) {
+        window.clearTimeout(bootTimerRef.current);
+      }
+    };
+  }, []);
+
+  const powerOn = (onReady) => {
+    if (powerState !== 'off') return;
+
+    setPowerState('booting');
+    bootTimerRef.current = window.setTimeout(() => {
+      setPowerState('on');
+      onReady?.();
+    }, 1650);
+  };
+
+  const powerOff = () => {
+    if (bootTimerRef.current) {
+      window.clearTimeout(bootTimerRef.current);
+      bootTimerRef.current = null;
+    }
+    setPowerState('off');
+  };
+
+  const toggleVhs = () => {
+    setVhsEnabled((enabled) => !enabled);
+  };
+
+  return (
+    <TVSystemContext.Provider
+      value={{ powerState, powerOn, powerOff, vhsEnabled, toggleVhs }}
+    >
+      {children}
+    </TVSystemContext.Provider>
+  );
+};
+
+export const useTVSystem = () => {
+  const context = useContext(TVSystemContext);
+
+  if (!context) {
+    throw new Error('useTVSystem must be used within TVSystemProvider');
+  }
+
+  return context;
+};
+</file>
+
+<file path="client/public/favicon.svg">
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="46" fill="none" viewBox="0 0 48 46"><path fill="#863bff" d="M25.946 44.938c-.664.845-2.021.375-2.021-.698V33.937a2.26 2.26 0 0 0-2.262-2.262H10.287c-.92 0-1.456-1.04-.92-1.788l7.48-10.471c1.07-1.497 0-3.578-1.842-3.578H1.237c-.92 0-1.456-1.04-.92-1.788L10.013.474c.214-.297.556-.474.92-.474h28.894c.92 0 1.456 1.04.92 1.788l-7.48 10.471c-1.07 1.498 0 3.579 1.842 3.579h11.377c.943 0 1.473 1.088.89 1.83L25.947 44.94z" style="fill:#863bff;fill:color(display-p3 .5252 .23 1);fill-opacity:1"/><mask id="a" width="48" height="46" x="0" y="0" maskUnits="userSpaceOnUse" style="mask-type:alpha"><path fill="#000" d="M25.842 44.938c-.664.844-2.021.375-2.021-.698V33.937a2.26 2.26 0 0 0-2.262-2.262H10.183c-.92 0-1.456-1.04-.92-1.788l7.48-10.471c1.07-1.498 0-3.579-1.842-3.579H1.133c-.92 0-1.456-1.04-.92-1.787L9.91.473c.214-.297.556-.474.92-.474h28.894c.92 0 1.456 1.04.92 1.788l-7.48 10.471c-1.07 1.498 0 3.578 1.842 3.578h11.377c.943 0 1.473 1.088.89 1.832L25.843 44.94z" style="fill:#000;fill-opacity:1"/></mask><g mask="url(#a)"><g filter="url(#b)"><ellipse cx="5.508" cy="14.704" fill="#ede6ff" rx="5.508" ry="14.704" style="fill:#ede6ff;fill:color(display-p3 .9275 .9033 1);fill-opacity:1" transform="matrix(.00324 1 1 -.00324 -4.47 31.516)"/></g><g filter="url(#c)"><ellipse cx="10.399" cy="29.851" fill="#ede6ff" rx="10.399" ry="29.851" style="fill:#ede6ff;fill:color(display-p3 .9275 .9033 1);fill-opacity:1" transform="matrix(.00324 1 1 -.00324 -39.328 7.883)"/></g><g filter="url(#d)"><ellipse cx="5.508" cy="30.487" fill="#7e14ff" rx="5.508" ry="30.487" style="fill:#7e14ff;fill:color(display-p3 .4922 .0767 1);fill-opacity:1" transform="rotate(89.814 -25.913 -14.639)scale(1 -1)"/></g><g filter="url(#e)"><ellipse cx="5.508" cy="30.599" fill="#7e14ff" rx="5.508" ry="30.599" style="fill:#7e14ff;fill:color(display-p3 .4922 .0767 1);fill-opacity:1" transform="rotate(89.814 -32.644 -3.334)scale(1 -1)"/></g><g filter="url(#f)"><ellipse cx="5.508" cy="30.599" fill="#7e14ff" rx="5.508" ry="30.599" style="fill:#7e14ff;fill:color(display-p3 .4922 .0767 1);fill-opacity:1" transform="matrix(.00324 1 1 -.00324 -34.34 30.47)"/></g><g filter="url(#g)"><ellipse cx="14.072" cy="22.078" fill="#ede6ff" rx="14.072" ry="22.078" style="fill:#ede6ff;fill:color(display-p3 .9275 .9033 1);fill-opacity:1" transform="rotate(93.35 24.506 48.493)scale(-1 1)"/></g><g filter="url(#h)"><ellipse cx="3.47" cy="21.501" fill="#7e14ff" rx="3.47" ry="21.501" style="fill:#7e14ff;fill:color(display-p3 .4922 .0767 1);fill-opacity:1" transform="rotate(89.009 28.708 47.59)scale(-1 1)"/></g><g filter="url(#i)"><ellipse cx="3.47" cy="21.501" fill="#7e14ff" rx="3.47" ry="21.501" style="fill:#7e14ff;fill:color(display-p3 .4922 .0767 1);fill-opacity:1" transform="rotate(89.009 28.708 47.59)scale(-1 1)"/></g><g filter="url(#j)"><ellipse cx=".387" cy="8.972" fill="#7e14ff" rx="4.407" ry="29.108" style="fill:#7e14ff;fill:color(display-p3 .4922 .0767 1);fill-opacity:1" transform="rotate(39.51 .387 8.972)"/></g><g filter="url(#k)"><ellipse cx="47.523" cy="-6.092" fill="#7e14ff" rx="4.407" ry="29.108" style="fill:#7e14ff;fill:color(display-p3 .4922 .0767 1);fill-opacity:1" transform="rotate(37.892 47.523 -6.092)"/></g><g filter="url(#l)"><ellipse cx="41.412" cy="6.333" fill="#47bfff" rx="5.971" ry="9.665" style="fill:#47bfff;fill:color(display-p3 .2799 .748 1);fill-opacity:1" transform="rotate(37.892 41.412 6.333)"/></g><g filter="url(#m)"><ellipse cx="-1.879" cy="38.332" fill="#7e14ff" rx="4.407" ry="29.108" style="fill:#7e14ff;fill:color(display-p3 .4922 .0767 1);fill-opacity:1" transform="rotate(37.892 -1.88 38.332)"/></g><g filter="url(#n)"><ellipse cx="-1.879" cy="38.332" fill="#7e14ff" rx="4.407" ry="29.108" style="fill:#7e14ff;fill:color(display-p3 .4922 .0767 1);fill-opacity:1" transform="rotate(37.892 -1.88 38.332)"/></g><g filter="url(#o)"><ellipse cx="35.651" cy="29.907" fill="#7e14ff" rx="4.407" ry="29.108" style="fill:#7e14ff;fill:color(display-p3 .4922 .0767 1);fill-opacity:1" transform="rotate(37.892 35.651 29.907)"/></g><g filter="url(#p)"><ellipse cx="38.418" cy="32.4" fill="#47bfff" rx="5.971" ry="15.297" style="fill:#47bfff;fill:color(display-p3 .2799 .748 1);fill-opacity:1" transform="rotate(37.892 38.418 32.4)"/></g></g><defs><filter id="b" width="60.045" height="41.654" x="-19.77" y="16.149" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="7.659"/></filter><filter id="c" width="90.34" height="51.437" x="-54.613" y="-7.533" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="7.659"/></filter><filter id="d" width="79.355" height="29.4" x="-49.64" y="2.03" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter><filter id="e" width="79.579" height="29.4" x="-45.045" y="20.029" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter><filter id="f" width="79.579" height="29.4" x="-43.513" y="21.178" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter><filter id="g" width="74.749" height="58.852" x="15.756" y="-17.901" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="7.659"/></filter><filter id="h" width="61.377" height="25.362" x="23.548" y="2.284" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter><filter id="i" width="61.377" height="25.362" x="23.548" y="2.284" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter><filter id="j" width="56.045" height="63.649" x="-27.636" y="-22.853" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter><filter id="k" width="54.814" height="64.646" x="20.116" y="-38.415" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter><filter id="l" width="33.541" height="35.313" x="24.641" y="-11.323" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter><filter id="m" width="54.814" height="64.646" x="-29.286" y="6.009" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter><filter id="n" width="54.814" height="64.646" x="-29.286" y="6.009" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter><filter id="o" width="54.814" height="64.646" x="8.244" y="-2.416" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter><filter id="p" width="39.409" height="43.623" x="18.713" y="10.588" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter></defs></svg>
+</file>
+
+<file path="client/public/icons.svg">
+<svg xmlns="http://www.w3.org/2000/svg">
+  <symbol id="bluesky-icon" viewBox="0 0 16 17">
+    <g clip-path="url(#bluesky-clip)"><path fill="#08060d" d="M7.75 7.735c-.693-1.348-2.58-3.86-4.334-5.097-1.68-1.187-2.32-.981-2.74-.79C.188 2.065.1 2.812.1 3.251s.241 3.602.398 4.13c.52 1.744 2.367 2.333 4.07 2.145-2.495.37-4.71 1.278-1.805 4.512 3.196 3.309 4.38-.71 4.987-2.746.608 2.036 1.307 5.91 4.93 2.746 2.72-2.746.747-4.143-1.747-4.512 1.702.189 3.55-.4 4.07-2.145.156-.528.397-3.691.397-4.13s-.088-1.186-.575-1.406c-.42-.19-1.06-.395-2.741.79-1.755 1.24-3.64 3.752-4.334 5.099"/></g>
+    <defs><clipPath id="bluesky-clip"><path fill="#fff" d="M.1.85h15.3v15.3H.1z"/></clipPath></defs>
+  </symbol>
+  <symbol id="discord-icon" viewBox="0 0 20 19">
+    <path fill="#08060d" d="M16.224 3.768a14.5 14.5 0 0 0-3.67-1.153c-.158.286-.343.67-.47.976a13.5 13.5 0 0 0-4.067 0c-.128-.306-.317-.69-.476-.976A14.4 14.4 0 0 0 3.868 3.77C1.546 7.28.916 10.703 1.231 14.077a14.7 14.7 0 0 0 4.5 2.306q.545-.748.965-1.587a9.5 9.5 0 0 1-1.518-.74q.191-.14.372-.293c2.927 1.369 6.107 1.369 8.999 0q.183.152.372.294-.723.437-1.52.74.418.838.963 1.588a14.6 14.6 0 0 0 4.504-2.308c.37-3.911-.63-7.302-2.644-10.309m-9.13 8.234c-.878 0-1.599-.82-1.599-1.82 0-.998.705-1.82 1.6-1.82.894 0 1.614.82 1.599 1.82.001 1-.705 1.82-1.6 1.82m5.91 0c-.878 0-1.599-.82-1.599-1.82 0-.998.705-1.82 1.6-1.82.893 0 1.614.82 1.599 1.82 0 1-.706 1.82-1.6 1.82"/>
+  </symbol>
+  <symbol id="documentation-icon" viewBox="0 0 21 20">
+    <path fill="none" stroke="#aa3bff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.35" d="m15.5 13.333 1.533 1.322c.645.555.967.833.967 1.178s-.322.623-.967 1.179L15.5 18.333m-3.333-5-1.534 1.322c-.644.555-.966.833-.966 1.178s.322.623.966 1.179l1.534 1.321"/>
+    <path fill="none" stroke="#aa3bff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.35" d="M17.167 10.836v-4.32c0-1.41 0-2.117-.224-2.68-.359-.906-1.118-1.621-2.08-1.96-.599-.21-1.349-.21-2.848-.21-2.623 0-3.935 0-4.983.369-1.684.591-3.013 1.842-3.641 3.428C3 6.449 3 7.684 3 10.154v2.122c0 2.558 0 3.838.706 4.726q.306.383.713.671c.76.536 1.79.64 3.581.66"/>
+    <path fill="none" stroke="#aa3bff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.35" d="M3 10a2.78 2.78 0 0 1 2.778-2.778c.555 0 1.209.097 1.748-.047.48-.129.854-.503.982-.982.145-.54.048-1.194.048-1.749a2.78 2.78 0 0 1 2.777-2.777"/>
+  </symbol>
+  <symbol id="github-icon" viewBox="0 0 19 19">
+    <path fill="#08060d" fill-rule="evenodd" d="M9.356 1.85C5.05 1.85 1.57 5.356 1.57 9.694a7.84 7.84 0 0 0 5.324 7.44c.387.079.528-.168.528-.376 0-.182-.013-.805-.013-1.454-2.165.467-2.616-.935-2.616-.935-.349-.91-.864-1.143-.864-1.143-.71-.48.051-.48.051-.48.787.051 1.2.805 1.2.805.695 1.194 1.817.857 2.268.649.064-.507.27-.857.49-1.052-1.728-.182-3.545-.857-3.545-3.87 0-.857.31-1.558.8-2.104-.078-.195-.349-1 .077-2.078 0 0 .657-.208 2.14.805a7.5 7.5 0 0 1 1.946-.26c.657 0 1.328.092 1.946.26 1.483-1.013 2.14-.805 2.14-.805.426 1.078.155 1.883.078 2.078.502.546.799 1.247.799 2.104 0 3.013-1.818 3.675-3.558 3.87.284.247.528.714.528 1.454 0 1.052-.012 1.896-.012 2.156 0 .208.142.455.528.377a7.84 7.84 0 0 0 5.324-7.441c.013-4.338-3.48-7.844-7.773-7.844" clip-rule="evenodd"/>
+  </symbol>
+  <symbol id="social-icon" viewBox="0 0 20 20">
+    <path fill="none" stroke="#aa3bff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.35" d="M12.5 6.667a4.167 4.167 0 1 0-8.334 0 4.167 4.167 0 0 0 8.334 0"/>
+    <path fill="none" stroke="#aa3bff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.35" d="M2.5 16.667a5.833 5.833 0 0 1 8.75-5.053m3.837.474.513 1.035c.07.144.257.282.414.309l.93.155c.596.1.736.536.307.965l-.723.73a.64.64 0 0 0-.152.531l.207.903c.164.715-.213.991-.84.618l-.872-.52a.63.63 0 0 0-.577 0l-.872.52c-.624.373-1.003.094-.84-.618l.207-.903a.64.64 0 0 0-.152-.532l-.723-.729c-.426-.43-.289-.864.306-.964l.93-.156a.64.64 0 0 0 .412-.31l.513-1.034c.28-.562.735-.562 1.012 0"/>
+  </symbol>
+  <symbol id="x-icon" viewBox="0 0 19 19">
+    <path fill="#08060d" fill-rule="evenodd" d="M1.893 1.98c.052.072 1.245 1.769 2.653 3.77l2.892 4.114c.183.261.333.48.333.486s-.068.089-.152.183l-.522.593-.765.867-3.597 4.087c-.375.426-.734.834-.798.905a1 1 0 0 0-.118.148c0 .01.236.017.664.017h.663l.729-.83c.4-.457.796-.906.879-.999a692 692 0 0 0 1.794-2.038c.034-.037.301-.34.594-.675l.551-.624.345-.392a7 7 0 0 1 .34-.374c.006 0 .93 1.306 2.052 2.903l2.084 2.965.045.063h2.275c1.87 0 2.273-.003 2.266-.021-.008-.02-1.098-1.572-3.894-5.547-2.013-2.862-2.28-3.246-2.273-3.266.008-.019.282-.332 2.085-2.38l2-2.274 1.567-1.782c.022-.028-.016-.03-.65-.03h-.674l-.3.342a871 871 0 0 1-1.782 2.025c-.067.075-.405.458-.75.852a100 100 0 0 1-.803.91c-.148.172-.299.344-.99 1.127-.304.343-.32.358-.345.327-.015-.019-.904-1.282-1.976-2.808L6.365 1.85H1.8zm1.782.91 8.078 11.294c.772 1.08 1.413 1.973 1.425 1.984.016.017.241.02 1.05.017l1.03-.004-2.694-3.766L7.796 5.75 5.722 2.852l-1.039-.004-1.039-.004z" clip-rule="evenodd"/>
+  </symbol>
+</svg>
+</file>
+
+<file path="client/src/assets/react.svg">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--logos" width="35.93" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 228"><path fill="#00D8FF" d="M210.483 73.824a171.49 171.49 0 0 0-8.24-2.597c.465-1.9.893-3.777 1.273-5.621c6.238-30.281 2.16-54.676-11.769-62.708c-13.355-7.7-35.196.329-57.254 19.526a171.23 171.23 0 0 0-6.375 5.848a155.866 155.866 0 0 0-4.241-3.917C100.759 3.829 77.587-4.822 63.673 3.233C50.33 10.957 46.379 33.89 51.995 62.588a170.974 170.974 0 0 0 1.892 8.48c-3.28.932-6.445 1.924-9.474 2.98C17.309 83.498 0 98.307 0 113.668c0 15.865 18.582 31.778 46.812 41.427a145.52 145.52 0 0 0 6.921 2.165a167.467 167.467 0 0 0-2.01 9.138c-5.354 28.2-1.173 50.591 12.134 58.266c13.744 7.926 36.812-.22 59.273-19.855a145.567 145.567 0 0 0 5.342-4.923a168.064 168.064 0 0 0 6.92 6.314c21.758 18.722 43.246 26.282 56.54 18.586c13.731-7.949 18.194-32.003 12.4-61.268a145.016 145.016 0 0 0-1.535-6.842c1.62-.48 3.21-.974 4.76-1.488c29.348-9.723 48.443-25.443 48.443-41.52c0-15.417-17.868-30.326-45.517-39.844Zm-6.365 70.984c-1.4.463-2.836.91-4.3 1.345c-3.24-10.257-7.612-21.163-12.963-32.432c5.106-11 9.31-21.767 12.459-31.957c2.619.758 5.16 1.557 7.61 2.4c23.69 8.156 38.14 20.213 38.14 29.504c0 9.896-15.606 22.743-40.946 31.14Zm-10.514 20.834c2.562 12.94 2.927 24.64 1.23 33.787c-1.524 8.219-4.59 13.698-8.382 15.893c-8.067 4.67-25.32-1.4-43.927-17.412a156.726 156.726 0 0 1-6.437-5.87c7.214-7.889 14.423-17.06 21.459-27.246c12.376-1.098 24.068-2.894 34.671-5.345a134.17 134.17 0 0 1 1.386 6.193ZM87.276 214.515c-7.882 2.783-14.16 2.863-17.955.675c-8.075-4.657-11.432-22.636-6.853-46.752a156.923 156.923 0 0 1 1.869-8.499c10.486 2.32 22.093 3.988 34.498 4.994c7.084 9.967 14.501 19.128 21.976 27.15a134.668 134.668 0 0 1-4.877 4.492c-9.933 8.682-19.886 14.842-28.658 17.94ZM50.35 144.747c-12.483-4.267-22.792-9.812-29.858-15.863c-6.35-5.437-9.555-10.836-9.555-15.216c0-9.322 13.897-21.212 37.076-29.293c2.813-.98 5.757-1.905 8.812-2.773c3.204 10.42 7.406 21.315 12.477 32.332c-5.137 11.18-9.399 22.249-12.634 32.792a134.718 134.718 0 0 1-6.318-1.979Zm12.378-84.26c-4.811-24.587-1.616-43.134 6.425-47.789c8.564-4.958 27.502 2.111 47.463 19.835a144.318 144.318 0 0 1 3.841 3.545c-7.438 7.987-14.787 17.08-21.808 26.988c-12.04 1.116-23.565 2.908-34.161 5.309a160.342 160.342 0 0 1-1.76-7.887Zm110.427 27.268a347.8 347.8 0 0 0-7.785-12.803c8.168 1.033 15.994 2.404 23.343 4.08c-2.206 7.072-4.956 14.465-8.193 22.045a381.151 381.151 0 0 0-7.365-13.322Zm-45.032-43.861c5.044 5.465 10.096 11.566 15.065 18.186a322.04 322.04 0 0 0-30.257-.006c4.974-6.559 10.069-12.652 15.192-18.18ZM82.802 87.83a323.167 323.167 0 0 0-7.227 13.238c-3.184-7.553-5.909-14.98-8.134-22.152c7.304-1.634 15.093-2.97 23.209-3.984a321.524 321.524 0 0 0-7.848 12.897Zm8.081 65.352c-8.385-.936-16.291-2.203-23.593-3.793c2.26-7.3 5.045-14.885 8.298-22.6a321.187 321.187 0 0 0 7.257 13.246c2.594 4.48 5.28 8.868 8.038 13.147Zm37.542 31.03c-5.184-5.592-10.354-11.779-15.403-18.433c4.902.192 9.899.29 14.978.29c5.218 0 10.376-.117 15.453-.343c-4.985 6.774-10.018 12.97-15.028 18.486Zm52.198-57.817c3.422 7.8 6.306 15.345 8.596 22.52c-7.422 1.694-15.436 3.058-23.88 4.071a382.417 382.417 0 0 0 7.859-13.026a347.403 347.403 0 0 0 7.425-13.565Zm-16.898 8.101a358.557 358.557 0 0 1-12.281 19.815a329.4 329.4 0 0 1-23.444.823c-7.967 0-15.716-.248-23.178-.732a310.202 310.202 0 0 1-12.513-19.846h.001a307.41 307.41 0 0 1-10.923-20.627a310.278 310.278 0 0 1 10.89-20.637l-.001.001a307.318 307.318 0 0 1 12.413-19.761c7.613-.576 15.42-.876 23.31-.876H128c7.926 0 15.743.303 23.354.883a329.357 329.357 0 0 1 12.335 19.695a358.489 358.489 0 0 1 11.036 20.54a329.472 329.472 0 0 1-11 20.722Zm22.56-122.124c8.572 4.944 11.906 24.881 6.52 51.026c-.344 1.668-.73 3.367-1.15 5.09c-10.622-2.452-22.155-4.275-34.23-5.408c-7.034-10.017-14.323-19.124-21.64-27.008a160.789 160.789 0 0 1 5.888-5.4c18.9-16.447 36.564-22.941 44.612-18.3ZM128 90.808c12.625 0 22.86 10.235 22.86 22.86s-10.235 22.86-22.86 22.86s-22.86-10.235-22.86-22.86s10.235-22.86 22.86-22.86Z"></path></svg>
+</file>
+
+<file path="client/src/assets/vite.svg">
+<svg xmlns="http://www.w3.org/2000/svg" width="77" height="47" fill="none" aria-labelledby="vite-logo-title" viewBox="0 0 77 47"><title id="vite-logo-title">Vite</title><style>.parenthesis{fill:#000}@media (prefers-color-scheme:dark){.parenthesis{fill:#fff}}</style><path fill="#9135ff" d="M40.151 45.71c-.663.844-2.02.374-2.02-.699V34.708a2.26 2.26 0 0 0-2.262-2.262H24.493c-.92 0-1.457-1.04-.92-1.788l7.479-10.471c1.07-1.498 0-3.578-1.842-3.578H15.443c-.92 0-1.456-1.04-.92-1.788l9.696-13.576c.213-.297.556-.474.92-.474h28.894c.92 0 1.456 1.04.92 1.788l-7.48 10.472c-1.07 1.497 0 3.578 1.842 3.578h11.376c.944 0 1.474 1.087.89 1.83L40.153 45.712z"/><mask id="a" width="48" height="47" x="14" y="0" maskUnits="userSpaceOnUse" style="mask-type:alpha"><path fill="#000" d="M40.047 45.71c-.663.843-2.02.374-2.02-.699V34.708a2.26 2.26 0 0 0-2.262-2.262H24.389c-.92 0-1.457-1.04-.92-1.788l7.479-10.472c1.07-1.497 0-3.578-1.842-3.578H15.34c-.92 0-1.456-1.04-.92-1.788l9.696-13.575c.213-.297.556-.474.92-.474H53.93c.92 0 1.456 1.04.92 1.788L47.37 13.03c-1.07 1.498 0 3.578 1.842 3.578h11.376c.944 0 1.474 1.088.89 1.831L40.049 45.712z"/></mask><g mask="url(#a)"><g filter="url(#b)"><ellipse cx="5.508" cy="14.704" fill="#eee6ff" rx="5.508" ry="14.704" transform="rotate(269.814 20.96 11.29)scale(-1 1)"/></g><g filter="url(#c)"><ellipse cx="10.399" cy="29.851" fill="#eee6ff" rx="10.399" ry="29.851" transform="rotate(89.814 -16.902 -8.275)scale(1 -1)"/></g><g filter="url(#d)"><ellipse cx="5.508" cy="30.487" fill="#8900ff" rx="5.508" ry="30.487" transform="rotate(89.814 -19.197 -7.127)scale(1 -1)"/></g><g filter="url(#e)"><ellipse cx="5.508" cy="30.599" fill="#8900ff" rx="5.508" ry="30.599" transform="rotate(89.814 -25.928 4.177)scale(1 -1)"/></g><g filter="url(#f)"><ellipse cx="5.508" cy="30.599" fill="#8900ff" rx="5.508" ry="30.599" transform="rotate(89.814 -25.738 5.52)scale(1 -1)"/></g><g filter="url(#g)"><ellipse cx="14.072" cy="22.078" fill="#eee6ff" rx="14.072" ry="22.078" transform="rotate(93.35 31.245 55.578)scale(-1 1)"/></g><g filter="url(#h)"><ellipse cx="3.47" cy="21.501" fill="#8900ff" rx="3.47" ry="21.501" transform="rotate(89.009 35.419 55.202)scale(-1 1)"/></g><g filter="url(#i)"><ellipse cx="3.47" cy="21.501" fill="#8900ff" rx="3.47" ry="21.501" transform="rotate(89.009 35.419 55.202)scale(-1 1)"/></g><g filter="url(#j)"><ellipse cx="14.592" cy="9.743" fill="#8900ff" rx="4.407" ry="29.108" transform="rotate(39.51 14.592 9.743)"/></g><g filter="url(#k)"><ellipse cx="61.728" cy="-5.321" fill="#8900ff" rx="4.407" ry="29.108" transform="rotate(37.892 61.728 -5.32)"/></g><g filter="url(#l)"><ellipse cx="55.618" cy="7.104" fill="#00c2ff" rx="5.971" ry="9.665" transform="rotate(37.892 55.618 7.104)"/></g><g filter="url(#m)"><ellipse cx="12.326" cy="39.103" fill="#8900ff" rx="4.407" ry="29.108" transform="rotate(37.892 12.326 39.103)"/></g><g filter="url(#n)"><ellipse cx="12.326" cy="39.103" fill="#8900ff" rx="4.407" ry="29.108" transform="rotate(37.892 12.326 39.103)"/></g><g filter="url(#o)"><ellipse cx="49.857" cy="30.678" fill="#8900ff" rx="4.407" ry="29.108" transform="rotate(37.892 49.857 30.678)"/></g><g filter="url(#p)"><ellipse cx="52.623" cy="33.171" fill="#00c2ff" rx="5.971" ry="15.297" transform="rotate(37.892 52.623 33.17)"/></g></g><path d="M6.919 0c-9.198 13.166-9.252 33.575 0 46.789h6.215c-9.25-13.214-9.196-33.623 0-46.789zm62.424 0h-6.215c9.198 13.166 9.252 33.575 0 46.789h6.215c9.25-13.214 9.196-33.623 0-46.789" class="parenthesis"/><defs><filter id="b" width="60.045" height="41.654" x="-5.564" y="16.92" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="7.659"/></filter><filter id="c" width="90.34" height="51.437" x="-40.407" y="-6.762" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="7.659"/></filter><filter id="d" width="79.355" height="29.4" x="-35.435" y="2.801" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="e" width="79.579" height="29.4" x="-30.84" y="20.8" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="f" width="79.579" height="29.4" x="-29.307" y="21.949" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="g" width="74.749" height="58.852" x="29.961" y="-17.13" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="7.659"/></filter><filter id="h" width="61.377" height="25.362" x="37.754" y="3.055" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="i" width="61.377" height="25.362" x="37.754" y="3.055" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="j" width="56.045" height="63.649" x="-13.43" y="-22.082" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="k" width="54.814" height="64.646" x="34.321" y="-37.644" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="l" width="33.541" height="35.313" x="38.847" y="-10.552" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="m" width="54.814" height="64.646" x="-15.081" y="6.78" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="n" width="54.814" height="64.646" x="-15.081" y="6.78" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="o" width="54.814" height="64.646" x="22.45" y="-1.645" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="p" width="39.409" height="43.623" x="32.919" y="11.36" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter></defs></svg>
+</file>
+
+<file path="client/src/components/ErrorMessage.jsx">
+import React from 'react';
+import '../styles/error.css';
+
+const ErrorMessage = ({ message, onRetry }) => (
+  <div className="error-container">
+    <div className="error-icon">⚠️</div>
+    <h2>SIGNAL LOST</h2>
+    <p>{message}</p>
+    {onRetry && (
+      <button onClick={onRetry} className="retry-btn">
+        RETUNE CHANNEL
+      </button>
+    )}
+  </div>
+);
+
+export default ErrorMessage;
+</file>
+
+<file path="client/src/components/LoadingSpinner.jsx">
+import React from 'react';
+import '../styles/loading.css';
+
+const LoadingSpinner = () => (
+  <div className="spinner-container" aria-label="Loading content">
+    <div className="crt-spinner"></div>
+  </div>
+);
+
+export default LoadingSpinner;
+</file>
+
+<file path="client/src/components/OrbCursor.jsx">
+import React from 'react';
+import { useOrbCursor } from '../hooks/useOrbCursor';
+
+const OrbCursor = () => {
+  const { isEnabled } = useOrbCursor();
+  if (!isEnabled) return null;
+
+  return (
+    <div
+      id="zamani-orb"
+      style={{
+        position: 'fixed', top: 0, left: 0, width: '32px', height: '32px',
+        borderRadius: '50%', 
+        border: '2px solid rgba(0, 255, 255, 0.9)',
+        background: 'radial-gradient(circle, rgba(0,255,255,0.2) 0%, transparent 70%)',
+        boxShadow: '0 0 20px rgba(0, 255, 255, 0.6), inset 0 0 12px rgba(0, 255, 255, 0.3)',
+        pointerEvents: 'none', zIndex: 9999, opacity: 0, willChange: 'transform',
+        transition: 'transform 0.1s ease-out, border-color 0.2s ease',
+      }}
+    />
+  );
+};
+
+export default OrbCursor;
+</file>
+
+<file path="client/src/components/SaveButton.jsx">
+import React from 'react';
+import { useCapsuleContext } from '../context/CapsuleContext';
+
+const SaveButton = ({ date, mode }) => {
+  const { isSaved, addSavedCapsule, removeSavedCapsule } = useCapsuleContext();
+  const saved = isSaved(date, mode);
+
+  const toggleSave = () => {
+    if (saved) {
+      removeSavedCapsule(date, mode);
+    } else {
+      addSavedCapsule(date, mode);
+    }
+  };
+
+  return (
+    <button
+      className={`save-btn ${saved ? 'saved' : ''}`}
+      onClick={toggleSave}
+      aria-label={saved ? 'Remove from saved' : 'Save to favorites'}
+    >
+      {saved ? '★ SAVED' : '☆ SAVE'}
+    </button>
+  );
+};
+
+export default SaveButton;
+</file>
+
+<file path="client/src/components/TVFrame.jsx">
+import React from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useTVSystem } from '../context/TVSystemContext';
+import '../styles/tv.css';
+
+const NAV_ITEMS = [
+  { label: 'Home', shortLabel: 'HM', path: '/' },
+  { label: 'Tune', shortLabel: 'CH', path: '/', state: { focusDate: true } },
+  { label: 'Saved', shortLabel: 'SV', path: '/saved' },
+  { label: 'About', shortLabel: 'IN', path: '/about' },
+];
+
+const getPageLabel = (pathname) => {
+  if (pathname.startsWith('/capsule/')) return 'TUNED ARCHIVE';
+  if (pathname.startsWith('/saved')) return 'SAVED CAPSULES';
+  if (pathname.startsWith('/about')) return 'ABOUT';
+  return 'HOME';
+};
+
+const TVFrame = ({ children, className = '', model = 'TIME CAPSULE' }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { powerState, powerOn, powerOff, vhsEnabled, toggleVhs } = useTVSystem();
+  const isPoweredOn = powerState === 'on';
+  const isBooting = powerState === 'booting';
+
+  const isActive = (path, label) => {
+    if (label === 'Tune') return location.pathname.startsWith('/capsule/');
+    if (path === '/') return location.pathname === '/' && label === 'Home';
+    return location.pathname.startsWith(path);
+  };
+
+  const handleNav = (item) => {
+    if (!isPoweredOn) return;
+    navigate(item.path, { state: item.state });
+  };
+
+  const handleBack = () => {
+    if (!isPoweredOn) return;
+
+    if (window.history.length > 1) {
+      navigate(-1);
+    } else {
+      navigate('/');
+    }
+  };
+
+  const handlePower = () => {
+    if (isPoweredOn) {
+      powerOff();
+      return;
+    }
+
+    if (powerState === 'off') {
+      powerOn(() => navigate('/'));
+    }
+  };
+
+  return (
+    <div className="tv-perspective-container">
+      <div className={`tv-frame tv-${powerState} ${className}`}>
+        <div className="tv-cabinet-highlight" aria-hidden="true" />
+
+        <div className="tv-model-row">
+          <span className="tv-model-dot" aria-hidden="true" />
+          <span>{model}</span>
+          <span className="tv-model-number">TC-1984</span>
+        </div>
+
+        <div className="tv-screen-bezel">
+          <div className={`tv-screen ${vhsEnabled ? 'vhs-enabled' : 'vhs-disabled'}`}>
+            {powerState === 'off' && (
+              <div className="tv-off-screen" aria-live="polite">
+                <span className="standby-pixel" aria-hidden="true" />
+                <p>STANDBY</p>
+                <span>PRESS POWER TO START</span>
+              </div>
+            )}
+
+            {isBooting && (
+              <div className="tv-boot-sequence" aria-live="polite">
+                <div className="boot-static" aria-hidden="true" />
+                <div className="boot-beam" aria-hidden="true" />
+                <div className="boot-copy">
+                  <strong>ZAMANI</strong>
+                  <span>TIME CAPSULE</span>
+                  <small>WARMING UP SIGNAL...</small>
+                </div>
+              </div>
+            )}
+
+            {isPoweredOn && (
+              <>
+                <header className="tv-screen-header">
+                  {location.pathname !== '/' && (
+                    <button
+                      type="button"
+                      className="screen-back-button"
+                      onClick={handleBack}
+                      aria-label="Go back"
+                    >
+                      <span aria-hidden="true">←</span>
+                    </button>
+                  )}
+                  <span className="screen-page-label">{getPageLabel(location.pathname)}</span>
+                </header>
+
+                <div className="tv-screen-glow" aria-hidden="true" />
+                <div className="tv-content">{children}</div>
+
+                {vhsEnabled && (
+                  <div className="tv-vhs-effects" aria-hidden="true">
+                    <div className="vhs-noise" />
+                    <div className="vhs-tracking-line" />
+                    <div className="vhs-scanlines" />
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+        </div>
+
+        <div className="tv-console">
+          <div className="tv-brand" aria-label="Project name">ZAMANI</div>
+
+          <nav className="tv-controls" aria-label="Time Capsule controls">
+            {NAV_ITEMS.map((item) => (
+              <button
+                key={item.label}
+                type="button"
+                className={`tv-control-button ${isActive(item.path, item.label) ? 'active' : ''}`}
+                onClick={() => handleNav(item)}
+                aria-label={item.label}
+                aria-current={isPoweredOn && isActive(item.path, item.label) ? 'page' : undefined}
+                disabled={!isPoweredOn}
+              >
+                <span className="control-short">{item.shortLabel}</span>
+                <span className="control-label">{item.label}</span>
+              </button>
+            ))}
+
+            <button
+              type="button"
+              className={`tv-control-button tv-vhs-button ${vhsEnabled ? 'active' : ''}`}
+              onClick={toggleVhs}
+              aria-label={`${vhsEnabled ? 'Disable' : 'Enable'} VHS effect`}
+              aria-pressed={vhsEnabled}
+              disabled={!isPoweredOn}
+            >
+              <span className="control-short">VHS</span>
+              <span className="control-label">FX</span>
+            </button>
+
+            <div className="tv-status" aria-label={`Television ${powerState}`}>
+              <span className={`status-light status-${powerState}`} />
+              <span className="status-copy">{isBooting ? 'WAIT' : isPoweredOn ? 'ON' : 'OFF'}</span>
+            </div>
+
+            <button
+              type="button"
+              className={`tv-power-button ${isPoweredOn ? 'powered' : ''}`}
+              aria-label={isPoweredOn ? 'Power off television' : 'Power on television'}
+              onClick={handlePower}
+              disabled={isBooting}
+            >
+              <span aria-hidden="true">⏻</span>
+            </button>
+          </nav>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default TVFrame;
+</file>
+
+<file path="client/src/hooks/useOrbCursor.js">
+import { useEffect, useRef, useState } from 'react';
+
+const mousePos = { x: -100, y: -100 };
+const orbPos = { x: -100, y: -100 };
+let animationId = null;
+let isEnabledGlobal = true;
+
+export const useOrbCursor = () => {
+  const [isHovering, setIsHovering] = useState(false);
+  const [isEnabled, setIsEnabled] = useState(isEnabledGlobal);
+  const isHoveringRef = useRef(isHovering);
+  
+  useEffect(() => { isHoveringRef.current = isHovering; }, [isHovering]);
+  useEffect(() => { isEnabledGlobal = isEnabled; }, [isEnabled]);
+
+  const lerp = (start, end, f) => start + (end - start) * 0.35;
+
+  useEffect(() => {
+    if (!animationId) {
+      const animate = () => {
+        try {
+          if (!isEnabledGlobal) {
+            document.body.style.cursor = 'auto';
+            animationId = requestAnimationFrame(animate);
+            return;
+          }
+          
+          const orb = document.getElementById('zamani-orb');
+          if (!orb) {
+            document.body.style.cursor = 'auto';
+            animationId = requestAnimationFrame(animate);
+            return;
+          }
+
+          document.body.style.cursor = 'none';
+          orbPos.x = lerp(orbPos.x, mousePos.x, 0.35);
+          orbPos.y = lerp(orbPos.y, mousePos.y, 0.35);
+
+          orb.style.transform = `translate(${orbPos.x}px, ${orbPos.y}px) scale(${isHoveringRef.current ? 1.8 : 1})`;
+          orb.style.opacity = '1';
+        } catch (err) {
+          console.error('Orb crash:', err);
+          document.body.style.cursor = 'auto';
+        }
+        animationId = requestAnimationFrame(animate);
+      };
+      animationId = requestAnimationFrame(animate);
+    }
+
+    const handleKey = (e) => {
+      if (e.key === 'Escape') {
+        setIsEnabled(prev => {
+          const next = !prev;
+          isEnabledGlobal = next;
+          return next;
+        });
+      }
+    };
+    
+    const updateMouse = (e) => { mousePos.x = e.clientX; mousePos.y = e.clientY; };
+    const checkHover = (e) => setIsHovering(!!e.target.closest('button, a, input, select, .clickable'));
+
+    window.addEventListener('keydown', handleKey);
+    window.addEventListener('mousemove', updateMouse);
+    window.addEventListener('mouseover', checkHover);
+    window.addEventListener('mouseout', checkHover);
+
+    return () => {
+      window.removeEventListener('keydown', handleKey);
+      window.removeEventListener('mousemove', updateMouse);
+      window.removeEventListener('mouseover', checkHover);
+      window.removeEventListener('mouseout', checkHover);
+    };
+  }, []);
+
+  return { isEnabled };
+};
+</file>
+
+<file path="client/src/hooks/useRetroAudio.js">
+import { useEffect, useRef } from 'react';
+
+// Using reliable CC0 sound sources from Freesound/ZapSplat archives
+const SOUNDS = {
+  click: 'https://assets.mixkit.co/sfx/preview/mixkit-mechanical-keyboard-typing-1387.mp3',
+  hover: 'https://assets.mixkit.co/sfx/preview/mixkit-ui-button-hover-click-1142.mp3',
+  tune: 'https://assets.mixkit.co/sfx/preview/mixkit-old-radio-tuning-static-2675.mp3'
+};
+
+export const useRetroAudio = () => {
+  const audioRefs = useRef({});
+
+  useEffect(() => {
+    // Preload all sounds on mount for instant playback
+    Object.entries(SOUNDS).forEach(([key, url]) => {
+      const audio = new Audio(url);
+      audio.preload = 'auto';
+      audio.volume = 0.4; // Keep it subtle so it doesn't overpower content
+      audioRefs.current[key] = audio;
+    });
+
+    return () => {
+      // Cleanup on unmount
+      Object.values(audioRefs.current).forEach(audio => {
+        audio.pause();
+        audio.src = '';
+      });
+    };
+  }, []);
+
+  const playSound = (type) => {
+    const audio = audioRefs.current[type];
+    if (audio) {
+      // Clone node allows overlapping rapid clicks without cutting off previous sound
+      const clone = audio.cloneNode();
+      clone.volume = 0.4;
+      clone.play().catch(() => {}); // Catch autoplay policy errors gracefully
+    }
+  };
+
+  return { playSound };
+};
+</file>
+
+<file path="client/src/pages/Capsule.jsx">
+import React from 'react';
+import { useParams } from 'react-router-dom';
+import CapsuleDisplay from '../components/CapsuleDisplay';
+
+export default function Capsule() {
+  const { date, mode } = useParams();
+
+  return (
+    <div className="capsule-page">
+      <CapsuleDisplay date={date} mode={mode} />
+    </div>
+  );
+}
+</file>
+
+<file path="client/src/styles/datepicker.css">
+.date-picker-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1rem;
+}
+
+.mode-toggle {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.mode-btn {
+  padding: 0.85rem 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  color: #ffffff;
+  font-family: 'Space Mono', monospace;
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border-radius: 4px;
+}
+
+.mode-btn:hover {
+  border-color: #38bdf8;
+  color: #ffffff;
+  background: rgba(56, 189, 248, 0.18);
+}
+
+.mode-btn.active {
+  background: #38bdf8 !important;
+  color: #000000 !important;
+  border-color: #38bdf8 !important;
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
+}
+
+.date-picker-input {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+  font-family: 'Space Mono', monospace;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  max-width: 380px;
+  border-radius: 4px;
+}
+
+.date-picker-input:hover {
+  border-color: #38bdf8;
+  background: rgba(56, 189, 248, 0.14);
+}
+
+.date-icon {
+  font-size: 1.3rem;
+}
+
+.date-value {
+  flex: 1;
+  text-align: left;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.date-arrow {
+  color: #38bdf8;
+  font-size: 0.9rem;
+}
+
+.picker-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 380px;
+}
+
+/* Glassmorphism Calendar Popup */
+.retro-calendar {
+  background: rgba(10, 10, 10, 0.85) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  border-radius: 16px !important;
+  font-family: 'Space Mono', monospace !important;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.9) !important;
+}
+
+/* Glassmorphic Header with Pure White Font/Controls */
+.retro-calendar .react-datepicker__header {
+  background: rgba(37, 37, 37, 0.4) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;
+  padding: 1rem !important;
+}
+
+.retro-calendar .react-datepicker__current-month,
+.retro-calendar .react-datepicker__year-read-view--down-arrow,
+.retro-calendar .react-datepicker__month-read-view--down-arrow {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  font-size: 1.1rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.1em !important;
+}
+
+/* Style react-datepicker native dropdowns if rendered in header */
+.retro-calendar .react-datepicker__month-dropdown-container,
+.retro-calendar .react-datepicker__year-dropdown-container {
+  color: #ffffff !important;
+}
+
+.retro-calendar .react-datepicker__year-select,
+.retro-calendar .react-datepicker__month-select {
+  background: rgba(0, 0, 0, 0.6) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  border-radius: 6px !important;
+  font-family: 'Space Mono', monospace !important;
+  padding: 0.2rem 0.5rem;
+}
+
+.retro-calendar .react-datepicker__day-name {
+  color: #38bdf8 !important;
+  font-weight: 700 !important;
+  font-size: 0.9rem !important;
+}
+
+.retro-calendar .react-datepicker__day {
+  color: #ffffff !important;
+  font-size: 1rem !important;
+  font-weight: 400 !important;
+  transition: all 0.2s ease !important;
+}
+
+.retro-calendar .react-datepicker__day:hover {
+  background: rgba(56, 189, 248, 0.25) !important;
+  color: #ffffff !important;
+  border-radius: 8px !important;
+}
+
+.retro-calendar .react-datepicker__day--selected {
+  background: #38bdf8 !important;
+  color: #000000 !important;
+  font-weight: 700 !important;
+  border-radius: 8px !important;
+}
+
+.retro-calendar .react-datepicker__day--today {
+  border: 2px solid #38bdf8 !important;
+  border-radius: 8px !important;
+}
+
+.retro-calendar .react-datepicker__navigation {
+  top: 1rem !important;
+}
+
+.retro-calendar .react-datepicker__navigation-icon::before {
+  border-color: #ffffff !important;
+}
+
+.retro-popper {
+  z-index: 100 !important;
+}
+
+.quick-dates {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.quick-btn {
+  padding: 0.6rem 1.2rem;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  border-radius: 4px;
+}
+
+.quick-btn:hover {
+  border-color: #38bdf8;
+  color: #ffffff;
+  background: rgba(56, 189, 248, 0.18);
+}
+
+.selected-date-display {
+  text-align: center;
+  padding: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  width: 100%;
+}
+
+.display-label {
+  font-size: 0.85rem;
+  color: #38bdf8;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+}
+
+.display-date {
+  font-size: 1.2rem;
+  color: #ffffff;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+@media (max-width: 768px) {
+  .mode-toggle {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .mode-btn {
+    width: 100%;
+  }
+
+  .date-picker-input,
+  .picker-wrapper {
+    max-width: 100%;
+  }
+}
+/* Zamani television control treatment */
+.home-picker-panel .date-picker-container {
+  align-items: flex-start;
+  gap: 0.72rem;
+  padding: 0;
+}
+
+.home-picker-panel .mode-toggle {
+  width: 100%;
+  gap: 0.45rem;
+  margin: 0;
+}
+
+.home-picker-panel .mode-btn,
+.home-picker-panel .quick-btn,
+.home-picker-panel .date-picker-input {
+  min-height: 42px;
+  border-radius: 3px;
+  background: rgba(0, 24, 40, 0.72);
+  border-color: rgba(255,255,255,0.24);
+  color: #ffffff;
+  box-shadow: inset 0 1px rgba(255,255,255,0.04);
+}
+
+.home-picker-panel .mode-btn {
+  flex: 1;
+  padding: 0.62rem 0.85rem;
+  font-size: 0.78rem;
+}
+
+.home-picker-panel .mode-btn.active {
+  color: #000000 !important;
+  background: #38bdf8 !important;
+  border-color: #38bdf8 !important;
+  box-shadow: 0 0 14px rgba(56,189,248,0.18);
+}
+
+.home-picker-panel .picker-wrapper {
+  width: 100%;
+  max-width: 100%;
+}
+
+.home-picker-panel .date-picker-input {
+  width: 100%;
+  max-width: 100%;
+  padding: 0.72rem 0.9rem;
+  font-size: clamp(0.78rem, 1.2vw, 0.9rem);
+}
+
+.home-picker-panel .quick-dates {
+  justify-content: flex-start;
+  gap: 0.45rem;
+}
+
+.home-picker-panel .quick-btn {
+  min-height: 36px;
+  padding: 0.48rem 0.75rem;
+  font-size: 0.68rem;
+}
+
+.home-picker-panel .selected-date-display {
+  padding: 0.55rem 0 0;
+  text-align: left;
+  border-top-color: rgba(255,255,255,0.14);
+}
+
+.home-picker-panel .display-label {
+  margin-bottom: 0.15rem;
+  color: #38bdf8 !important;
+  font-size: 0.58rem !important;
+}
+
+.home-picker-panel .display-date {
+  color: #ffffff !important;
+  font-size: 0.78rem !important;
+}
+
+@media (max-width: 760px) {
+  .home-picker-panel .mode-toggle { flex-direction: row; }
+  .home-picker-panel .mode-btn { width: auto; }
+  .home-picker-panel .selected-date-display { display: none; }
+}
+
+
+@media (max-width: 767px) {
+  .home-picker-panel .date-picker-container {
+    gap: 0.5rem;
+  }
+
+  .home-picker-panel .mode-btn {
+    min-height: 38px;
+    padding: 0.48rem 0.55rem;
+    font-size: 0.66rem;
+  }
+
+  .home-picker-panel .date-picker-input {
+    min-height: 40px;
+    padding: 0.58rem 0.68rem;
+    font-size: 0.72rem;
+  }
+
+  .home-picker-panel .quick-btn {
+    min-height: 34px;
+    padding: 0.42rem 0.58rem;
+    font-size: 0.58rem;
+  }
+}
+</file>
+
+<file path="client/src/styles/error.css">
+.error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+  gap: 1rem;
+}
+
+.error-icon {
+  font-size: 3rem;
+  filter: grayscale(100%);
+}
+
+.retry-btn {
+  margin-top: 1rem;
+  padding: 0.75rem 1.5rem;
+  background: #fff;
+  color: #000;
+  border: none;
+  font-family: 'Space Mono', monospace;
+  font-weight: 700;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.retry-btn:hover {
+  background: #ddd;
+}
+</file>
+
+<file path="client/src/styles/loading.css">
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.crt-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #333;
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+</file>
+
+<file path="client/src/styles/saved.css">
+.saved-container {
+  padding: 1rem;
+}
+
+.saved-header {
+  margin-bottom: 2rem;
+  border-bottom: 2px solid #333;
+  padding-bottom: 1rem;
+}
+
+.saved-header h1 {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.saved-header p {
+  color: #888;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.9rem;
+}
+
+.empty-archive {
+  text-align: center;
+  padding: 4rem 1rem;
+  opacity: 0.7;
+}
+
+.browse-link {
+  display: inline-block;
+  margin-top: 1rem;
+  color: #fff;
+  text-decoration: none;
+  border-bottom: 1px solid #fff;
+  font-family: 'Space Mono', monospace;
+  transition: opacity 0.3s ease;
+}
+
+.browse-link:hover {
+  opacity: 0.7;
+}
+
+.saved-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.saved-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid #333;
+  padding: 1.5rem;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Scanline overlay on hover */
+.saved-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 2px,
+    rgba(255, 255, 255, 0.03) 2px,
+    rgba(255, 255, 255, 0.03) 4px
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.saved-card:hover::before {
+  opacity: 1;
+}
+
+.saved-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.1),
+              inset 0 0 20px rgba(255, 255, 255, 0.05);
+}
+
+.saved-mode {
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  color: #888;
+  text-transform: uppercase;
+}
+
+.saved-card h2 {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.3;
+  margin: 0;
+}
+
+.saved-date {
+  font-size: 0.8rem;
+  color: #666;
+  font-family: 'Space Mono', monospace;
+}
+
+@media (max-width: 768px) {
+  .saved-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</file>
+
+<file path="client/src/styles/tv.css">
+/* ========================================
+   ZAMANI — RETRO CRT SHELL
+   Original black / white / cyan palette
+   ======================================== */
+
+:root {
+  --zamani-black: #000000;
+  --zamani-panel: #090909;
+  --zamani-panel-raised: #171717;
+  --zamani-grey: #8b8b8b;
+  --zamani-white: #ffffff;
+  --zamani-cyan: #38bdf8;
+  --zamani-screen-blue: #00a2ed;
+  --zamani-screen-deep: #003f66;
+}
+
+.tv-perspective-container {
+  width: 100vw;
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: clamp(0.55rem, 1.7vw, 1.35rem);
+  background:
+    radial-gradient(circle at 50% 18%, rgba(56, 189, 248, 0.09), transparent 28%),
+    #000000;
+  overflow: hidden;
+  perspective: 1400px;
+}
+
+.tv-frame {
+  position: relative;
+  width: min(1180px, 98vw);
+  height: min(900px, 97dvh);
+  min-height: min(620px, 96dvh);
+  padding: clamp(1rem, 2.2vw, 1.8rem) clamp(1rem, 2.5vw, 2.1rem) clamp(0.85rem, 1.6vw, 1.25rem);
+  border: 1px solid #202020;
+  border-radius: 28px 28px 40px 40px;
+  background:
+    linear-gradient(90deg, transparent 0 7%, rgba(255, 255, 255, 0.025) 13%, transparent 20%),
+    linear-gradient(180deg, #242424 0%, #151515 48%, #080808 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.09),
+    inset 0 -20px 36px rgba(0, 0, 0, 0.72),
+    0 32px 70px rgba(0, 0, 0, 0.72);
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 0.65rem;
+  overflow: hidden;
+}
+
+.tv-cabinet-highlight {
+  position: absolute;
+  inset: 7px 9% auto;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.14), transparent);
+  pointer-events: none;
+}
+
+.tv-model-row {
+  min-height: 28px;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0 0.7rem;
+  color: rgba(255, 255, 255, 0.64);
+  font-size: clamp(0.65rem, 0.95vw, 0.78rem);
+  font-weight: 700;
+  letter-spacing: 0.17em;
+  text-transform: uppercase;
+}
+
+.tv-model-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--zamani-cyan);
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.7);
+}
+
+.tv-model-number {
+  margin-left: auto;
+  opacity: 0.42;
+  letter-spacing: 0.12em;
+}
+
+.tv-screen-bezel {
+  min-height: 0;
+  padding: clamp(0.65rem, 1.2vw, 0.95rem);
+  border-radius: 25px;
+  background: linear-gradient(145deg, #020202, #111111 46%, #000000);
+  box-shadow:
+    inset 0 0 0 2px #000000,
+    inset 0 0 28px rgba(0, 0, 0, 0.96),
+    0 3px 13px rgba(0, 0, 0, 0.72);
+}
+
+.tv-screen {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  border-radius: 32px / 24px;
+  background: #000000;
+  box-shadow:
+    inset 0 0 65px rgba(0, 0, 0, 0.72),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  isolation: isolate;
+}
+
+.tv-on .tv-screen {
+  background:
+    radial-gradient(circle at 77% 17%, rgba(255, 255, 255, 0.09), transparent 28%),
+    linear-gradient(145deg, var(--zamani-screen-deep) 0%, #006da4 56%, var(--zamani-screen-blue) 115%);
+  animation: tv-turn-on 0.48s cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+
+@keyframes tv-turn-on {
+  0% {
+    transform: scale(1, 0.006);
+    opacity: 0;
+    filter: brightness(18);
+  }
+  56% {
+    transform: scale(1, 0.006);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+    filter: brightness(1);
+  }
+}
+
+.tv-off-screen,
+.tv-boot-sequence {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  text-align: center;
+  z-index: 10;
+  background: #010101;
+  color: rgba(255, 255, 255, 0.48);
+  font-family: 'Space Mono', monospace;
+}
+
+.tv-off-screen {
+  gap: 0.45rem;
+}
+
+.tv-off-screen p,
+.tv-off-screen span {
+  color: rgba(255, 255, 255, 0.42) !important;
+  font-size: 0.68rem !important;
+  letter-spacing: 0.18em;
+}
+
+.tv-off-screen p {
+  color: rgba(255, 255, 255, 0.68) !important;
+  font-weight: 700;
+}
+
+.standby-pixel {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  margin-bottom: 0.45rem;
+  background: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.55);
+}
+
+.tv-boot-sequence {
+  overflow: hidden;
+  background: #000000;
+}
+
+.boot-static {
+  position: absolute;
+  inset: 0;
+  opacity: 0.36;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.96' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: boot-static-shift 140ms steps(2) infinite;
+}
+
+.boot-beam {
+  position: absolute;
+  left: 5%;
+  right: 5%;
+  top: 50%;
+  height: 2px;
+  background: #ffffff;
+  box-shadow: 0 0 16px 5px rgba(255, 255, 255, 0.72);
+  animation: boot-beam 1.65s ease-in-out both;
+}
+
+.boot-copy {
+  position: relative;
+  z-index: 3;
+  display: grid;
+  gap: 0.2rem;
+  padding: 1rem 1.25rem;
+  background: rgba(0, 0, 0, 0.58);
+  opacity: 0;
+  animation: boot-copy 1.65s ease both;
+}
+
+.boot-copy strong {
+  color: #ffffff;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(1.8rem, 5vw, 3.6rem);
+  letter-spacing: 0.08em;
+}
+
+.boot-copy span {
+  color: var(--zamani-cyan) !important;
+  font-size: clamp(0.62rem, 1.3vw, 0.82rem) !important;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+}
+
+.boot-copy small {
+  margin-top: 0.5rem;
+  color: rgba(255, 255, 255, 0.64);
+  font-size: 0.58rem;
+  letter-spacing: 0.16em;
+}
+
+@keyframes boot-static-shift {
+  0% { transform: translate(0, 0) scale(1.05); }
+  50% { transform: translate(-3%, 2%) scale(1.08); }
+  100% { transform: translate(2%, -3%) scale(1.05); }
+}
+
+@keyframes boot-beam {
+  0% { opacity: 0; transform: scaleX(0.04); }
+  15% { opacity: 1; transform: scaleX(0.28); }
+  42% { transform: scaleX(1); }
+  58% { opacity: 1; transform: scaleY(1); }
+  82% { opacity: 0.8; transform: scaleY(160); }
+  100% { opacity: 0; transform: scaleY(260); }
+}
+
+@keyframes boot-copy {
+  0%, 48% { opacity: 0; transform: scale(0.96); }
+  58%, 90% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; }
+}
+
+.tv-screen-header {
+  position: absolute;
+  z-index: 30;
+  top: 0;
+  left: 0;
+  right: 0;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.7rem clamp(1rem, 2.2vw, 1.8rem);
+  pointer-events: none;
+}
+
+.screen-back-button {
+  width: 32px;
+  height: 32px;
+  flex: 0 0 32px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.26);
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.32);
+  color: #ffffff;
+  font: inherit;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: border-color 150ms ease, background 150ms ease, transform 150ms ease;
+}
+
+.screen-back-button:hover,
+.screen-back-button:focus-visible {
+  border-color: var(--zamani-cyan);
+  background: rgba(56, 189, 248, 0.16);
+  outline: none;
+  transform: translateX(-2px);
+}
+
+.screen-page-label {
+  color: rgba(255, 255, 255, 0.9) !important;
+  font-size: clamp(0.58rem, 1vw, 0.72rem) !important;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
+}
+
+.tv-screen-glow {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(112deg, rgba(255, 255, 255, 0.08), transparent 25% 72%, rgba(255, 255, 255, 0.025)),
+    radial-gradient(ellipse at center, transparent 58%, rgba(0, 0, 0, 0.48) 100%);
+}
+
+.tv-content {
+  position: relative;
+  z-index: 4;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  padding: clamp(3.6rem, 7vh, 4.9rem) clamp(1.2rem, 3vw, 2.6rem) clamp(1.2rem, 2.5vw, 2.2rem);
+  color: #ffffff;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--zamani-cyan) transparent;
+}
+
+/* VHS layers are deliberately children of .tv-screen so the effect never escapes the glass. */
+.tv-vhs-effects {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.vhs-noise,
+.vhs-tracking-line,
+.vhs-scanlines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.vhs-noise {
+  inset: -18%;
+  opacity: 0.055;
+  mix-blend-mode: screen;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.95' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  animation: vhs-noise-shift 430ms steps(3) infinite;
+}
+
+.vhs-scanlines {
+  opacity: 0.32;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 2px,
+    rgba(0, 0, 0, 0.19) 3px,
+    rgba(0, 0, 0, 0.19) 4px
+  );
+}
+
+.vhs-tracking-line {
+  height: 12%;
+  top: -16%;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(255, 255, 255, 0.07),
+    rgba(255, 255, 255, 0.16),
+    transparent
+  );
+  animation: vhs-track 6.5s linear infinite;
+}
+
+@keyframes vhs-noise-shift {
+  0% { transform: translate(0, 0); }
+  33% { transform: translate(-5%, 3%); }
+  66% { transform: translate(3%, -4%); }
+  100% { transform: translate(-2%, 4%); }
+}
+
+@keyframes vhs-track {
+  0%, 58% { transform: translateY(0); opacity: 0; }
+  61% { opacity: 0.7; }
+  75% { transform: translateY(980%); opacity: 0.24; }
+  76%, 100% { transform: translateY(980%); opacity: 0; }
+}
+
+.tv-console {
+  display: grid;
+  grid-template-columns: minmax(150px, 0.34fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(0.8rem, 2vw, 1.6rem);
+  padding: 0.1rem 0.5rem 0;
+}
+
+.tv-brand {
+  color: #d7d7d7;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(1.6rem, 3.2vw, 2.55rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-align: center;
+  text-shadow: 0 2px 0 #000000;
+}
+
+.tv-controls {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(62px, 1fr)) auto auto;
+  align-items: stretch;
+  gap: 0.38rem;
+  padding: 0.42rem;
+  border: 1px solid #181818;
+  background: linear-gradient(180deg, #151515, #080808);
+  box-shadow: inset 0 1px 6px rgba(0, 0, 0, 0.9);
+}
+
+.tv-control-button,
+.tv-power-button {
+  min-height: 45px;
+  border: 1px solid #030303;
+  border-top-color: #3a3a3a;
+  border-radius: 3px;
+  background: linear-gradient(180deg, #2d2d2d, #171717);
+  color: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 2px 0 #000000, inset 0 1px rgba(255, 255, 255, 0.05);
+  cursor: pointer;
+  transition: transform 120ms ease, background 120ms ease, color 120ms ease, box-shadow 120ms ease;
+}
+
+.tv-control-button {
+  display: grid;
+  place-items: center;
+  gap: 0.08rem;
+  padding: 0.35rem 0.4rem;
+}
+
+.tv-control-button:hover:not(:disabled),
+.tv-control-button:focus-visible:not(:disabled) {
+  color: #ffffff;
+  border-color: rgba(56, 189, 248, 0.56);
+  background: linear-gradient(180deg, #363636, #1c1c1c);
+  outline: none;
+  box-shadow: 0 2px 0 #000000, 0 0 13px rgba(56, 189, 248, 0.16);
+}
+
+.tv-control-button:active:not(:disabled) {
+  transform: translateY(2px);
+  box-shadow: none;
+}
+
+.tv-control-button.active:not(:disabled) {
+  color: #000000;
+  border-color: #58c9fb;
+  background: linear-gradient(180deg, #67cdf9, var(--zamani-cyan));
+  box-shadow: 0 2px 0 #006995, 0 0 15px rgba(56, 189, 248, 0.28);
+}
+
+.tv-control-button:disabled {
+  cursor: default;
+  opacity: 0.34;
+}
+
+.control-short {
+  color: inherit !important;
+  font-size: 0.68rem !important;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+}
+
+.control-label {
+  color: inherit !important;
+  font-size: 0.55rem !important;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  opacity: 0.78 !important;
+}
+
+.tv-status {
+  min-width: 45px;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 0.18rem;
+  color: rgba(255, 255, 255, 0.48);
+  font-size: 0.5rem;
+  letter-spacing: 0.1em;
+}
+
+.status-light {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #242424;
+  box-shadow: inset 0 0 2px #000000;
+}
+
+.status-on {
+  background: var(--zamani-cyan);
+  box-shadow: 0 0 8px var(--zamani-cyan), 0 0 16px rgba(56, 189, 248, 0.52);
+}
+
+.status-booting {
+  background: #ffffff;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+  animation: status-blink 280ms steps(2) infinite;
+}
+
+.status-copy {
+  color: rgba(255, 255, 255, 0.48) !important;
+  font-size: 0.48rem !important;
+}
+
+@keyframes status-blink {
+  50% { opacity: 0.2; }
+}
+
+.tv-power-button {
+  width: 48px;
+  border-radius: 50%;
+  color: rgba(255, 255, 255, 0.66);
+  font-size: 1.22rem;
+}
+
+.tv-power-button:hover:not(:disabled),
+.tv-power-button:focus-visible:not(:disabled) {
+  color: var(--zamani-cyan);
+  outline: none;
+  box-shadow: 0 2px 0 #000000, 0 0 12px rgba(56, 189, 248, 0.3);
+}
+
+.tv-power-button.powered {
+  color: var(--zamani-cyan);
+}
+
+.tv-power-button:disabled {
+  cursor: wait;
+  opacity: 0.55;
+}
+
+/* Tablet keeps the television casing, but compresses the physical controls. */
+@media (min-width: 768px) and (max-width: 980px) {
+  .tv-frame {
+    width: 98vw;
+    height: min(900px, 96dvh);
+    min-height: min(600px, 96dvh);
+  }
+
+  .tv-console {
+    grid-template-columns: 130px minmax(0, 1fr);
+  }
+
+  .control-label {
+    display: none;
+  }
+
+  .tv-controls {
+    grid-template-columns: repeat(5, minmax(50px, 1fr)) auto auto;
+  }
+}
+
+/*
+  Mobile becomes a portable retro receiver instead of squeezing a full TV cabinet
+  into a phone-shaped viewport.
+*/
+@media (max-width: 767px) {
+  .tv-perspective-container {
+    min-height: 100dvh;
+    padding: 0;
+    background: #000000;
+    overflow: hidden;
+  }
+
+  .tv-frame {
+    width: 100vw;
+    height: 100dvh;
+    min-height: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: #000000;
+    box-shadow: none;
+    grid-template-rows: minmax(0, 1fr) auto;
+    gap: 0;
+  }
+
+  .tv-cabinet-highlight,
+  .tv-model-row {
+    display: none;
+  }
+
+  .tv-screen-bezel {
+    min-height: 0;
+    padding: 0;
+    border-radius: 0;
+    background: #000000;
+    box-shadow: none;
+  }
+
+  .tv-screen {
+    border-radius: 0;
+    box-shadow: inset 0 0 42px rgba(0, 0, 0, 0.58);
+  }
+
+  .tv-on .tv-screen {
+    background:
+      linear-gradient(rgba(0, 0, 0, 0.18), rgba(0, 0, 0, 0.04)),
+      linear-gradient(155deg, #003e65 0%, #006c9f 58%, #0096db 100%);
+  }
+
+  .tv-screen-header {
+    min-height: 54px;
+    padding: max(0.75rem, env(safe-area-inset-top)) 0.9rem 0.65rem;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.42), transparent);
+  }
+
+  .screen-back-button {
+    width: 34px;
+    height: 34px;
+    flex-basis: 34px;
+  }
+
+  .screen-page-label {
+    font-size: 0.62rem !important;
+  }
+
+  .tv-content {
+    padding: calc(max(0.75rem, env(safe-area-inset-top)) + 3.4rem) 0.9rem 1.2rem;
+  }
+
+  .tv-console {
+    position: relative;
+    z-index: 40;
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+    padding: 0.45rem 0.5rem max(0.45rem, env(safe-area-inset-bottom));
+    border-top: 1px solid rgba(56, 189, 248, 0.32);
+    background:
+      linear-gradient(180deg, #121212, #050505 70%),
+      #000000;
+    box-shadow: 0 -8px 22px rgba(0, 0, 0, 0.4);
+  }
+
+  .tv-brand {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.28em;
+    color: rgba(255, 255, 255, 0.7);
+    text-align: left;
+    padding-left: 0.15rem;
+  }
+
+  .tv-brand::after {
+    content: ' // PORTABLE RECEIVER';
+    color: var(--zamani-cyan);
+    font-size: 0.52rem;
+    letter-spacing: 0.1em;
+  }
+
+  .tv-controls {
+    grid-template-columns: repeat(5, minmax(0, 1fr)) 42px;
+    gap: 0.24rem;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .tv-control-button,
+  .tv-power-button {
+    min-height: 42px;
+  }
+
+  .tv-control-button {
+    min-width: 0;
+    padding: 0.2rem;
+  }
+
+  .control-label,
+  .tv-status {
+    display: none;
+  }
+
+  .control-short {
+    font-size: 0.58rem !important;
+    letter-spacing: 0.04em;
+  }
+
+  .tv-power-button {
+    width: 42px;
+    min-width: 42px;
+  }
+
+  .tv-off-screen p,
+  .tv-off-screen span {
+    font-size: 0.58rem !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tv-on .tv-screen,
+  .boot-static,
+  .boot-beam,
+  .boot-copy,
+  .vhs-noise,
+  .vhs-tracking-line,
+  .status-booting {
+    animation: none !important;
+  }
+}
+</file>
+
+<file path="client/src/main.jsx">
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './styles/globals.css';
+import App from './App';
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
+</file>
+
+<file path="client/.gitignore">
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+</file>
+
+<file path="client/eslint.config.js">
+import js from '@eslint/js'
+import globals from 'globals'
+import reactHooks from 'eslint-plugin-react-hooks'
+import reactRefresh from 'eslint-plugin-react-refresh'
+import { defineConfig, globalIgnores } from 'eslint/config'
+
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{js,jsx}'],
+    extends: [
+      js.configs.recommended,
+      reactHooks.configs.flat.recommended,
+      reactRefresh.configs.vite,
+    ],
+    languageOptions: {
+      globals: globals.browser,
+      parserOptions: { ecmaFeatures: { jsx: true } },
+    },
+  },
+])
+</file>
+
+<file path="client/index.html">
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/x-icon" href="/heart-blue.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ZAMANI // Kenya's Time Capsule</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
+</file>
+
+<file path="client/package.json">
+{
+  "name": "client",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "axios": "^1.19.0",
+    "matter-js": "^0.20.0",
+    "react": "^19.2.8",
+    "react-datepicker": "^9.1.0",
+    "react-dom": "^19.2.8",
+    "react-router-dom": "^7.18.2"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.4",
+    "eslint": "^10.8.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.3",
+    "globals": "^17.7.0",
+    "vite": "^8.2.0"
+  }
+}
+</file>
+
+<file path="client/README.md">
+# ZAMANI – Kenya's Time Capsule
+
+A retro TV-themed React application that lets users explore global and Kenyan history by selecting any date. Features Wikipedia events, NASA APOD, curated Kenyan milestones, and localStorage persistence. Built as Phase 1 of a 3-phase capstone project.
+
+[Zamani App Screenshot](./client/src/assets/hero.png)
+
+## Live Demo
+
+**[View Production Build on Vercel](https://capstone-zamani-app.vercel.app/)**
+
+## Setup Instructions
+
+### Prerequisites
+
+- Node.js v18+
+- pnpm (recommended), npm, or yarn
+
+### Installation
+
+```bash
+# Navigate to client directory
+cd client
+
+# Install dependencies
+pnpm install
+
+# Start local development server
+pnpm dev
+
+🌐 ##Live Demo
+https://capstone-zamani-app.vercel.app/
+
+The application will be available at http://localhost:5173.
+### APIs Used & Endpoints
+This application dynamically fetches data from external web services and local curated datasets:
+#API
+#Endpoint
+#Purpose
+Wikipedia On This Day
+https://en.wikipedia.org/api/rest_v1/feed/onthisday/all/{MM}/{DD}
+Fetches historical events, births, and deaths for selected dates
+NASA APOD
+https://api.nasa.gov/planetary/apod?date={YYYY-MM-DD}
+Retrieves official NASA imagery and descriptions as visual historical artifacts
+Local Kenya Dataset
+client/src/api/kenyaData.js
+Provides 20+ curated Kenyan historical milestones when Kenya Mode is active
+
+##Challenges & Known Bugs
+API Rate Limiting: The NASA APOD API relies on a public DEMO_KEY, which imposes strict hourly rate limits if users cycle rapidly through multiple dates. Graceful error-handling components were built to display fallback UI elements if rate limits are exceeded.
+
+CRT Screen Distortion Overlay: Implementing the retro SVG physics-based CRT warp (<feTurbulence>) required adjusting pointer-events: none to prevent the graphical scanline layer from intercepting and blocking mouse clicks on interactive buttons.
+
+Project Roadmap
+Phase 1: React frontend + external APIs ✅
+Phase 2: Flask backend + PostgreSQL database (upcoming)
+Phase 3: JWT authentication + user-owned capsules (upcoming)
+Tech Stack
+React 18 + React Router v6
+Context API for state management
+react-datepicker with custom retro styling
+Axios for API calls
+Custom CSS with CRT scanline animations
+localStorage for client-side persistence
+```
+</file>
+
+<file path="client/vite.config.js">
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+// https://vite.dev/config/
+export default defineConfig({
+  plugins: [react()],
+})
+</file>
+
+<file path="server/routes/__init__.py">
+
+</file>
+
+<file path="server/__init__.py">
+
+</file>
+
+<file path="server/config.py">
+import os
+from flask_sqlalchemy import SQLAlchemy
+from dotenv import load_dotenv
+
+load_dotenv()
+
+class Config:
+    SECRET_KEY = os.getenv('SECRET_KEY', 'fallback-dev-key')
+    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL')
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    
+   
+    FRONTEND_URL = os.getenv('FRONTEND_URL', 'http://localhost:5173')
+
+db = SQLAlchemy()
+
+def init_db(app):
+    app.config.from_object(Config)
+    db.init_app(app)
+    
+   
+    with app.app_context():
+        db.create_all()
+</file>
+
+<file path="client/src/api/capsules.js">
+import axios from 'axios';
+
+// RENDER URL
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000/api/v1';
+
+export const getCapsules = () =>
+  axios.get(`${API_BASE}/capsules`).then((res) => res.data);
+
+export const createCapsule = (data) =>
+  axios.post(`${API_BASE}/capsules`, data).then((res) => res.data);
+
+export const updateCapsule = (id, data) =>
+  axios.put(`${API_BASE}/capsules/${id}`, data).then((res) => res.data);
+
+export const deleteCapsule = (id) => axios.delete(`${API_BASE}/capsules/${id}`);
+</file>
+
+<file path="client/src/components/DatePicker.jsx">
+import React, { useState } from 'react';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import { useNavigate } from 'react-router-dom';
+import '../styles/datepicker.css';
+
+const DatePickerComponent = ({ onDateSelect, initialDate }) => {
+  const navigate = useNavigate();
+  const [selectedDate, setSelectedDate] = useState(
+    initialDate ? new Date(initialDate) : new Date(),
+  );
+  const [mode, setMode] = useState('global');
+
+  const handleDateChange = (date) => {
+    if (date) {
+      setSelectedDate(date);
+
+      const formattedDate = date.toISOString().split('T')[0];
+
+      if (onDateSelect) {
+        onDateSelect(date);
+      }
+
+      navigate(`/capsule/${formattedDate}/${mode}`);
+    }
+  };
+
+  const CustomInput = ({ value, onClick }) => (
+    <button
+      className="date-picker-input"
+      onClick={onClick}
+      aria-label="Select a date"
+    >
+      <span className="date-icon">📅</span>
+      <span className="date-value">{value || 'SELECT DATE'}</span>
+      <span className="date-arrow">▼</span>
+    </button>
+  );
+
+  return (
+    <div className="date-picker-container">
+      <div className="mode-toggle">
+        <button
+          className={`mode-btn ${mode === 'global' ? 'active' : ''}`}
+          onClick={() => setMode('global')}
+          aria-pressed={mode === 'global'}
+        >
+          🌍 GLOBAL
+        </button>
+        <button
+          className={`mode-btn ${mode === 'kenya' ? 'active' : ''}`}
+          onClick={() => setMode('kenya')}
+          aria-pressed={mode === 'kenya'}
+        >
+          🇰🇪 KENYA
+        </button>
+      </div>
+
+      <div className="picker-wrapper">
+        <DatePicker
+          selected={selectedDate}
+          onChange={handleDateChange}
+          dateFormat="MMMM d, yyyy"
+          maxDate={new Date()}
+          minDate={new Date('1900-01-01')}
+          customInput={<CustomInput />}
+          calendarClassName="retro-calendar"
+          popperClassName="retro-popper"
+          showPopperArrow={false}
+          showYearDropdown
+          showMonthDropdown
+          dropdownMode="select"
+        />
+      </div>
+
+      <div className="quick-dates">
+        <button
+          className="quick-btn"
+          onClick={() => handleDateChange(new Date('1963-12-12'))}
+        >
+          Independence Day
+        </button>
+        <button
+          className="quick-btn"
+          onClick={() => handleDateChange(new Date())}
+        >
+          Today
+        </button>
+      </div>
+
+      <div className="selected-date-display">
+        <p className="display-label">SELECTED:</p>
+        <p className="display-date">
+          {selectedDate.toLocaleDateString('en-US', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+          })}
+        </p>
+      </div>
+    </div>
+  );
+};
+
+export default DatePickerComponent;
+</file>
+
+<file path="client/src/context/CapsuleContext.jsx">
+import React, { createContext, useState, useContext, useEffect } from 'react';
+import { STORAGE_KEYS } from '../utils/constants';
+
+const CapsuleContext = createContext();
+
+export const useCapsuleContext = () => useContext(CapsuleContext);
+
+export const CapsuleProvider = ({ children }) => {
+  const [savedCapsules, setSavedCapsules] = useState(() => {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEYS.SAVED_CAPSULES);
+      return stored ? JSON.parse(stored) : [];
+    } catch (error) {
+      console.error('Failed to load saved capsules:', error);
+      return [];
+    }
+  });
+
+  useEffect(() => {
+    localStorage.setItem(
+      STORAGE_KEYS.SAVED_CAPSULES,
+      JSON.stringify(savedCapsules),
+    );
+  }, [savedCapsules]);
+
+  const addSavedCapsule = (date, mode) => {
+    setSavedCapsules((prev) => {
+      if (prev.some((c) => c.date === date && c.mode === mode)) return prev;
+      return [...prev, { date, mode, savedAt: new Date().toISOString() }];
+    });
+  };
+
+  const removeSavedCapsule = (date, mode) => {
+    setSavedCapsules((prev) =>
+      prev.filter((c) => !(c.date === date && c.mode === mode)),
+    );
+  };
+
+  const isSaved = (date, mode) => {
+    return savedCapsules.some((c) => c.date === date && c.mode === mode);
+  };
+
+  return (
+    <CapsuleContext.Provider
+      value={{
+        savedCapsules,
+        addSavedCapsule,
+        removeSavedCapsule,
+        isSaved,
+      }}
+    >
+      {children}
+    </CapsuleContext.Provider>
+  );
+};
+</file>
+
+<file path="client/src/pages/Home.jsx">
+import React, { useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
+import TVFrame from '../components/TVFrame';
+import DatePickerComponent from '../components/DatePicker';
+
+const Home = () => {
+  const location = useLocation();
+  const pickerRef = useRef(null);
+
+  useEffect(() => {
+    if (location.state?.focusDate) {
+      pickerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, [location.state]);
+
+  return (
+    <div className="home-page">
+      <TVFrame brand="ZAMANI" model="TIME CAPSULE">
+        <main className="home-broadcast">
+          <section className="home-copy">
+            <div className="broadcast-kicker">
+              <span className="live-dot" aria-hidden="true" />
+              ARCHIVE SIGNAL / 001
+            </div>
+
+            <p className="home-eyebrow">A WINDOW INTO THEN</p>
+            <h1>
+              Tune into <span>history.</span>
+            </h1>
+            <p className="home-intro">
+              Pick a date and travel through global and Kenyan moments, people,
+              stories and visual archives.
+            </p>
+
+            <div ref={pickerRef} className="home-picker-panel">
+              <DatePickerComponent />
+            </div>
+          </section>
+
+          <aside className="home-image-placeholder" aria-label="Homepage image placeholder">
+            <div className="placeholder-grid" aria-hidden="true" />
+            <div className="placeholder-content">
+              <span className="placeholder-index">IMG / 01</span>
+              <div className="placeholder-frame" aria-hidden="true">
+                <span>+</span>
+              </div>
+              <strong>YOUR IMAGE HERE</strong>
+              <p>Replace this block with your preferred time-capsule imagery.</p>
+            </div>
+          </aside>
+        </main>
+      </TVFrame>
+    </div>
+  );
+};
+
+export default Home;
+</file>
+
+<file path="client/src/styles/about.css">
+.about-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  padding: 2rem;
+  max-width: 950px;
+  margin: 0 auto;
+  height: 100%;
+  overflow-y: auto;
+  color: #ffffff;
+}
+
+.about-header {
+  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+  padding-bottom: 1.5rem;
+  position: relative;
+}
+
+/* BROADCAST GLOW TITLE */
+.about-header h1 {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: clamp(2.2rem, 4vw, 3.2rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+  /* Multi-layered text shadow 4 CRT bloom effect */
+  text-shadow: 
+    0 0 10px rgba(255, 255, 255, 0.8),
+    0 0 20px rgba(56, 189, 248, 0.6),
+    0 0 40px rgba(56, 189, 248, 0.4);
+}
+
+.subtitle {
+  color: #38bdf8;
+  font-family: 'Space Mono', monospace;
+  font-size: 1.15rem;
+  font-weight: 700;
+  text-shadow: 0 0 8px rgba(56, 189, 248, 0.5);
+}
+
+.about-section h2 {
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #38bdf8;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding-bottom: 0.5rem;
+  font-weight: 700;
+}
+
+.about-section p {
+  font-size: 1.15rem;
+  line-height: 1.75;
+  color: #ffffff;
+}
+
+.tech-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.pill {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #ffffff;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 0.6rem 1.2rem;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+  cursor: default;
+}
+
+.pill:hover {
+  background: rgba(56, 189, 248, 0.2);
+  border-color: #38bdf8;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
+}
+
+.phase-timeline {
+  position: relative;
+  padding-left: 2rem;
+  margin-top: 1rem;
+}
+
+.phase-timeline::before {
+  content: '';
+  position: absolute;
+  left: 7px;
+  top: 10px;
+  bottom: 10px;
+  width: 2px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+}
+
+.phase-item {
+  position: relative;
+  margin-bottom: 2.5rem;
+}
+
+.phase-item::before {
+  content: '';
+  position: absolute;
+  left: -2rem;
+  top: 6px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #000000;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  z-index: 2;
+  transition: all 0.3s ease;
+}
+
+.phase-item.active::before {
+  border-color: #38bdf8;
+  background: #38bdf8;
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.6);
+}
+
+/* ACTIVE SIGNAL PHASE CONTAINER */
+.phase-content {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(8px);
+}
+
+/* Enhanced hover state with luminous border glow */
+.phase-item:hover .phase-content {
+  border-color: #38bdf8;
+  background: rgba(56, 189, 248, 0.15);
+  transform: translateX(4px);
+  box-shadow: 
+    0 0 20px rgba(56, 189, 248, 0.2),
+    inset 0 0 10px rgba(56, 189, 248, 0.1);
+}
+
+/* Specific styling to make Phase 2 look like it's currently processing */
+.phase-item:nth-child(2) .phase-content {
+  border-color: rgba(56, 189, 248, 0.6);
+  background: linear-gradient(
+    135deg, 
+    rgba(56, 189, 248, 0.1) 0%, 
+    rgba(0, 0, 0, 0.4) 100%
+  );
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.15);
+}
+
+.phase-tag {
+  display: inline-block;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.15);
+  padding: 0.3rem 0.8rem;
+  border-radius: 12px;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.75rem;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+.phase-content h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.2rem;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.phase-desc {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: #ffffff;
+  margin: 0;
+}
+
+.about-footer {
+  margin-top: auto;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.back-link {
+  font-family: 'Space Mono', monospace;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 1.1rem;
+  font-weight: 700;
+  border-bottom: 2px solid #38bdf8;
+  padding-bottom: 2px;
+  transition: color 0.2s ease;
+}
+
+.back-link:hover {
+  color: #38bdf8;
+  text-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
+}
+</file>
+
+<file path="client/src/styles/capsule.css">
+.capsule-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  height: 100%;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
+
+.capsule-container::-webkit-scrollbar {
+  width: 6px;
+}
+.capsule-container::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.5);
+}
+.capsule-container::-webkit-scrollbar-thumb {
+  background: #38bdf8;
+  border-radius: 3px;
+}
+
+.capsule-header {
+  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+  padding-bottom: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.header-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.broadcast-tag {
+  font-size: 0.85rem;
+  letter-spacing: 0.2em;
+  color: #38bdf8;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.capsule-date {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(2.2rem, 6vw, 3.8rem);
+  font-weight: 900;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  margin: 0.5rem 0;
+  color: #ffffff;
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+}
+
+.mode-indicator {
+  display: inline-block;
+  padding: 0.3rem 0.8rem;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  font-size: 0.85rem;
+  letter-spacing: 0.15em;
+  color: #ffffff;
+  text-transform: uppercase;
+  margin-top: 0.5rem;
+  backdrop-filter: blur(8px);
+  border-radius: 8px;
+}
+
+.capsule-grid {
+  display: grid;
+  gap: 2.5rem;
+}
+
+.section-title {
+  font-size: 1.05rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: #38bdf8;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  position: relative;
+  padding-left: 1.2rem;
+  font-weight: 700;
+}
+
+.section-title::before {
+  content: '>';
+  position: absolute;
+  left: 0;
+  color: #38bdf8;
+  font-weight: 700;
+}
+
+.events-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.event-card {
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  gap: 1rem;
+  align-items: start;
+}
+
+.event-year {
+  font-family: 'Space Mono', monospace;
+  font-weight: 700;
+  color: #38bdf8;
+  font-size: 1.1rem;
+}
+
+.event-text {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #ffffff;
+}
+
+.kenya-card {
+  grid-template-columns: 1fr;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  padding: 1.25rem;
+  border-left: 4px solid #38bdf8;
+  border-radius: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.event-category {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #38bdf8;
+  margin-bottom: 0.35rem;
+  display: block;
+  font-weight: 700;
+}
+
+.nasa-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.image-wrapper {
+  width: 100%;
+  aspect-ratio: 16/9;
+  background: #000;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.placeholder-text {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.5);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+}
+
+.nasa-info h3 {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 1.25rem;
+  margin-bottom: 0.75rem;
+  color: #ffffff;
+}
+
+.explanation {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: #ffffff;
+}
+
+.births-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.25rem;
+}
+
+.birth-card {
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  padding: 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 12px;
+}
+
+.birth-year {
+  font-size: 0.95rem;
+  color: #38bdf8;
+  display: block;
+  margin-bottom: 0.35rem;
+  font-weight: 700;
+}
+
+.birth-desc {
+  font-size: 1.05rem;
+  color: #ffffff;
+  margin-top: 0.5rem;
+  line-height: 1.5;
+}
+
+.save-btn {
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+  padding: 0.6rem 1.2rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 12px;
+}
+
+.save-btn:hover {
+  border-color: #38bdf8;
+  background: rgba(56, 189, 248, 0.2);
+  color: #ffffff;
+}
+
+.save-btn.saved {
+  background: #38bdf8 !important;
+  color: #000000 !important;
+  border-color: #38bdf8 !important;
+}
+
+@media (min-width: 768px) {
+  .nasa-card {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+  .image-wrapper {
+    width: 50%;
+    flex-shrink: 0;
+  }
+  .event-card {
+    grid-template-columns: 110px 1fr;
+  }
+}
+</file>
+
+<file path="client/src/utils/helpers.js">
+/**
+ * Format date for display
+ * @param {string|Date} date - Date to format
+ * @param {string} format - Format type ('full', 'short', 'iso')
+ * @returns {string} - Formatted date string
+ */
+export const formatDate = (date, format = 'full') => {
+  const dateObj = typeof date === 'string' ? new Date(date) : date;
+
+  switch (format) {
+    case 'full':
+      return dateObj.toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      });
+    case 'short':
+      return dateObj.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+      });
+    case 'iso':
+      return dateObj.toISOString().split('T')[0];
+    default:
+      return dateObj.toLocaleDateString();
+  }
+};
+
+/**
+ * Extract month and day from date string
+ * @param {string} dateString - Date in YYYY-MM-DD format
+ * @returns {Object} - { month, day }
+ */
+export const extractMonthDay = (dateString) => {
+  const date = new Date(dateString);
+  return {
+    month: date.getMonth() + 1, // JavaScript months are 0-indexed
+    day: date.getDate(),
+  };
+};
+
+/**
+ * Truncate text to specified length
+ * @param {string} text - Text to truncate
+ * @param {number} maxLength - Maximum length
+ * @returns {string} - Truncated text with ellipsis
+ */
+export const truncateText = (text, maxLength = 150) => {
+  if (!text || text.length <= maxLength) return text;
+  return text.substring(0, maxLength) + '...';
+};
+
+/**
+ * Generate unique ID
+ * @returns {string} - Unique identifier
+ */
+export const generateId = () => {
+  return Date.now().toString(36) + Math.random().toString(36).substr(2);
+};
+
+/**
+ * Debounce function for performance
+ * @param {Function} func - Function to debounce
+ * @param {number} wait - Wait time in milliseconds
+ * @returns {Function} - Debounced function
+ */
+export const debounce = (func, wait = 300) => {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+};
+
+/**
+ * Check if date is valid
+ * @param {string} dateString - Date string to validate
+ * @returns {boolean} - True if valid date
+ */
+export const isValidDate = (dateString) => {
+  const date = new Date(dateString);
+  return date instanceof Date && !isNaN(date);
+};
+
+/**
+ * Get relative time string
+ * @param {string|Date} date - Date to compare
+ * @returns {string} - Relative time description
+ */
+export const getRelativeTime = (date) => {
+  const dateObj = typeof date === 'string' ? new Date(date) : date;
+  const now = new Date();
+  const diffTime = Math.abs(now - dateObj);
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+  if (diffDays === 0) return 'Today';
+  if (diffDays === 1) return 'Yesterday';
+  if (diffDays < 7) return `${diffDays} days ago`;
+  if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
+  if (diffDays < 365) return `${Math.floor(diffDays / 30)} months ago`;
+  return `${Math.floor(diffDays / 365)} years ago`;
+};
+</file>
+
+<file path="client/src/App.css">
+.nav-arrow {
+  position: fixed;
+  bottom: 30px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(0, 255, 255, 0.6);
+  color: #0ff;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: none;
+  z-index: 9998;
+  transition: all 0.2s ease;
+  font-family: 'Space Mono', monospace;
+  backdrop-filter: blur(4px);
+}
+
+.nav-arrow:hover {
+  background: rgba(0, 255, 255, 0.2);
+  border-color: #0ff;
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+  transform: scale(1.1);
+}
+
+.nav-arrow-left {
+  right: 76px; /* Stacked left of right arrow */
+}
+
+.nav-arrow-right {
+  right: 30px;
+}
+
+@media (max-width: 768px) {
+  .nav-arrow {
+    display: none;
+  }
+}
+
+/* Navigation now lives on the television console. */
+.nav-arrow {
+  display: none !important;
+}
+</file>
+
+<file path="client/vercel.json">
+{
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+}
+</file>
+
+<file path="server/routes/capsules.py">
+from flask import Blueprint, request, jsonify
+from datetime import date as dt_date
+from config import db
+from models import Capsule, Tag
+
+capsules_bp = Blueprint('capsules', __name__)
+
+@capsules_bp.route('/', methods=['GET'])
+def get_capsules():
+    date_filter = request.args.get('date')
+    category_filter = request.args.get('category')
+    query = Capsule.query
+    if date_filter:
+        try:
+            target_date = dt_date.fromisoformat(date_filter)
+            query = query.filter_by(date=target_date)
+        except ValueError:
+            return jsonify({'error': 'Invalid date format. Use YYYY-MM-DD'}), 400
+    if category_filter:
+        query = query.filter_by(category=category_filter)
+    capsules = query.all()
+    return jsonify([c.to_dict() for c in capsules]), 200
+
+@capsules_bp.route('/<int:id>', methods=['GET'])
+def get_capsule(id):
+    capsule = Capsule.query.get_or_404(id)
+    return jsonify(capsule.to_dict()), 200
+
+@capsules_bp.route('/', methods=['POST'])
+def create_capsule():
+    data = request.get_json()
+    if not all(k in data for k in ['date', 'title', 'description']):
+        return jsonify({'error': 'Missing required fields: date, title, description'}), 400
+    try:
+        target_date = dt_date.fromisoformat(data['date'])
+    except ValueError:
+        return jsonify({'error': 'Invalid date format. Use YYYY-MM-DD'}), 400
+
+    capsule = Capsule(
+        date=target_date,
+        title=data['title'],
+        description=data['description'],
+        category=data.get('category', 'personal_memory'),
+        image_url=data.get('image_url'),
+        personal_note=data.get('personal_note'),
+        historical_content=False,
+        user_id=data.get('user_id')
+    )
+    
+    db.session.add(capsule)
+    db.session.flush()
+    
+    if 'tags' in data and isinstance(data['tags'], list):
+        for tag_name in data['tags']:
+            tag = Tag.query.filter_by(name=tag_name).first()
+            if not tag:
+                tag = Tag(name=tag_name)
+                db.session.add(tag)
+            capsule.tags.append(tag)
+    
+    db.session.commit()
+    return jsonify(capsule.to_dict()), 201
+
+@capsules_bp.route('/<int:id>', methods=['PUT'])
+def update_capsule(id):
+    capsule = Capsule.query.get_or_404(id)
+    data = request.get_json()
+    if 'personal_note' in data:
+        capsule.personal_note = data['personal_note']
+    if 'title' in data:
+        capsule.title = data['title']
+    if 'description' in data:
+        capsule.description = data['description']
+    db.session.commit()
+    return jsonify(capsule.to_dict()), 200
+
+@capsules_bp.route('/<int:id>', methods=['DELETE'])
+def delete_capsule(id):
+    capsule = Capsule.query.get_or_404(id)
+    db.session.delete(capsule)
+    db.session.commit()
+    return '', 204
+</file>
+
+<file path="server/routes/tags.py">
+from flask import Blueprint, request, jsonify
+from config import db
+from models import Tag
+
+tags_bp = Blueprint('tags', __name__)
+
+@tags_bp.route('/', methods=['GET', 'POST'])
+def handle_tags():
+    if request.method == 'POST':
+        data = request.get_json()
+        if not data or 'name' not in data:
+            return jsonify({'error': 'Missing required field: name'}), 400
+        
+        existing = Tag.query.filter_by(name=data['name']).first()
+        if existing:
+            return jsonify({'id': existing.id, 'name': existing.name}), 200
+        
+        tag = Tag(name=data['name'])
+        db.session.add(tag)
+        db.session.commit()
+        return jsonify({'id': tag.id, 'name': tag.name}), 201
+    
+    tags = Tag.query.all()
+    return jsonify([{'id': t.id, 'name': t.name} for t in tags]), 200
+</file>
+
+<file path="server/models.py">
+from datetime import datetime
+from config import db
+
+# Association table for Capsule 
+capsule_tags = db.Table('capsule_tags',
+    db.Column('capsule_id', db.Integer, db.ForeignKey('capsules.id'), primary_key=True),
+    db.Column('tag_id', db.Integer, db.ForeignKey('tags.id'), primary_key=True)
+)
+
+class Tag(db.Model):
+    __tablename__ = 'tags'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), unique=True, nullable=False)  # e.g., "politics", "sports", "music"
+
+class Capsule(db.Model):
+    __tablename__ = 'capsules'
+    id = db.Column(db.Integer, primary_key=True)
+    
+    # Core Data Fields
+    date = db.Column(db.Date, nullable=False, index=True)
+    title = db.Column(db.String(200), nullable=False)
+    description = db.Column(db.Text, nullable=False)
+    category = db.Column(db.String(20), nullable=False)  # 'event', 'birth', 'death', 'personal_memory'
+    image_url = db.Column(db.String(500), nullable=True)
+    
+    # Security & Ownership Separation
+    historical_content = db.Column(db.Boolean, default=False)  # True = Admin curated (immutable)
+    personal_note = db.Column(db.Text, nullable=True)          # User-owned (mutable)
+    user_id = db.Column(db.Integer, nullable=True)             # NULL for history, INT for personal
+    
+    # Relationships
+    tags = db.relationship('Tag', secondary=capsule_tags, backref=db.backref('capsules', lazy='dynamic'))
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'date': self.date.isoformat(),
+            'title': self.title,
+            'description': self.description,
+            'category': self.category,
+            'image_url': self.image_url,
+            'historical_content': self.historical_content,
+            'personal_note': self.personal_note,
+            'user_id': self.user_id,
+            'tags': [tag.name for tag in self.tags],
+            'created_at': self.created_at.isoformat()
+        }
+</file>
+
+<file path="server/seed.py">
+from datetime import date
+from config import db
+from models import Capsule, Tag
+
+KENYAN_BIRTHS = [
+    {
+        "date": date(1987, 6, 15),
+        "title": "Bien-Aimé Baraza (Bien)",
+        "description": "Lead vocalist of Sauti Sol; Grammy-nominated Afro-pop artist.",
+        "category": "birth",
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Bien_Aime_Baraza.jpg/440px-Bien_Aime_Baraza.jpg",
+        "tags": ["music", "sauti sol"]
+    },
+    {
+        "date": date(1984, 11, 5),
+        "title": "Eliud Kipchoge",
+        "description": "Marathon world record holder; first human to run sub-2-hour marathon.",
+        "category": "birth",
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Eliud_Kipchoge_2019.jpg/440px-Eliud_Kipchoge_2019.jpg",
+        "tags": ["sports", "athletics"]
+    },
+    {
+        "date": date(1994, 1, 10),
+        "title": "Faith Kipyegon",
+        "description": "Olympic gold medalist; 1500m world record holder.",
+        "category": "birth",
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Faith_Kipyegon_2022.jpg/440px-Faith_Kipyegon_2022.jpg",
+        "tags": ["sports", "athletics"]
+    }
+]
+
+HISTORICAL_EVENTS = [
+    {
+        "date": date(1963, 12, 12),
+        "title": "Kenya Independence Day",
+        "description": "Kenya gains full independence from British colonial rule.",
+        "category": "event",
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Kenya_Flag_Raising_1963.jpg/440px-Kenya_Flag_Raising_1963.jpg",
+        "tags": ["politics", "independence"]
+    },
+    
+    {
+        "date": date(2024, 6, 25),
+        "title": "Gen Z Protests Peak",
+        "description": "Nationwide youth-led demonstrations against Finance Bill reach historic scale.",
+        "category": "event",
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Gen_Z_Protest_Nairobi_2024.jpg/440px-Gen_Z_Protest_Nairobi_2024.jpg",
+        "tags": ["politics", "youth"]
+    },
+    {
+        "date": date(1963, 6, 1),
+        "title": "Madaraka Day",
+        "description": "Kenya achieved internal self-government, transitioning from colonial rule.",
+        "category": "event",
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Kenya_Flag_Raising_1963.jpg/440px-Kenya_Flag_Raising_1963.jpg",
+        "tags": ["politics", "independence"]
+    },
+    {
+        "date": date(2010, 8, 27),
+        "title": "New Constitution Promulgated",
+        "description": "Kenya's new constitution was promulgated, introducing devolution and bill of rights.",
+        "category": "event",
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Kenya_Flag_Raising_1963.jpg/440px-Kenya_Flag_Raising_1963.jpg",
+        "tags": ["politics", "constitution"]
+    },
+    {
+        "date": date(1988, 9, 25),
+        "title": "Douglas Wakiihuri Olympic Gold",
+        "description": "Won Kenya's first Olympic marathon gold medal in Seoul.",
+        "category": "birth",
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Eliud_Kipchoge_2019.jpg/440px-Eliud_Kipchoge_2019.jpg",
+        "tags": ["sports", "athletics"]
+    },
+    {
+        "date": date(1998, 8, 7),
+        "title": "US Embassy Bombing",
+        "description": "Al-Qaeda bombed the US Embassy in Nairobi, killing 213 people.",
+        "category": "event",
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Gen_Z_Protest_Nairobi_2024.jpg/440px-Gen_Z_Protest_Nairobi_2024.jpg",
+        "tags": ["security", "history"]
+    },
+    {
+        "date": date(2017, 10, 16),
+        "title": "SGR Launch",
+        "description": "The Standard Gauge Railway between Mombasa and Nairobi officially launched.",
+        "category": "event",
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Gen_Z_Protest_Nairobi_2024.jpg/440px-Gen_Z_Protest_Nairobi_2024.jpg",
+        "tags": ["infrastructure", "development"]
+    }
+]
+
+def seed_database():
+    """Populate DB with verified Kenyan data"""
+    print("𓇢 Seeding ZAMANI database...")
+    
+    # Create tags first
+    tag_names = set()
+    for entry in KENYAN_BIRTHS + HISTORICAL_EVENTS:
+        tag_names.update(entry.get('tags', []))
+    
+    tags_map = {}
+    for name in tag_names:
+        tag = Tag.query.filter_by(name=name).first()
+        if not tag:
+            tag = Tag(name=name)
+            db.session.add(tag)
+        tags_map[name] = tag
+    
+    db.session.commit()
+    
+    # Seed births
+    for birth in KENYAN_BIRTHS:
+        existing = Capsule.query.filter_by(date=birth['date'], title=birth['title']).first()
+        if not existing:
+            capsule = Capsule(
+                date=birth['date'],
+                title=birth['title'],
+                description=birth['description'],
+                category=birth['category'],
+                image_url=birth['image_url'],
+                historical_content=True
+            )
+            for tag_name in birth.get('tags', []):
+                capsule.tags.append(tags_map[tag_name])
+            db.session.add(capsule)
+    
+    # Seed events
+    for event in HISTORICAL_EVENTS:
+        existing = Capsule.query.filter_by(date=event['date'], title=event['title']).first()
+        if not existing:
+            capsule = Capsule(
+                date=event['date'],
+                title=event['title'],
+                description=event['description'],
+                category=event['category'],
+                image_url=event['image_url'],
+                historical_content=True
+            )
+            for tag_name in event.get('tags', []):
+                capsule.tags.append(tags_map[tag_name])
+            db.session.add(capsule)
+    
+    db.session.commit()
+    print(f"✔ Seeded {len(KENYAN_BIRTHS)} births and {len(HISTORICAL_EVENTS)} events")
+
+if __name__ == '__main__':
+    from app import create_app
+    app = create_app()
+    with app.app_context():
+        seed_database()
+</file>
+
+<file path="requirements.txt">
+blinker==1.9.0
+click==8.5.0
+Flask==3.1.3
+flask-cors==6.0.5
+Flask-SQLAlchemy==3.1.1
+greenlet==3.5.5
+itsdangerous==2.2.0
+Jinja2==3.1.6
+MarkupSafe==3.0.3
+marshmallow==4.3.1
+psycopg2-binary==2.9.12
+python-dotenv==1.2.3
+SQLAlchemy==2.0.52
+typing_extensions==4.16.0
+Werkzeug==3.1.8
+gunicorn
+</file>
+
+<file path="client/src/components/TechStackPhysics.jsx">
+import React, { useEffect, useRef, useState } from 'react';
+import Matter from 'matter-js';
+
+const TechStackPhysics = () => {
+  const sceneRef = useRef(null);
+  const [pillPositions, setPillPositions] = useState([]);
+
+  const techItems = [
+    'React 18', 'React Router', 'Custom CSS', 
+    'Context API', 'localStorage', 'Wikipedia API', 
+    'NASA APOD', 'Datepicker'
+  ];
+
+  useEffect(() => {
+    if (!sceneRef.current) return;
+
+    const engine = Matter.Engine.create();
+    const render = Matter.Render.create({
+      element: sceneRef.current,
+      engine: engine,
+      options: {
+        width: sceneRef.current.clientWidth,
+        height: 400,
+        wireframes: false,
+        background: 'transparent',
+        pixelRatio: window.devicePixelRatio
+      }
+    });
+
+    const width = sceneRef.current.clientWidth;
+    const height = 400;
+    const wallOptions = { isStatic: true, render: { visible: false } };
+    
+    // Walls to keep them in the TV screen area mostly
+    const ground = Matter.Bodies.rectangle(width / 2, height + 30, width, 60, wallOptions);
+    const leftWall = Matter.Bodies.rectangle(-30, height / 2, 60, height, wallOptions);
+    const rightWall = Matter.Bodies.rectangle(width + 30, height / 2, 60, height, wallOptions);
+
+    const bodies = techItems.map((text) => {
+      const x = Math.random() * (width - 150) + 75;
+      const y = -Math.random() * 500 - 50;
+      
+      return Matter.Bodies.rectangle(x, y, 140, 40, {
+        chamfer: { radius: 20 },
+        restitution: 0.7,
+        friction: 0.1,
+        label: text,
+        render: {
+          fillStyle: 'rgba(56, 189, 248, 0.1)',
+          strokeStyle: '#38bdf8',
+          lineWidth: 1
+        }
+      });
+    });
+
+    const mouse = Matter.Mouse.create(render.canvas);
+    const mouseConstraint = Matter.MouseConstraint.create(engine, {
+      mouse: mouse,
+      constraint: {
+        stiffness: 0.2,
+        render: { visible: false }
+      }
+    });
+
+    render.mouse = mouse;
+
+    Matter.World.add(engine.world, [ground, leftWall, rightWall, ...bodies, mouseConstraint]);
+
+    const runner = Matter.Runner.create();
+    
+    // --- RESPAWN LOGIC START ---
+    Matter.Events.on(engine, 'afterUpdate', () => {
+      const centerX = width / 2;
+      const centerY = height / 2;
+      const respawnThreshold = 600; // Distance from center to trigger respawn
+
+      bodies.forEach(body => {
+        const dist = Math.hypot(body.position.x - centerX, body.position.y - centerY);
+        
+        // If thrown too far OR fell below the ground significantly
+        if (dist > respawnThreshold || body.position.y > height + 100) {
+          // Reset position to top of screen
+          Matter.Body.setPosition(body, {
+            x: Math.random() * (width - 150) + 75,
+            y: -50
+          });
+          
+          // Reset velocity and angle so it falls nicely again
+          Matter.Body.setVelocity(body, { x: 0, y: 0 });
+          Matter.Body.setAngularVelocity(body, 0);
+          Matter.Body.setAngle(body, 0);
+        }
+      });
+
+      // Update React state for rendering text labels
+      const positions = bodies.map(body => ({
+        id: body.label,
+        x: body.position.x,
+        y: body.position.y,
+        angle: body.angle
+      }));
+      setPillPositions(positions);
+    });
+    // --- RESPAWN END ---
+
+    Matter.Engine.run(engine);
+    Matter.Render.run(render);
+    Matter.Runner.run(runner, engine);
+
+    return () => {
+      Matter.Render.stop(render);
+      Matter.Runner.stop(runner);
+      Matter.Engine.clear(engine);
+      if (render.canvas) render.canvas.remove();
+    };
+  }, []);
+
+  return (
+    <div ref={sceneRef} style={{ width: '100%', height: '400px', position: 'relative', overflow: 'hidden' }}>
+      {pillPositions.map((pos) => (
+        <div
+          key={pos.id}
+          style={{
+            position: 'absolute',
+            left: pos.x,
+            top: pos.y,
+            transform: `translate(-50%, -50%) rotate(${pos.angle}rad)`,
+            pointerEvents: 'none',
+            fontFamily: "'Space Mono', monospace",
+            fontSize: '0.85rem',
+            color: '#e2e8f0',
+            whiteSpace: 'nowrap',
+            fontWeight: 600,
+            userSelect: 'none',
+            textShadow: '0 2px 4px rgba(0,0,0,0.5)'
+          }}
+        >
+          {pos.id}
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export default TechStackPhysics;
+</file>
+
+<file path="client/src/pages/About.jsx">
+import React from 'react';
+import TVFrame from '../components/TVFrame';
+import TechStackPhysics from '../components/TechStackPhysics';
+import '../styles/about.css';
+
+const About = () => {
+  return (
+    <TVFrame brand="ZAMANI BROADCAST">
+      <div className="about-container">
+        <header className="about-header">
+          <h1>ABOUT ZAMANI</h1>
+          <p className="subtitle">Kenya's Time Capsule</p>
+        </header>
+
+        <section className="about-section">
+          <h2>The Mission</h2>
+          <p>
+            ZAMANI is a digital time capsule that lets you tune into history.
+            Select any date to explore global events, notable births, NASA's
+            Astronomy Picture of the Day, or curated Kenyan historical moments.
+            Built as a tribute to our past and a tool for future discovery.
+          </p>
+        </section>
+
+        <section className="about-section">
+          <h2>Tech Stack</h2>
+          <p style={{ fontSize: '0.9rem', color: '#e7b07c', marginBottom: '1rem' }}>
+            DRAG & THROW 
+          </p>
+          <TechStackPhysics />
+        </section>
+
+        <section className="about-section">
+          <h2>Phase Roadmap</h2>
+          <div className="phase-timeline">
+            <div className="phase-item active">
+              <span className="phase-tag">PHASE 1</span>
+              <p>React Frontend + External APIs</p>
+            </div>
+            <div className="phase-item current">
+              <span className="phase-tag">PHASE 2</span>
+              <p>Flask Backend + PostgreSQL Database</p>
+            </div>
+            <div className="phase-item">
+              <span className="phase-tag">PHASE 3</span>
+              <p>User Authentication + Personal Capsules</p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </TVFrame>
+  );
+};
+
+export default About;
+</file>
+
+<file path="client/src/pages/Saved.jsx">
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { getCapsules, deleteCapsule } from '../api/capsules';
+import TVFrame from '../components/TVFrame';
+import { formatDate } from '../utils/helpers';
+import '../styles/saved.css';
+
+const Saved = () => {
+  const [capsules, setCapsules] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const loadCapsules = async () => {
+      try {
+        setLoading(true);
+        const data = await getCapsules();
+        setCapsules(data);
+      } catch (err) {
+        console.error('Failed to fetch capsules:', err);
+        setError('No signal detected. Backend may be offline.');
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadCapsules();
+  }, []);
+
+  const handleDelete = async (id) => {
+    if (!window.confirm('Permanently delete this capsule?')) return;
+    try {
+      await deleteCapsule(id);
+      setCapsules(prev => prev.filter(c => c.id !== id));
+    } catch (err) {
+      alert('Failed to delete capsule');
+    }
+  };
+
+  if (loading) {
+    return (
+      <TVFrame brand="ZAMANI ARCHIVE">
+        <div className="saved-container">
+          <p>Loading archive...</p>
+        </div>
+      </TVFrame>
+    );
+  }
+
+  if (error) {
+    return (
+      <TVFrame brand="ZAMANI ARCHIVE">
+        <div className="saved-container">
+          <p>{error}</p>
+        </div>
+      </TVFrame>
+    );
+  }
+
+  return (
+    <TVFrame brand="ZAMANI ARCHIVE">
+      <div className="saved-container">
+        <header className="saved-header">
+          <h1>Saved Capsules</h1>
+          <p>{capsules.length} entries in your archive</p>
+        </header>
+
+        {capsules.length === 0 ? (
+          <div className="empty-archive">
+            <p>No saved capsules yet.</p>
+            <Link to="/" className="browse-link">
+              Browse History →
+            </Link>
+          </div>
+        ) : (
+          <div className="saved-grid">
+            {capsules.map((capsule) => (
+              <div key={capsule.id} className="saved-card-wrapper" style={{ position: 'relative' }}>
+                <Link
+                  to={`/capsule/${capsule.date}/${capsule.category === 'event' ? 'kenya' : 'global'}`}
+                  className="saved-card"
+                >
+                  <span className="saved-mode">
+                    {capsule.category === 'event' ? '🇰🇪 KENYA' : '🌐 GLOBAL'}
+                  </span>
+                  <h2>{formatDate(capsule.date, 'full')}</h2>
+                  <p>{capsule.title}</p>
+                  <span className="saved-date">
+                    {new Date(capsule.createdAt || Date.now()).toLocaleDateString()}
+                  </span>
+                </Link>
+                <button
+                  onClick={() => handleDelete(capsule.id)}
+                  style={{
+                    position: 'absolute',
+                    top: '10px',
+                    right: '10px',
+                    background: 'rgba(255,0,0,0.2)',
+                    border: '1px solid red',
+                    color: 'red',
+                    padding: '0.25rem 0.5rem',
+                    cursor: 'pointer',
+                    borderRadius: '4px',
+                    fontSize: '0.75rem',
+                    zIndex: 2
+                  }}
+                >
+                  DELETE
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </TVFrame>
+  );
+};
+
+export default Saved;
+</file>
+
+<file path="client/src/styles/globals.css">
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;600;900&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+  width: 100%;
+}
+
+body {
+  font-family: 'Space Mono', 'Inter', monospace;
+  background-color: #000000;
+  color: #ffffff;
+  min-height: 100vh;
+  width: 100vw;
+  font-size: 1.15rem;
+  overflow: hidden;
+}
+
+button,
+a,
+input,
+select {
+  font: inherit;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(56, 189, 248, 0.42);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(56, 189, 248, 0.72);
+}
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background-color: #000000;
+  width: 100vw;
+}
+
+.home-page {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100dvh;
+  padding: 0;
+  overflow: hidden;
+  background: #000000;
+  text-align: left;
+}
+
+.mode-btn,
+.quick-btn,
+.date-picker-input,
+.pill,
+.home-page a,
+.view-saved-link,
+.about-link {
+  min-height: 52px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.85rem 1.5rem;
+  border-radius: 8px;
+  font-family: 'Space Mono', monospace;
+  font-size: 1.05rem;
+  font-weight: 700;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #ffffff !important;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.mode-btn:hover,
+.quick-btn:hover,
+.date-picker-input:hover,
+.pill:hover,
+.home-page a:hover,
+.view-saved-link:hover,
+.about-link:hover {
+  background: rgba(56, 189, 248, 0.18);
+  border-color: #38bdf8;
+  color: #ffffff !important;
+  box-shadow: 0 0 18px rgba(56, 189, 248, 0.3);
+}
+
+.mode-btn.active,
+.quick-btn.active {
+  background: #38bdf8 !important;
+  color: #000000 !important;
+  border-color: #38bdf8 !important;
+}
+
+p,
+span,
+.event-text,
+.explanation,
+.birth-desc,
+.about-section p,
+.display-date {
+  color: #ffffff !important;
+  opacity: 1 !important;
+  font-size: 1.1rem !important;
+}
+
+.section-title,
+.broadcast-tag,
+.subtitle,
+.display-label {
+  color: #38bdf8 !important;
+  font-weight: 700;
+}
+
+/* ========================================
+   ZAMANI HOME BROADCAST
+   ======================================== */
+
+.home-broadcast {
+  min-height: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1.12fr) minmax(260px, 0.88fr);
+  gap: clamp(1.2rem, 4vw, 3.6rem);
+  align-items: center;
+}
+
+.home-copy {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.broadcast-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-bottom: 1.15rem;
+  color: rgba(255, 255, 255, 0.68);
+  font-size: clamp(0.6rem, 1vw, 0.74rem);
+  font-weight: 700;
+  letter-spacing: 0.17em;
+}
+
+.live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #38bdf8;
+  box-shadow: 0 0 11px rgba(56, 189, 248, 0.84);
+}
+
+.home-eyebrow {
+  margin-bottom: 0.4rem;
+  color: #38bdf8 !important;
+  font-size: clamp(0.68rem, 1.1vw, 0.84rem) !important;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+}
+
+.home-page .home-copy h1 {
+  max-width: 780px;
+  margin: 0;
+  color: #ffffff;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(2.2rem, 5.8vw, 5.2rem);
+  font-weight: 900;
+  line-height: 0.96;
+  letter-spacing: -0.055em;
+  text-transform: none;
+  text-shadow: 0 0 24px rgba(255, 255, 255, 0.12);
+}
+
+.home-page .home-copy h1 span {
+  color: #38bdf8 !important;
+  font-size: inherit !important;
+}
+
+.home-intro {
+  max-width: 610px;
+  margin: 0.9rem 0 1.25rem;
+  color: rgba(255, 255, 255, 0.8) !important;
+  font-size: clamp(0.8rem, 1.25vw, 0.96rem) !important;
+  line-height: 1.65;
+}
+
+.home-picker-panel {
+  width: min(100%, 680px);
+}
+
+.home-image-placeholder {
+  position: relative;
+  min-height: min(56vh, 500px);
+  align-self: stretch;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.26);
+  background:
+    linear-gradient(135deg, rgba(56, 189, 248, 0.22), transparent 44%),
+    linear-gradient(315deg, rgba(0, 162, 237, 0.2), transparent 48%),
+    rgba(0, 24, 40, 0.56);
+  box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.16);
+}
+
+.placeholder-grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.24;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.18) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.18) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+.placeholder-content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.placeholder-index {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  color: #38bdf8 !important;
+  font-size: 0.66rem !important;
+  letter-spacing: 0.18em;
+}
+
+.placeholder-frame {
+  width: min(58%, 220px);
+  aspect-ratio: 4 / 3;
+  display: grid;
+  place-items: center;
+  margin-bottom: 1rem;
+  border: 1px dashed rgba(255, 255, 255, 0.58);
+  box-shadow: inset 0 0 0 10px rgba(0, 0, 0, 0.08);
+}
+
+.placeholder-frame span {
+  color: #38bdf8 !important;
+  font-size: 3rem !important;
+  font-weight: 300;
+}
+
+.placeholder-content strong {
+  color: #ffffff;
+  font-size: 0.82rem;
+  letter-spacing: 0.2em;
+}
+
+.placeholder-content p {
+  max-width: 260px;
+  margin-top: 0.55rem;
+  color: rgba(255, 255, 255, 0.68) !important;
+  font-size: 0.68rem !important;
+  line-height: 1.5;
+}
+
+@media (max-width: 900px) {
+  .home-broadcast {
+    grid-template-columns: 1fr;
+    align-content: start;
+    gap: 1.15rem;
+  }
+
+  .home-image-placeholder {
+    min-height: 170px;
+  }
+
+  .placeholder-frame {
+    width: 120px;
+    max-height: 88px;
+  }
+}
+
+@media (max-width: 767px) {
+  body {
+    font-size: 1rem;
+  }
+
+  #zamani-orb {
+    display: none !important;
+  }
+
+  .home-broadcast {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.9rem;
+  }
+
+  .home-copy {
+    flex: 0 0 auto;
+  }
+
+  .broadcast-kicker {
+    margin-bottom: 0.65rem;
+    font-size: 0.58rem;
+  }
+
+  .home-page .home-copy h1 {
+    max-width: 100%;
+    font-size: clamp(2rem, 12vw, 3.3rem);
+    line-height: 1;
+  }
+
+  .home-intro {
+    margin: 0.6rem 0 0.75rem;
+    font-size: 0.76rem !important;
+    line-height: 1.45;
+  }
+
+  .home-image-placeholder {
+    min-height: 118px;
+    flex: 0 0 118px;
+    box-shadow: none;
+  }
+
+  .placeholder-frame {
+    width: 84px;
+    max-height: 58px;
+    margin-bottom: 0.5rem;
+  }
+
+  .placeholder-frame span {
+    font-size: 1.7rem !important;
+  }
+
+  .placeholder-content strong {
+    font-size: 0.64rem;
+  }
+
+  .placeholder-content p {
+    display: none;
+  }
+
+  .placeholder-index {
+    top: 0.55rem;
+    left: 0.55rem;
+    font-size: 0.52rem !important;
+  }
+}
+</file>
+
+<file path="client/src/utils/constants.js">
+// API Config
+export const API_CONFIG = {
+  WIKIPEDIA_BASE:
+    'https://api.wikimedia.org/core/v1/wikipedia/en/page/onthisday',
+  NASA_BASE: 'https://api.nasa.gov/planetary/apod',
+  NASA_KEY: 'DEMO_KEY',
+  TIMEOUT: 10000, // 10 seconds
+};
+
+//  API Base URL
+export const API_BASE_URL = 
+  import.meta.env.VITE_API_URL || 
+  'http://localhost:5000';
+
+// Date Config
+export const DATE_CONFIG = {
+  MIN_DATE: '1900-01-01',
+  MAX_DATE: new Date().toISOString().split('T')[0],
+  DEFAULT_MODE: 'global',
+};
+
+// UI Config
+export const UI_CONFIG = {
+  TV_BRAND: 'ZAMANI BROADCAST',
+  LOADING_DELAY: 800, 
+  ANIMATION_DURATION: 300,
+};
+
+// Storage Keys 
+export const STORAGE_KEYS = {
+  SAVED_CAPSULES: 'zamani_saved_capsules',
+  USER_PREFERENCES: 'zamani_preferences',
+};
+
+// Categories Kenya events
+export const KENYA_CATEGORIES = {
+  INDEPENDENCE: 'independence',
+  POLITICAL: 'political',
+  CULTURAL: 'cultural',
+  SECURITY: 'security',
+  SPORTS: 'sports',
+  INFRASTRUCTURE: 'infrastructure',
+  SOCIAL: 'social',
+  REGIONAL: 'regional',
+};
+</file>
+
+<file path="client/src/App.jsx">
+import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { CapsuleProvider } from './context/CapsuleContext';
+import { TVSystemProvider } from './context/TVSystemContext';
+import OrbCursor from './components/OrbCursor';
+import Home from './pages/Home';
+import Capsule from './pages/Capsule';
+import Saved from './pages/Saved';
+import About from './pages/About';
+import './App.css';
+
+const SOUNDS = {
+  click: new Audio('/audio/button-press.wav'),
+  tune: new Audio('/audio/tuning.wav')
+};
+Object.values(SOUNDS).forEach((sound) => {
+  sound.preload = 'auto';
+  sound.volume = 0.4;
+});
+
+export default function App() {
+  useEffect(() => {
+    const handleClick = (event) => {
+      if (event.target.closest('button, a, .clickable')) {
+        SOUNDS.click.cloneNode().play().catch(() => {});
+      }
+    };
+
+    window.addEventListener('click', handleClick);
+    return () => window.removeEventListener('click', handleClick);
+  }, []);
+
+  return (
+    <Router>
+      <TVSystemProvider>
+        <CapsuleProvider>
+          <OrbCursor />
+
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/capsule/:date/:mode" element={<Capsule />} />
+            <Route path="/saved" element={<Saved />} />
+            <Route path="/about" element={<About />} />
+          </Routes>
+        </CapsuleProvider>
+      </TVSystemProvider>
+    </Router>
+  );
+}
+</file>
+
+<file path=".gitignore">
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+node_modules
+.venv
+*.pyc
+.env
+venv/
+venv/
+</file>
+
+<file path="client/src/components/CapsuleDisplay.jsx">
+import { fetchCapsuleData } from '../api/wikipedia';
+import { fetchVisualArtifact } from '../api/nasa';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import TVFrame from './TVFrame';
+import LoadingSpinner from './LoadingSpinner';
+import ErrorMessage from './ErrorMessage';
+import SaveButton from './SaveButton';
+import { formatDate } from '../utils/helpers';
+import '../styles/capsule.css';
+
+const CapsuleDisplay = () => {
+  const { date, mode } = useParams();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [data, setData] = useState({
+    events: [],
+    births: [],
+    visual: null,
+  });
+
+  useEffect(() => {
+    const loadCapsuleData = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const capsuleData = await fetchCapsuleData(date, mode);
+
+        if (capsuleData.source === 'error') {
+          throw new Error(capsuleData.error || 'Archive unavailable');
+        }
+
+        const allItems = [...capsuleData.events, ...capsuleData.births];
+        const visual = await fetchVisualArtifact(allItems);
+
+        setData({
+          events: capsuleData.events,
+          births: capsuleData.births,
+          visual: visual,
+        });
+      } catch (err) {
+        console.error('Broadcast Error:', err);
+        setError(err.message || 'Signal Lost: Unable to retrieve archive.');
+      } finally {
+        setTimeout(() => setLoading(false), 800);
+      }
+    };
+
+    if (date) loadCapsuleData();
+  }, [date, mode]);
+
+  if (loading) {
+    return (
+      <TVFrame brand="ZAMANI BROADCAST">
+        <div className="capsule-loading">
+          <LoadingSpinner />
+          <p className="tuning-text">TUNING SIGNAL...</p>
+          <p className="date-display">{formatDate(date, 'full')}</p>
+        </div>
+      </TVFrame>
+    );
+  }
+
+  if (error) {
+    return (
+      <TVFrame brand="ZAMANI BROADCAST">
+        <ErrorMessage
+          message={error}
+          onRetry={() => window.location.reload()}
+        />
+      </TVFrame>
+    );
+  }
+
+  const hasNoData = data.events.length === 0 && data.births.length === 0;
+  const primaryEvent = data.events[0] || null;
+
+  return (
+    <TVFrame brand={`ZAMANI • ${mode.toUpperCase()} MODE`}>
+      <div className="capsule-container">
+        <header className="capsule-header">
+          <div className="header-meta">
+            <span className="broadcast-tag">ON THIS DAY</span>
+            <SaveButton date={date} mode={mode} currentEvent={primaryEvent} />
+          </div>
+          <h1 className="capsule-date">{formatDate(date, 'full')}</h1>
+          <div className="mode-indicator">
+            {mode === 'global' ? '🌍 GLOBAL ARCHIVE' : '🇰🇪 KENYA ARCHIVE'}
+          </div>
+        </header>
+
+        {hasNoData && (
+          <div className="empty-state">
+            <p>NO SIGNAL DETECTED</p>
+            <p className="subtext">
+              {mode === 'kenya'
+                ? 'No Kenyan records found for this date in our archive.'
+                : 'Try selecting another date or switching modes.'}
+            </p>
+          </div>
+        )}
+
+        {!hasNoData && (
+          <div className="capsule-grid">
+            {data.visual?.url && (
+              <section className="nasa-section">
+                <h2 className="section-title">VISUAL ARTIFACT</h2>
+                <div className="nasa-card">
+                  <div className="image-wrapper">
+                    <img
+                      src={data.visual.url}
+                      alt={data.visual.title}
+                      loading="lazy"
+                      referrerPolicy={
+                        data.visual.referrerPolicy || 'no-referrer'
+                      }
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                        e.target.parentElement.innerHTML =
+                          '<div class="placeholder-text">IMAGE UNAVAILABLE</div>';
+                      }}
+                    />
+                  </div>
+                  <div className="nasa-info">
+                    <h3>{data.visual.title}</h3>
+                    <p className="explanation">{data.visual.explanation}</p>
+                  </div>
+                </div>
+              </section>
+            )}
+
+            {data.events.length > 0 && (
+              <section className="wiki-section">
+                <h2 className="section-title">HISTORICAL EVENTS</h2>
+                <div className="events-list">
+                  {data.events.slice(0, 5).map((event, idx) => (
+                    <article key={idx} className="event-card">
+                      <span className="event-year">
+                        {event.year || event.date}
+                      </span>
+                      <p className="event-text">
+                        {event.text || event.description}
+                      </p>
+                    </article>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {data.births.length > 0 && (
+              <section className="births-section">
+                <h2 className="section-title">NOTABLE BIRTHS</h2>
+                <div className="births-grid">
+                  {data.births.slice(0, 6).map((person, idx) => (
+                    <div key={idx} className="birth-card">
+                      <span className="birth-year">
+                        {person.year || person.date}
+                      </span>
+                      <strong>{person.name || person.title}</strong>
+                      <p className="birth-desc">
+                        {person.text || person.description}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
+          </div>
+        )}
+      </div>
+    </TVFrame>
+  );
+};
+
+export default CapsuleDisplay;
+</file>
+
+<file path="client/src/api/kenyaData.js">
+const kenyaEvents = [
+  {
+    date: '1963-12-12',
+    title: 'Kenya Independence Day',
+    description: 'Kenya gained independence from British colonial rule. Jomo Kenyatta became the first Prime Minister, marking the end of over 60 years of colonial administration.',
+    category: 'independence',
+    significance: 'high',
+  },
+  {
+    date: '1963-06-01',
+    title: 'Madaraka Day',
+    description: 'Kenya achieved internal self-government (Madaraka), transitioning from colonial rule to self-governance before full independence.',
+    category: 'independence',
+    significance: 'high',
+  },
+  {
+    date: '1964-12-12',
+    title: 'Republic Day',
+    description: 'Kenya became a republic with Jomo Kenyatta as its first President, completing the transition from monarchy to republic.',
+    category: 'political',
+    significance: 'high',
+  },
+  {
+    date: '1982-08-01',
+    title: "Attempted Coup d'État",
+    description: "A group of air force officers attempted to overthrow President Daniel arap Moi's government. The coup was suppressed within 24 hours.",
+    category: 'political',
+    significance: 'medium',
+  },
+  {
+    date: '1991-12-10',
+    title: 'Repeal of Section 2A',
+    description: 'Parliament repealed Section 2A of the constitution, ending single-party rule and paving the way for multi-party democracy.',
+    category: 'political',
+    significance: 'high',
+  },
+  {
+    date: '2007-12-27',
+    title: 'Post-Election Violence Begins',
+    description: 'Disputed presidential election results triggered widespread violence across Kenya, leading to over 1,000 deaths and 600,000 displaced.',
+    category: 'political',
+    significance: 'high',
+  },
+  {
+    date: '2010-08-27',
+    title: 'New Constitution Promulgated',
+    description: "Kenya's new constitution was promulgated, introducing devolution, bill of rights, and independent judiciary.",
+    category: 'political',
+    significance: 'high',
+  },
+  {
+    date: '1963-10-20',
+    title: 'Release of Jomo Kenyatta',
+    description: 'Jomo Kenyatta was released from detention after 7 years, setting the stage for his leadership in independent Kenya.',
+    category: 'cultural',
+    significance: 'high',
+  },
+  {
+    date: '1978-08-22',
+    title: 'Death of Jomo Kenyatta',
+    description: "Kenya's founding father and first President, Jomo Kenyatta, passed away. Daniel arap Moi succeeded him as President.",
+    category: 'cultural',
+    significance: 'high',
+  },
+  {
+    date: '1998-08-07',
+    title: 'US Embassy Bombing',
+    description: 'Al-Qaeda bombed the US Embassy in Nairobi, killing 213 people including 12 Americans, in one of the deadliest terrorist attacks in Africa.',
+    category: 'security',
+    significance: 'high',
+  },
+  {
+    date: '2013-09-21',
+    title: 'Westgate Mall Attack',
+    description: 'Al-Shabaab militants attacked Westgate Shopping Mall in Nairobi, killing 67 people and injuring over 175.',
+    category: 'security',
+    significance: 'high',
+  },
+  {
+    date: '2017-09-01',
+    title: 'Supreme Court Nullifies Election',
+    description: "Kenya's Supreme Court nullified the presidential election results, ordering a fresh vote - a first in African history.",
+    category: 'political',
+    significance: 'high',
+  },
+  {
+    date: '2024-06-25',
+    title: 'Gen Z Protests Peak',
+    description: 'Nationwide protests led by Gen Z against proposed tax bills reached their peak, resulting in significant political changes and cabinet resignations.',
+    category: 'social',
+    significance: 'high',
+  },
+  {
+    date: '2024-07-09',
+    title: 'Finance Bill Withdrawn',
+    description: 'President William Ruto withdrew the controversial Finance Bill 2024 following sustained public pressure and protests.',
+    category: 'political',
+    significance: 'high',
+  },
+  {
+    date: '1988-09-25',
+    title: 'Douglas Wakiihuri Wins Marathon',
+    description: "Douglas Wakiihuri won the Olympic marathon gold medal in Seoul, becoming Kenya's first Olympic marathon champion.",
+    category: 'sports',
+    significance: 'medium',
+  },
+  {
+    date: '1996-08-03',
+    title: 'Josephat Machuka World Record',
+    description: "Josephat Machuka set a world record in the 10km road race, showcasing Kenya's dominance in long-distance running.",
+    category: 'sports',
+    significance: 'medium',
+  },
+  {
+    date: '2008-08-17',
+    title: 'Samuel Wanjiru Olympic Gold',
+    description: "Samuel Wanjiru won Kenya's first Olympic 10,000m gold medal in Beijing, continuing Kenya's athletics legacy.",
+    category: 'sports',
+    significance: 'medium',
+  },
+  {
+    date: '1976-05-30',
+    title: 'Standard Gauge Railway Proposal',
+    description: "Initial proposals for modernizing Kenya's railway system were made, eventually leading to the SGR project decades later.",
+    category: 'infrastructure',
+    significance: 'low',
+  },
+  {
+    date: '2017-10-16',
+    title: 'SGR Launch',
+    description: 'The Standard Gauge Railway (SGR) between Mombasa and Nairobi officially launched, transforming cargo and passenger transport.',
+    category: 'infrastructure',
+    significance: 'high',
+  },
+  {
+    date: '2011-07-09',
+    title: 'South Sudan Independence',
+    description: "South Sudan gained independence, affecting Kenya's regional dynamics and trade relationships.",
+    category: 'regional',
+    significance: 'medium',
+  },
+];
+
+export const getKenyaEventsByDate = (date) => {
+  return kenyaEvents.filter((event) => event.date === date);
+};
+
+export const getKenyaEventsByCategory = (category) => {
+  return kenyaEvents.filter((event) => event.category === category);
+};
+
+export const getAllKenyaEvents = () => {
+  return [...kenyaEvents].sort((a, b) => new Date(a.date) - new Date(b.date));
+};
+
+export const searchKenyaEvents = (query) => {
+  const lowerQuery = query.toLowerCase();
+  return kenyaEvents.filter(
+    (event) =>
+      event.title.toLowerCase().includes(lowerQuery) ||
+      event.description.toLowerCase().includes(lowerQuery)
+  );
+};
+
+export default kenyaEvents;
+</file>
+
+<file path="client/src/api/nasa.js">
+export const fetchVisualArtifact = async (capsules) => {
+  const featured = capsules.find((c) => c.image_url && c.historical_content);
+  
+  if (featured) {
+    let imageUrl = featured.image_url;
+    
+    if (imageUrl.includes('upload.wikimedia.org')) {
+      const encodedUrl = encodeURIComponent(imageUrl);
+      imageUrl = `https://wsrv.nl/?url=${encodedUrl}&w=800&q=90&output=webp`;
+    }
+    
+    return {
+      url: imageUrl,
+      title: featured.title,
+      explanation: featured.description,
+      source: 'zamani_curated',
+    };
+  }
+  
+  return {
+    url: null,
+    title: 'No Visual Record',
+    explanation: 'Verified imagery not available for this date in our archive.',
+    source: 'placeholder',
+  };
+};
+</file>
+
+<file path="client/src/api/wikipedia.js">
+import axios from 'axios';
+
+const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api/v1';
+const WIKI_API = 'https://en.wikipedia.org/api/rest_v1/feed/onthisday/all';
+
+export const fetchCapsuleData = async (dateStr, mode = 'global') => {
+  try {
+    const localRes = await axios.get(`${BASE_URL}/capsules/`, {
+      params: { date: dateStr }
+    });
+
+    const localData = Array.isArray(localRes.data) ? localRes.data : [];
+
+    if (localData.length > 0) {
+      return {
+        events: localData.filter((c) => c.category === 'event'),
+        births: localData.filter((c) => c.category === 'birth'),
+        source: 'local_db',
+      };
+    }
+
+    if (mode === 'kenya') {
+      return { events: [], births: [], source: 'empty_kenya' };
+    }
+
+    const [, month, day] = dateStr.split('-');
+    const wikiRes = await axios.get(`${WIKI_API}/${month}/${day}`);
+
+    return {
+      events: wikiRes.data?.events || [],
+      births: wikiRes.data?.births || [],
+      source: 'wikipedia_fallback',
+    };
+  } catch (error) {
+    console.error('Capsule Fetch Error:', error);
+    return {
+      events: [],
+      births: [],
+      source: 'error',
+      error: error.response?.data?.message || error.message || 'Network Error',
+    };
+  }
+};
+</file>
+
+<file path="README.md">
+# ZAMANI – Kenya's Time Capsule
+
+A retro TV-themed full-stack application that lets users explore global and Kenyan history by selecting any date. Features a custom Flask + PostgreSQL backend, curated Kenyan milestones, and a polished CRT broadcast aesthetic. Built as Phase 2 of a 3-phase capstone project.
+
+## Live Demo
+
+**[View Production Frontend on Vercel](https://capstone-zamani-app.vercel.app/)**  
+*Note: Backend runs locally at http://localhost:5000 for development. Render deployment link available upon request.*
+
+## Setup Instructions
+
+### Prerequisites
+
+- Node.js v18+
+- Python 3.10+
+- PostgreSQL 14+
+- pnpm (recommended), npm, or yarn
+
+### Installation
+
+```bash
+# 1. Clone repository
+git clone https://github.com/ToniMoringa/Capstone-Zamani-App.git
+cd Capstone-Zamani-App
+
+# 2. Setup Backend
+cd server
+python -m venv venv && source venv/bin/activate  # Windows: venv\Scripts\activate
+pip install -r requirements.txt
+createdb zamani_db  # Or use pgAdmin to create database
+python -m server.seed  # Seeds PostgreSQL with Kenyan historical data
+python -m server.app  # Runs on http://localhost:5000
+
+# 3. Setup Frontend (in new terminal)
+cd ../client
+pnpm install  # or npm install
+pnpm dev      # Runs on http://localhost:5173
+
+```
+
+## API Endpoints & Resources
+
+This application uses a custom Flask REST API replacing public Wikipedia/NASA endpoints from Phase 1:
+
+|Method|Endpoint|Purpose|
+|---|---|---|
+|GET|`/api/v1/capsules/`|List all capsules (filter by ?date=YYYY-MM-DD)|
+|POST|`/api/v1/capsules/`|Create new capsule|
+|GET|`/api/v1/capsules/:id`|Get single capsule|
+|PUT|`/api/v1/capsules/:id`|Update capsule|
+|DELETE|`/api/v1/capsules/:id`|Delete capsule|
+|GET|`/api/v1/tags/`|List all tags|
+|POST|`/api/v1/tags/`|Create new tag|
+
+**Relational Resources:** Capsules ↔ Tags (Many-to-Many via association table)
+
+## Known Issues & Scope Notes
+
+- **Authentication:** Phase 2 pitch, user authentication is scoped for Phase 3. The `user_id` column exists in the Capsules table as a foreign key placeholder. Current MVP focuses on backend infrastructure, relational data modeling, and full CRUD operations without user ownership.
+- **Kenya Archive Coverage:** Phase 2 MVP includes 10+ verified Kenyan historical milestones (Independence Day, Madaraka Day, Gen Z Protests, etc.). Dates without seeded records display an honest "No Signal Detected" state rather than falling back to global Wikipedia data. This preserves the integrity of the Kenya Archive as a curated collection. Expanded coverage and user-contributed entries are planned for Phase 3 alongside authentication.
+- **NASA APOD Rate Limiting:** The NASA API relies on a public DEMO_KEY with strict hourly limits. Graceful error handling displays fallback UI when rate limits are exceeded.
+- **CRT Overlay:** SVG physics-based warp (`<feTurbulence>`) uses `pointer-events: none` to prevent scanline layer from blocking mouse interactions.
+
+## Project Roadmap
+
+-  ꪜ**Phase 1:** React frontend + external APIs (Wikipedia, NASA)
+- ꪜ **Phase 2:** Flask backend + PostgreSQL database + Full CRUD + Retro TV UI polish _(Current)_
+- ⌛︎ **Phase 3:** JWT authentication + user-owned capsules + personal archive dashboard
+
+## Tech Stack
+
+**Backend:** Flask, SQLAlchemy, PostgreSQL, Flask-Migrate, Marshmallow  
+**Frontend:** React 18, React Router v6, Axios, Context API  
+**Styling:** Custom CSS with CRT scanlines, film grain, fisheye warp  
+**Tools:** Postman (API testing), Git/GitHub, Vercel (frontend hosting)
+</file>
+
+<file path="server/app.py">
+from flask import Flask, jsonify, request
+from flask_cors import CORS
+from config import init_db, db
+from models import Capsule, Tag
+from routes.capsules import capsules_bp
+from routes.tags import tags_bp
+from seed import seed_database
+
+def create_app():
+    app = Flask(__name__)
+    
+    app.config['PREFERRED_URL_SCHEME'] = 'http'
+    app.config['SERVER_NAME'] = None
+    
+    init_db(app)
+    
+    with app.app_context():
+        try:
+            seed_database()
+        except Exception as e:
+            print(f"Seeding skipped or failed: {e}")
+            
+    CORS(app, 
+        resources={r"/api/*": {"origins": "*"}},
+        supports_credentials=True,
+        allow_headers=["Content-Type", "Authorization"],
+        methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"])
+        
+    app.register_blueprint(capsules_bp, url_prefix='/api/v1/capsules')
+    app.register_blueprint(tags_bp, url_prefix='/api/v1/tags')
+    
+    @app.errorhandler(404)
+    def not_found(e):
+        return jsonify({'error': 'Resource not found'}), 404
+        
+    @app.errorhandler(500)
+    def server_error(e):
+        return jsonify({'error': 'Internal server error'}), 500
+        
+    @app.route('/api/health')
+    def health_check():
+        return jsonify({'status': 'ok', 'service': 'ZAMANI Phase 2 Backend'})
+        
+    return app
+
+app = create_app()
+
+if __name__ == '__main__':
+    app.run(debug=True, port=5000, host='127.0.0.1')
+</file>
+
+</files>

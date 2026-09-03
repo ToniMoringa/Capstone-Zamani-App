@@ -1,37 +1,54 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import TVFrame from '../components/TVFrame';
 import DatePickerComponent from '../components/DatePicker';
 
 const Home = () => {
+  const location = useLocation();
+  const pickerRef = useRef(null);
+
+  useEffect(() => {
+    if (location.state?.focusDate) {
+      pickerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, [location.state]);
+
   return (
-    <div className="home-page" style={{ width: '100vw', height: '100vh', margin: 0, padding: 0, overflow: 'hidden' }}>
-      <TVFrame brand="ZAMANI TIME CAPSULE">
-        <div style={{ position: 'absolute', top: '20px', left: '25px', zIndex: 20, pointerEvents: 'none', textAlign: 'left' }}>
-          <h1 style={{ fontSize: '1.2rem', fontWeight: 900, letterSpacing: '0.1em', margin: 0, color: '#e0e0e0' }}>ZAMANI</h1>
-          <p style={{ fontSize: '0.7rem', opacity: 0.6, letterSpacing: '0.05em', margin: 0, fontFamily: 'Space Mono, monospace' }}>KENYA'S TIME CAPSULE</p>
-        </div>
-        
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', textAlign: 'center' }}>
-          <h2 style={{ 
-            fontSize: 'clamp(1.5rem, 3.5vw, 2.5rem)', 
-            marginBottom: '0.5rem',
-            fontWeight: 900,
-            letterSpacing: '-0.02em'
-          }}>
-            TUNE IN TO HISTORY
-          </h2>
-          <p style={{ marginBottom: '1.5rem', opacity: 0.7, fontSize: '0.9rem' }}>
-            Select a date to explore global and Kenyan history...
-          </p>
-          
-          <DatePickerComponent />
-          
-          <nav className="home-nav" style={{ marginTop: '1.5rem', display: 'flex', gap: '1rem' }}>
-            <Link to="/saved">View Saved Memories</Link>
-            <Link to="/about">About ZAMANI</Link>
-          </nav>
-        </div>
+    <div className="home-page">
+      <TVFrame brand="ZAMANI" model="TIME CAPSULE">
+        <main className="home-broadcast">
+          <section className="home-copy">
+            <div className="broadcast-kicker">
+              <span className="live-dot" aria-hidden="true" />
+              ARCHIVE SIGNAL / 001
+            </div>
+
+            <p className="home-eyebrow">A WINDOW INTO THEN</p>
+            <h1>
+              Tune into <span>history.</span>
+            </h1>
+            <p className="home-intro">
+              Pick a date and travel through global and Kenyan moments, people,
+              stories and visual archives.
+            </p>
+
+            <div ref={pickerRef} className="home-picker-panel">
+              <DatePickerComponent />
+            </div>
+          </section>
+
+          <aside className="home-image-placeholder" aria-label="Homepage image placeholder">
+            <div className="placeholder-grid" aria-hidden="true" />
+            <div className="placeholder-content">
+              <span className="placeholder-index">IMG / 01</span>
+              <div className="placeholder-frame" aria-hidden="true">
+                <span>+</span>
+              </div>
+              <strong>YOUR IMAGE HERE</strong>
+              <p>Replace this block with your preferred time-capsule imagery.</p>
+            </div>
+          </aside>
+        </main>
       </TVFrame>
     </div>
   );
