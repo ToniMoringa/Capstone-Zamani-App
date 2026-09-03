@@ -8,8 +8,9 @@ import '../styles/saved.css';
 const EMPTY_FORM = { title: '', date: '', description: '', personal_note: '' };
 
 const Saved = () => {
-  // --- STATE FOR PERSONAL CAPSULES (DATABASE) ---
-  const [capsules, setCapsules] = useState([]);
+  // --- STATE ---
+  const [capsules, setCapsules] = useState([]); // Personal DB capsules
+  const [savedHistory, setSavedHistory] = useState([]); // LocalStorage history
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [showForm, setShowForm] = useState(false);
@@ -18,26 +19,20 @@ const Saved = () => {
   const [saving, setSaving] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // --- STATE FOR SAVED HISTORY (LOCALSTORAGE) ---
-  // We read directly from localStorage to avoid Context sync issues
-  const [savedHistory, setSavedHistory] = useState([]);
-
-  // Load Personal Capsules from Backend
-  const loadCapsules = async () => {
+  // --- LOAD DATA ---
+  const loadData = async () => {
     setLoading(true);
     setError('');
+    
+    // 1. Load Personal Capsules from Backend
     try {
       const data = await getMyCapsules();
       setCapsules(data);
     } catch (err) {
       setError(err.response?.data?.error || 'Could not load personal capsules.');
-    } finally {
-      setLoading(false);
     }
-  };
 
-  // Load Saved History from LocalStorage
-  const loadHistory = () => {
+    // 2. Load Saved History from LocalStorage
     try {
       const stored = localStorage.getItem('zamani_saved_capsules');
       if (stored) {
@@ -46,14 +41,14 @@ const Saved = () => {
     } catch (e) {
       console.error("Failed to parse saved history", e);
     }
+
+    setLoading(false);
   };
 
   useEffect(() => {
-    loadCapsules();
-    loadHistory(); // Load history on mount
+    loadData();
   }, []);
 
-  // Handle "New Memory" param from URL
   useEffect(() => {
     if (searchParams.get('new') === '1') {
       openCreateForm();
@@ -61,6 +56,7 @@ const Saved = () => {
     }
   }, [searchParams]);
 
+  // --- HANDLERS ---
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
   
   const openCreateForm = () => { 
@@ -116,14 +112,13 @@ const Saved = () => {
     }
   };
 
-  // Remove from LocalStorage History
   const handleRemoveHistory = (date, mode) => {
     const stored = localStorage.getItem('zamani_saved_capsules');
     if (stored) {
       const list = JSON.parse(stored);
       const newList = list.filter(item => !(item.date === date && item.mode === mode));
       localStorage.setItem('zamani_saved_capsules', JSON.stringify(newList));
-      setSavedHistory(newList); // Update UI immediately
+      setSavedHistory(newList);
     }
   };
 
@@ -137,7 +132,7 @@ const Saved = () => {
 
         <div className="saved-toolbar">
           <button type="button" className="quick-btn" onClick={openCreateForm}>+ NEW MEMORY</button>
-          <button type="button" className="quick-btn" onClick={() => { loadCapsules(); loadHistory(); }}>REFRESH</button>
+          <button type="button" className="quick-btn" onClick={loadData}>REFRESH</button>
         </div>
 
         {error && <div className="error-container"><p>{error}</p></div>}
@@ -156,7 +151,7 @@ const Saved = () => {
         )}
 
         {loading ? (
-          <p>LOADING PERSONAL ARCHIVE...</p>
+          <p>LOADING ARCHIVE...</p>
         ) : (
           <>
             {/* SECTION 1: PERSONAL CAPSULES (DATABASE) */}
@@ -189,7 +184,7 @@ const Saved = () => {
               <div className="saved-grid">
                 {savedHistory.map((item, idx) => (
                   <article key={`${item.date}-${idx}`} className="saved-card" style={{ borderLeftColor: '#D6A14A' }}>
-                    <span className="saved-mode">{item.mode === 'kenya' ? '🇰🇪 KENYA' : '🌍 GLOBAL'}</span>
+                    <span className="saved-mode">{item.mode === 'kenya' ? '🇰 KENYA' : '🌍 GLOBAL'}</span>
                     <h2>{formatDate(item.date, 'full')}</h2>
                     <p>{item.title || 'Historical Archive Entry'}</p>
                     <div className="saved-card-actions">
