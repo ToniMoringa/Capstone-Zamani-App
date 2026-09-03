@@ -175,7 +175,7 @@ const Saved = () => {
 
             {/* SECTION 2: SAVED HISTORY (LOCALSTORAGE) */}
             <h2 className="saved-section-title" style={{ marginTop: '2rem', borderBottom: '1px solid var(--ui-border)', paddingBottom: '0.5rem' }}>
-              📌 SAVED FROM ARCHIVE ({savedHistory.length})
+              SAVED FROM ARCHIVE ({savedHistory.length})
             </h2>
             
             {savedHistory.length === 0 ? (
