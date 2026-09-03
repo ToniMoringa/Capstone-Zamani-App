@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import TVFrame from '../components/TVFrame';
-import { useCapsule } from '../context/CapsuleContext'; // Ensure this hook exists
 import { getMyCapsules, createCapsule, updateCapsule, deleteCapsule } from '../api/capsules';
 import { formatDate } from '../utils/helpers';
 import '../styles/saved.css';
@@ -9,29 +8,21 @@ import '../styles/saved.css';
 const EMPTY_FORM = { title: '', date: '', description: '', personal_note: '' };
 
 const Saved = () => {
-  // 1. Get Personal Capsules from Backend
+  // --- STATE FOR PERSONAL CAPSULES (DATABASE) ---
   const [capsules, setCapsules] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  
-  // 2. Get History Bookmarks from LocalStorage (via Context)
-  // If useCapsule doesn't exist, we fallback to raw localStorage
-  let savedHistory = [];
-  try {
-    const { savedCapsules } = useCapsule(); 
-    savedHistory = savedCapsules || [];
-  } catch (e) {
-    // Fallback if context fails
-    const stored = localStorage.getItem('zamani_saved_capsules');
-    savedHistory = stored ? JSON.parse(stored) : [];
-  }
-
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [form, setForm] = useState(EMPTY_FORM);
   const [saving, setSaving] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
 
+  // --- STATE FOR SAVED HISTORY (LOCALSTORAGE) ---
+  // We read directly from localStorage to avoid Context sync issues
+  const [savedHistory, setSavedHistory] = useState([]);
+
+  // Load Personal Capsules from Backend
   const loadCapsules = async () => {
     setLoading(true);
     setError('');
@@ -45,8 +36,24 @@ const Saved = () => {
     }
   };
 
-  useEffect(() => { loadCapsules(); }, []);
+  // Load Saved History from LocalStorage
+  const loadHistory = () => {
+    try {
+      const stored = localStorage.getItem('zamani_saved_capsules');
+      if (stored) {
+        setSavedHistory(JSON.parse(stored));
+      }
+    } catch (e) {
+      console.error("Failed to parse saved history", e);
+    }
+  };
 
+  useEffect(() => {
+    loadCapsules();
+    loadHistory(); // Load history on mount
+  }, []);
+
+  // Handle "New Memory" param from URL
   useEffect(() => {
     if (searchParams.get('new') === '1') {
       openCreateForm();
@@ -55,13 +62,29 @@ const Saved = () => {
   }, [searchParams]);
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
-  const openCreateForm = () => { setForm(EMPTY_FORM); setEditingId(null); setShowForm(true); };
+  
+  const openCreateForm = () => { 
+    setForm(EMPTY_FORM); 
+    setEditingId(null); 
+    setShowForm(true); 
+  };
+  
   const openEditForm = (capsule) => {
-    setForm({ title: capsule.title, date: capsule.date, description: capsule.description, personal_note: capsule.personal_note || '' });
+    setForm({ 
+      title: capsule.title, 
+      date: capsule.date, 
+      description: capsule.description, 
+      personal_note: capsule.personal_note || '' 
+    });
     setEditingId(capsule.id);
     setShowForm(true);
   };
-  const closeForm = () => { setShowForm(false); setEditingId(null); setForm(EMPTY_FORM); };
+  
+  const closeForm = () => { 
+    setShowForm(false); 
+    setEditingId(null); 
+    setForm(EMPTY_FORM); 
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -93,14 +116,14 @@ const Saved = () => {
     }
   };
 
-  // Helper to remove from localStorage history
+  // Remove from LocalStorage History
   const handleRemoveHistory = (date, mode) => {
     const stored = localStorage.getItem('zamani_saved_capsules');
     if (stored) {
       const list = JSON.parse(stored);
       const newList = list.filter(item => !(item.date === date && item.mode === mode));
       localStorage.setItem('zamani_saved_capsules', JSON.stringify(newList));
-      window.location.reload(); // Quick refresh to update UI
+      setSavedHistory(newList); // Update UI immediately
     }
   };
 
@@ -114,7 +137,7 @@ const Saved = () => {
 
         <div className="saved-toolbar">
           <button type="button" className="quick-btn" onClick={openCreateForm}>+ NEW MEMORY</button>
-          <button type="button" className="quick-btn" onClick={loadCapsules}>REFRESH</button>
+          <button type="button" className="quick-btn" onClick={() => { loadCapsules(); loadHistory(); }}>REFRESH</button>
         </div>
 
         {error && <div className="error-container"><p>{error}</p></div>}
