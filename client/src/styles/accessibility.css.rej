@@ -1,0 +1,457 @@
+diff a/client/src/styles/accessibility.css b/client/src/styles/accessibility.css	(rejected hunks)
+@@ -1078,3 +1078,455 @@ h6,
+       #090706 !important;
+   }
+ }
++
++/* ========================================
++   REVISION 6 — MEMORY CAROUSEL + ARCHIVE CONTRAST
++   ======================================== */
++
++/* Home image area is now a timed archive carousel rather than an upload placeholder. */
++.home-archive-carousel {
++  min-height: min(56vh, 500px);
++  border-style: solid !important;
++  background: #160D08 !important;
++  isolation: isolate;
++}
++
++.archive-carousel-viewport,
++.archive-carousel-slide {
++  position: absolute;
++  inset: 0;
++}
++
++.archive-carousel-viewport {
++  overflow: hidden;
++  background: var(--retro-ink, #160D08);
++}
++
++.archive-carousel-slide {
++  margin: 0;
++  opacity: 0;
++  visibility: hidden;
++  transform: scale(1.018);
++  transition: opacity 700ms ease, transform 8s ease;
++}
++
++.archive-carousel-slide.active {
++  opacity: 1;
++  visibility: visible;
++  transform: scale(1);
++}
++
++.archive-carousel-slide img {
++  width: 100%;
++  height: 100%;
++  display: block;
++  object-fit: cover;
++  filter: sepia(0.88) saturate(0.62) contrast(1.08) brightness(0.82) hue-rotate(-5deg);
++}
++
++.archive-photo-wash {
++  position: absolute;
++  inset: 0;
++  pointer-events: none;
++  background:
++    linear-gradient(to bottom, rgba(18, 10, 7, 0.04), rgba(18, 10, 7, 0.12) 50%, rgba(18, 10, 7, 0.82) 100%),
++    radial-gradient(circle at 50% 42%, transparent 45%, rgba(18, 10, 7, 0.42) 100%);
++  box-shadow: inset 0 0 45px rgba(12, 6, 3, 0.52);
++}
++
++.archive-carousel-caption {
++  position: absolute;
++  z-index: 2;
++  left: 1rem;
++  right: 1rem;
++  bottom: 4.3rem;
++  display: grid;
++  gap: 0.2rem;
++  color: var(--retro-cream, #F3E5C2);
++  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.72);
++}
++
++.archive-frame-number {
++  color: var(--retro-ochre, #D6A14A);
++  font-size: 0.62rem;
++  font-weight: 700;
++  letter-spacing: 0.14em;
++}
++
++.archive-carousel-caption strong {
++  max-width: 90%;
++  color: var(--retro-cream, #F3E5C2);
++  font-family: Georgia, 'Times New Roman', serif;
++  font-size: clamp(1.05rem, 2.2vw, 1.45rem);
++  line-height: 1.1;
++}
++
++.archive-carousel-caption p {
++  max-width: 92%;
++  color: #D8C49A !important;
++  font-size: 0.7rem;
++  line-height: 1.45;
++}
++
++.archive-carousel-status {
++  position: absolute;
++  z-index: 6;
++  top: 0.75rem;
++  left: 0.75rem;
++  width: min(220px, calc(100% - 1.5rem));
++  padding: 0.48rem 0.55rem;
++  border: 1px solid rgba(214, 161, 74, 0.52);
++  background: rgba(18, 10, 7, 0.76);
++  backdrop-filter: blur(3px);
++}
++
++.archive-carousel-status > span {
++  display: block;
++  margin-bottom: 0.28rem;
++  color: var(--retro-cream, #F3E5C2);
++  font-size: 0.56rem;
++  font-weight: 700;
++  letter-spacing: 0.1em;
++}
++
++.archive-timer-track {
++  height: 3px;
++  overflow: hidden;
++  background: rgba(216, 196, 154, 0.18);
++}
++
++.archive-timer-track span {
++  display: block;
++  height: 100%;
++  margin-left: auto;
++  background: var(--retro-copper, #C76A3A);
++  transition: width 300ms linear;
++}
++
++.archive-carousel-controls {
++  position: absolute;
++  z-index: 7;
++  left: 0.75rem;
++  right: 0.75rem;
++  bottom: 0.75rem;
++  min-height: 44px;
++  display: flex;
++  align-items: center;
++  justify-content: space-between;
++  gap: 0.45rem;
++  padding: 0.35rem;
++  border: 1px solid rgba(125, 88, 57, 0.78);
++  background: rgba(18, 10, 7, 0.84);
++  backdrop-filter: blur(4px);
++}
++
++.archive-carousel-controls button {
++  min-width: 44px;
++  min-height: 44px;
++  display: inline-grid;
++  place-items: center;
++  border: 1px solid var(--retro-bronze, #7D5839);
++  border-radius: 2px;
++  background: linear-gradient(180deg, #4A2D1D, #2D1A11);
++  color: var(--retro-cream, #F3E5C2);
++  font: inherit;
++  font-size: 0.72rem;
++  font-weight: 700;
++  cursor: pointer;
++}
++
++.archive-carousel-controls button:hover,
++.archive-carousel-controls button:focus-visible {
++  border-color: var(--retro-ochre, #D6A14A);
++  background: linear-gradient(180deg, #5A3824, #382116);
++}
++
++.archive-carousel-pause {
++  padding-inline: 0.65rem;
++  letter-spacing: 0.08em;
++}
++
++.archive-carousel-dots {
++  display: flex;
++  align-items: center;
++  justify-content: center;
++  gap: 0.4rem;
++  margin-inline: auto;
++}
++
++.archive-carousel-dots .archive-carousel-dot {
++  min-width: 44px;
++  width: 44px;
++  min-height: 44px;
++  height: 44px;
++  position: relative;
++  border-color: transparent;
++  background: transparent;
++}
++
++.archive-carousel-dot::after {
++  content: '';
++  width: 8px;
++  height: 8px;
++  border: 1px solid var(--retro-ochre, #D6A14A);
++  border-radius: 50%;
++  background: transparent;
++}
++
++.archive-carousel-dot.active::after {
++  background: var(--retro-copper, #C76A3A);
++  box-shadow: 0 0 8px rgba(199, 106, 58, 0.45);
++}
++
++/* New About archive-register cards. */
++.tv-perspective-container:not(.high-contrast) .tech-archive-card {
++  border-color: var(--retro-bronze) !important;
++  background:
++    linear-gradient(145deg, rgba(82, 49, 31, 0.92), rgba(42, 23, 16, 0.98)) !important;
++}
++
++.tv-perspective-container:not(.high-contrast) .tech-card-spine {
++  border-color: var(--retro-bronze) !important;
++  background: rgba(22, 13, 8, 0.5) !important;
++}
++
++.tv-perspective-container:not(.high-contrast) .tech-card-stamp,
++.tv-perspective-container:not(.high-contrast) .tech-card-spine span,
++.tv-perspective-container:not(.high-contrast) .about-section-kicker,
++.tv-perspective-container:not(.high-contrast) .about-section-index,
++.tv-perspective-container:not(.high-contrast) .about-record-line {
++  color: var(--retro-ochre) !important;
++  border-color: var(--retro-ochre);
++}
++
++.tv-perspective-container:not(.high-contrast) .tech-module-list li {
++  background: rgba(22, 13, 8, 0.42) !important;
++  border-color: var(--retro-bronze) !important;
++  color: var(--retro-cream) !important;
++}
++
++.tv-perspective-container:not(.high-contrast) .tech-module-marker {
++  border-color: var(--retro-copper) !important;
++  background: var(--retro-copper) !important;
++  box-shadow: 0 0 7px rgba(199, 106, 58, 0.35) !important;
++}
++
++/*
++   ARCHIVE CONTRAST MODE
++   Replaces the black/white/bright-yellow scheme with a high-contrast historical
++   palette: lamp-black, ivory paper and illuminated manuscript gold.
++*/
++.tv-perspective-container.high-contrast {
++  --ui-bg: #0B0704;
++  --ui-card: #1B0F08;
++  --ui-surface: #2A160B;
++  --ui-text: #FFF8E7;
++  --ui-accent: #FFBE5C;
++  --ui-muted: #F1D7A5;
++  --ui-border: #D99A45;
++  --ui-accent-glow: rgba(255, 190, 92, 0.34);
++  --ui-grid: rgba(255, 190, 92, 0.08);
++  --ui-overlay: rgba(11, 7, 4, 0.97);
++}
++
++.tv-perspective-container.high-contrast {
++  background:
++    radial-gradient(circle at 50% 18%, rgba(255, 190, 92, 0.08), transparent 27%),
++    #070402 !important;
++}
++
++.tv-perspective-container.high-contrast .tv-on .tv-screen {
++  background:
++    radial-gradient(circle at 76% 16%, rgba(255, 190, 92, 0.10), transparent 27%),
++    linear-gradient(145deg, #0B0704 0%, #1B0F08 52%, #321A0D 116%) !important;
++  box-shadow:
++    inset 0 0 74px rgba(0, 0, 0, 0.74),
++    inset 0 0 0 1px rgba(255, 248, 231, 0.18) !important;
++}
++
++.tv-perspective-container.high-contrast .tv-screen-header {
++  background: linear-gradient(to bottom, rgba(7, 4, 2, 0.98), rgba(7, 4, 2, 0.76), transparent) !important;
++}
++
++.tv-perspective-container.high-contrast :is(
++  .screen-page-label,
++  .home-eyebrow,
++  .broadcast-kicker,
++  .broadcast-tag,
++  .display-label,
++  .saved-mode,
++  .event-year,
++  .birth-year,
++  .event-category,
++  .date-picker-label,
++  .about-section-kicker,
++  .about-section-index,
++  .about-record-line,
++  .tech-card-spine span,
++  .tech-card-stamp
++) {
++  color: #FFBE5C !important;
++}
++
++.tv-perspective-container.high-contrast :is(
++  .about-header,
++  .about-section,
++  .capsule-header,
++  .event-card,
++  .birth-card,
++  .nasa-card,
++  .saved-header,
++  .saved-card,
++  .phase-item,
++  .tech-archive-card
++) {
++  background: #1B0F08 !important;
++  border-color: #D99A45 !important;
++  box-shadow: inset 0 1px 0 rgba(255, 248, 231, 0.06) !important;
++}
++
++.tv-perspective-container.high-contrast :is(
++  .mode-btn,
++  .quick-btn,
++  .date-picker-input,
++  .save-btn,
++  .retry-btn,
++  .browse-link,
++  .contrast-toggle,
++  .screen-back-button,
++  .saved-delete-btn,
++  .archive-carousel-controls button
++) {
++  background: #2A160B !important;
++  border-color: #D99A45 !important;
++  color: #FFF8E7 !important;
++}
++
++.tv-perspective-container.high-contrast :is(
++  .mode-btn,
++  .quick-btn,
++  .save-btn,
++  .contrast-toggle
++).active {
++  background: #FFBE5C !important;
++  border-color: #FFCF82 !important;
++  color: #120A05 !important;
++}
++
++.tv-perspective-container.high-contrast .home-page .home-copy h1 span {
++  color: #FFBE5C !important;
++  text-shadow: 0 0 14px rgba(255, 190, 92, 0.24) !important;
++}
++
++.tv-perspective-container.high-contrast .live-dot,
++.tv-perspective-container.high-contrast .tv-model-dot,
++.tv-perspective-container.high-contrast .status-on {
++  background: #FFBE5C !important;
++  box-shadow: 0 0 10px rgba(255, 190, 92, 0.48) !important;
++}
++
++.tv-perspective-container.high-contrast .tv-control-button:hover:not(:disabled),
++.tv-perspective-container.high-contrast .tv-control-button:focus-visible:not(:disabled) {
++  color: #FFF8E7 !important;
++  border-color: #D99A45 !important;
++  background: linear-gradient(180deg, #312016, #17100B) !important;
++  box-shadow: 0 2px 0 #000000, 0 0 10px rgba(255, 190, 92, 0.18) !important;
++}
++
++.tv-perspective-container.high-contrast .tv-control-button.active:not(:disabled) {
++  color: #120A05 !important;
++  border-color: #FFCF82 !important;
++  background: linear-gradient(180deg, #FFCF82, #FFBE5C) !important;
++  box-shadow: 0 2px 0 #7A4D19, 0 0 12px rgba(255, 190, 92, 0.28) !important;
++}
++
++.tv-perspective-container.high-contrast .tv-power-button:hover:not(:disabled),
++.tv-perspective-container.high-contrast .tv-power-button:focus-visible:not(:disabled),
++.tv-perspective-container.high-contrast .tv-power-button.powered {
++  color: #FFBE5C !important;
++  box-shadow: 0 2px 0 #000000, 0 0 12px rgba(255, 190, 92, 0.24) !important;
++}
++
++.tv-perspective-container.high-contrast .boot-copy span,
++.tv-perspective-container.high-contrast .boot-copy small {
++  color: #FFBE5C !important;
++}
++
++.tv-perspective-container.high-contrast .archive-carousel-slide img {
++  filter: sepia(1) grayscale(0.12) contrast(1.18) brightness(0.78) !important;
++}
++
++.tv-perspective-container.high-contrast .archive-frame-number,
++.tv-perspective-container.high-contrast .archive-carousel-status > span {
++  color: #FFBE5C !important;
++}
++
++.tv-perspective-container.high-contrast .archive-timer-track span,
++.tv-perspective-container.high-contrast .archive-carousel-dot.active::after,
++.tv-perspective-container.high-contrast .tech-module-marker {
++  background: #FFBE5C !important;
++}
++
++.tv-perspective-container.high-contrast .archive-carousel-dot::after,
++.tv-perspective-container.high-contrast .tech-module-marker {
++  border-color: #FFBE5C !important;
++}
++
++.tv-perspective-container.high-contrast :where(
++  button,
++  a,
++  input,
++  select,
++  textarea,
++  [role='button'],
++  [tabindex]:not([tabindex='-1'])
++):focus-visible {
++  outline: 3px solid #FFCF82 !important;
++  outline-offset: 2px;
++}
++
++@media (max-width: 900px) {
++  .home-archive-carousel {
++    min-height: 300px;
++  }
++}
++
++@media (max-width: 767px) {
++  .home-archive-carousel {
++    min-height: 265px;
++    flex: 0 0 265px;
++  }
++
++  .archive-carousel-caption {
++    bottom: 4.05rem;
++  }
++
++  .archive-carousel-caption p {
++    display: none;
++  }
++
++  .archive-carousel-controls {
++    left: 0.45rem;
++    right: 0.45rem;
++    bottom: 0.45rem;
++  }
++
++  .archive-carousel-status {
++    top: 0.45rem;
++    left: 0.45rem;
++  }
++
++  .archive-carousel-dots .archive-carousel-dot:nth-child(n+4) {
++    display: none;
++  }
++}
++
++@media (prefers-reduced-motion: reduce) {
++  .archive-carousel-slide {
++    transition: none;
++  }
++
++  .archive-timer-track span {
++    transition: none;
++  }
++}

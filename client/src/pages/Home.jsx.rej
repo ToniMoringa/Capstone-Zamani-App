@@ -1,0 +1,158 @@
+diff a/client/src/pages/Home.jsx b/client/src/pages/Home.jsx	(rejected hunks)
+@@ -1,11 +1,42 @@
+-import React, { useEffect, useRef } from 'react';
++import React, { useEffect, useRef, useState } from 'react';
+ import { useLocation } from 'react-router-dom';
+ import TVFrame from '../components/TVFrame';
+ import DatePickerComponent from '../components/DatePicker';
+ 
++const CAROUSEL_INTERVAL_SECONDS = 10;
++
++// Replace these sample archive images with your final ZAMANI image set.
++const HOME_ARCHIVE_SLIDES = [
++  {
++    src: 'https://images.unsplash.com/photo-1581067405398-ffdf8e2183fc?q=80&w=1200&auto=format&fit=crop',
++    alt: 'Historic wartime field communication scene',
++    title: 'Voices from another time',
++    caption: 'Photographs, broadcasts and records preserved as windows into the past.',
++  },
++  {
++    src: 'https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=1200&auto=format&fit=crop',
++    alt: 'Notebook and writing tools representing preserved written history',
++    title: 'Written records endure',
++    caption: 'Letters, journals and public records keep ordinary moments from disappearing.',
++  },
++  {
++    src: 'https://images.unsplash.com/photo-1461360370896-922624d12aa1?q=80&w=1200&auto=format&fit=crop',
++    alt: 'Vintage objects representing memories preserved through generations',
++    title: 'Objects carry memory',
++    caption: 'Every artefact can hold a story worth tuning back into.',
++  },
++];
++
+ const Home = () => {
+   const location = useLocation();
+   const pickerRef = useRef(null);
++  const [currentSlide, setCurrentSlide] = useState(0);
++  const [secondsRemaining, setSecondsRemaining] = useState(CAROUSEL_INTERVAL_SECONDS);
++  const [isManuallyPaused, setIsManuallyPaused] = useState(() => (
++    typeof window !== 'undefined'
++      && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
++  ));
++  const isPaused = isManuallyPaused;
+ 
+   useEffect(() => {
+     if (location.state?.focusDate) {
+@@ -13,6 +44,30 @@ const Home = () => {
+     }
+   }, [location.state]);
+ 
++  useEffect(() => {
++    if (isPaused) return undefined;
++
++    const timer = window.setInterval(() => {
++      setSecondsRemaining((remaining) => {
++        if (remaining <= 1) {
++          setCurrentSlide((slide) => (slide + 1) % HOME_ARCHIVE_SLIDES.length);
++          return CAROUSEL_INTERVAL_SECONDS;
++        }
++
++        return remaining - 1;
++      });
++    }, 1000);
++
++    return () => window.clearInterval(timer);
++  }, [isPaused]);
++
++  const goToSlide = (index) => {
++    const total = HOME_ARCHIVE_SLIDES.length;
++    setCurrentSlide((index + total) % total);
++    setSecondsRemaining(CAROUSEL_INTERVAL_SECONDS);
++  };
++
++
+   return (
+     <div className="home-page">
+       <TVFrame brand="ZAMANI" model="TIME CAPSULE">
+@@ -37,9 +92,78 @@ const Home = () => {
+             </div>
+           </section>
+ 
+-          <aside className="home-image-placeholder" aria-label="Homepage image placeholder">
+-            <div className="placeholder-content">
+-              <img src="https://images.unsplash.com/photo-1581067405398-ffdf8e2183fc?q=80&w=753&auto=format&fit=crop" alt="histo" />
++          <aside
++            className="home-image-placeholder home-archive-carousel"
++            aria-label="Historical image carousel"
++          >
++            <div className="archive-carousel-viewport">
++              {HOME_ARCHIVE_SLIDES.map((slide, index) => (
++                <figure
++                  key={slide.src}
++                  className={`archive-carousel-slide ${index === currentSlide ? 'active' : ''}`}
++                  aria-hidden={index !== currentSlide}
++                >
++                  <img src={slide.src} alt={index === currentSlide ? slide.alt : ''} />
++                  <div className="archive-photo-wash" aria-hidden="true" />
++                  <figcaption className="archive-carousel-caption">
++                    <span className="archive-frame-number">
++                      FRAME {String(index + 1).padStart(2, '0')} / {String(HOME_ARCHIVE_SLIDES.length).padStart(2, '0')}
++                    </span>
++                    <strong>{slide.title}</strong>
++                    <p>{slide.caption}</p>
++                  </figcaption>
++                </figure>
++              ))}
++            </div>
++
++            <div className="archive-carousel-status" aria-live="polite">
++              <span>{isPaused ? 'PAUSED' : `NEXT MEMORY IN ${secondsRemaining}s`}</span>
++              <div className="archive-timer-track" aria-hidden="true">
++                <span style={{ width: `${(secondsRemaining / CAROUSEL_INTERVAL_SECONDS) * 100}%` }} />
++              </div>
++            </div>
++
++            <div className="archive-carousel-controls" aria-label="Carousel controls">
++              <button
++                type="button"
++                className="archive-carousel-arrow"
++                onClick={() => goToSlide(currentSlide - 1)}
++                aria-label="Show previous historical image"
++              >
++                ←
++              </button>
++
++              <div className="archive-carousel-dots" role="group" aria-label="Choose historical image">
++                {HOME_ARCHIVE_SLIDES.map((slide, index) => (
++                  <button
++                    key={slide.title}
++                    type="button"
++                    className={`archive-carousel-dot ${index === currentSlide ? 'active' : ''}`}
++                    onClick={() => goToSlide(index)}
++                    aria-label={`Show image ${index + 1}: ${slide.title}`}
++                    aria-current={index === currentSlide ? 'true' : undefined}
++                  />
++                ))}
++              </div>
++
++              <button
++                type="button"
++                className="archive-carousel-pause"
++                onClick={() => setIsManuallyPaused((paused) => !paused)}
++                aria-label={isManuallyPaused ? 'Resume automatic carousel' : 'Pause automatic carousel'}
++                aria-pressed={isManuallyPaused}
++              >
++                {isManuallyPaused ? 'PLAY' : 'PAUSE'}
++              </button>
++
++              <button
++                type="button"
++                className="archive-carousel-arrow"
++                onClick={() => goToSlide(currentSlide + 1)}
++                aria-label="Show next historical image"
++              >
++                →
++              </button>
+             </div>
+           </aside>
+         </main>

@@ -1,0 +1,12 @@
+diff a/client/src/components/OrbCursor.jsx b/client/src/components/OrbCursor.jsx	(rejected hunks)
+@@ -7,8 +7,8 @@ const OrbCursor = () => {
+   const { highContrast } = useTVSystem();
+   if (!isEnabled) return null;
+ 
+-  const accent = highContrast ? '#FFD700' : '#C76A3A';
+-  const glow = highContrast ? 'rgba(255, 215, 0, 0.28)' : 'rgba(199, 106, 58, 0.24)';
++  const accent = highContrast ? '#FFBE5C' : '#C76A3A';
++  const glow = highContrast ? 'rgba(255, 190, 92, 0.30)' : 'rgba(199, 106, 58, 0.24)';
+ 
+   return (
+     <div

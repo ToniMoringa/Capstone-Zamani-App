@@ -1,0 +1,37 @@
+diff a/client/src/pages/Saved.jsx b/client/src/pages/Saved.jsx	(rejected hunks)
+@@ -74,7 +74,7 @@ const Saved = () => {
+         ) : (
+           <div className="saved-grid">
+             {capsules.map((capsule) => (
+-              <div key={capsule.id} className="saved-card-wrapper" style={{ position: 'relative' }}>
++              <div key={capsule.id} className="saved-card-wrapper">
+                 <Link
+                   to={`/capsule/${capsule.date}/${capsule.category === 'event' ? 'kenya' : 'global'}`}
+                   className="saved-card"
+@@ -89,22 +89,12 @@ const Saved = () => {
+                   </span>
+                 </Link>
+                 <button
++                  type="button"
++                  className="saved-delete-btn"
+                   onClick={() => handleDelete(capsule.id)}
+-                  style={{
+-                    position: 'absolute',
+-                    top: '10px',
+-                    right: '10px',
+-                    background: 'rgba(255,0,0,0.2)',
+-                    border: '1px solid red',
+-                    color: 'red',
+-                    padding: '0.25rem 0.5rem',
+-                    cursor: 'pointer',
+-                    borderRadius: '4px',
+-                    fontSize: '0.75rem',
+-                    zIndex: 2
+-                  }}
++                  aria-label={`Delete capsule for ${formatDate(capsule.date, 'full')}`}
+                 >
+-                  DELETE
++                  <span className="saved-delete-label">DELETE</span>
+                 </button>
+               </div>
+             ))}

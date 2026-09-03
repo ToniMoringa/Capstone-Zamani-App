@@ -1,0 +1,48 @@
+diff a/client/src/App.css b/client/src/App.css	(rejected hunks)
+@@ -1,45 +1,4 @@
+-.nav-arrow {
+-  position: fixed;
+-  bottom: 30px;
+-  width: 36px;
+-  height: 36px;
+-  border-radius: 50%;
+-  background: rgba(0, 0, 0, 0.8);
+-  border: 1px solid rgba(0, 255, 255, 0.6);
+-  color: #0ff;
+-  font-size: 18px;
+-  display: flex;
+-  align-items: center;
+-  justify-content: center;
+-  cursor: none;
+-  z-index: 9998;
+-  transition: all 0.2s ease;
+-  font-family: 'Space Mono', monospace;
+-  backdrop-filter: blur(4px);
+-}
+-
+-.nav-arrow:hover {
+-  background: rgba(0, 255, 255, 0.2);
+-  border-color: #0ff;
+-  box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+-  transform: scale(1.1);
+-}
+-
+-.nav-arrow-left {
+-  right: 76px; /* Stacked left of right arrow */
+-}
+-
+-.nav-arrow-right {
+-  right: 30px;
+-}
+-
+-@media (max-width: 768px) {
+-  .nav-arrow {
+-    display: none;
+-  }
+-}
+-
+-/* Navigation now lives on the television console. */
++/* Navigation is intentionally integrated into the television hardware frame. */
+ .nav-arrow {
+   display: none !important;
+ }

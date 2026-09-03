@@ -3,29 +3,34 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100%;
+  min-height: 240px;
+  padding: 1.5rem;
+  border: 1px solid var(--ui-border);
+  border-radius: 8px;
+  background: var(--ui-surface);
+  color: var(--ui-text);
   text-align: center;
   gap: 1rem;
 }
 
 .error-icon {
-  font-size: 3rem;
-  filter: grayscale(100%);
+  color: var(--ui-accent);
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.error-container h2 {
+  color: var(--ui-text);
+  font-size: 1.5rem;
+}
+
+.error-container p {
+  color: var(--ui-text);
+  font-size: 1rem;
 }
 
 .retry-btn {
-  margin-top: 1rem;
-  padding: 0.75rem 1.5rem;
-  background: #fff;
-  color: #000;
-  border: none;
-  font-family: 'Space Mono', monospace;
-  font-weight: 700;
-  cursor: pointer;
+  margin-top: 0.25rem;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-}
-
-.retry-btn:hover {
-  background: #ddd;
+  letter-spacing: 0.08em;
 }

@@ -1,0 +1,152 @@
+diff a/client/src/components/TechStackPhysics.jsx b/client/src/components/TechStackPhysics.jsx	(rejected hunks)
+@@ -1,19 +1,24 @@
+ import React, { useEffect, useRef, useState } from 'react';
+ import Matter from 'matter-js';
++import { useTVSystem } from '../context/TVSystemContext';
+ 
+ const TechStackPhysics = () => {
+   const sceneRef = useRef(null);
+   const [pillPositions, setPillPositions] = useState([]);
++  const { highContrast } = useTVSystem();
+ 
+   const techItems = [
+-    'React 18', 'React Router', 'Custom CSS', 
+-    'Context API', 'localStorage', 'Wikipedia API', 
++    'React 18', 'React Router', 'Custom CSS',
++    'Context API', 'localStorage', 'Wikipedia API',
+     'NASA APOD', 'Datepicker'
+   ];
+ 
+   useEffect(() => {
+     if (!sceneRef.current) return;
+ 
++    const accent = highContrast ? '#FFD700' : '#64FFDA';
++    const surface = highContrast ? '#121212' : '#112240';
++
+     const engine = Matter.Engine.create();
+     const render = Matter.Render.create({
+       element: sceneRef.current,
+@@ -30,8 +35,7 @@ const TechStackPhysics = () => {
+     const width = sceneRef.current.clientWidth;
+     const height = 400;
+     const wallOptions = { isStatic: true, render: { visible: false } };
+-    
+-    // Walls to keep them in the TV screen area mostly
++
+     const ground = Matter.Bodies.rectangle(width / 2, height + 30, width, 60, wallOptions);
+     const leftWall = Matter.Bodies.rectangle(-30, height / 2, 60, height, wallOptions);
+     const rightWall = Matter.Bodies.rectangle(width + 30, height / 2, 60, height, wallOptions);
+@@ -39,16 +43,16 @@ const TechStackPhysics = () => {
+     const bodies = techItems.map((text) => {
+       const x = Math.random() * (width - 150) + 75;
+       const y = -Math.random() * 500 - 50;
+-      
+-      return Matter.Bodies.rectangle(x, y, 140, 40, {
++
++      return Matter.Bodies.rectangle(x, y, 140, 44, {
+         chamfer: { radius: 20 },
+         restitution: 0.7,
+         friction: 0.1,
+         label: text,
+         render: {
+-          fillStyle: 'rgba(56, 189, 248, 0.1)',
+-          strokeStyle: '#38bdf8',
+-          lineWidth: 1
++          fillStyle: surface,
++          strokeStyle: accent,
++          lineWidth: 2
+         }
+       });
+     });
+@@ -63,45 +67,36 @@ const TechStackPhysics = () => {
+     });
+ 
+     render.mouse = mouse;
+-
+     Matter.World.add(engine.world, [ground, leftWall, rightWall, ...bodies, mouseConstraint]);
+ 
+     const runner = Matter.Runner.create();
+-    
+-    // --- RESPAWN LOGIC START ---
++
+     Matter.Events.on(engine, 'afterUpdate', () => {
+       const centerX = width / 2;
+       const centerY = height / 2;
+-      const respawnThreshold = 600; // Distance from center to trigger respawn
++      const respawnThreshold = 600;
+ 
+       bodies.forEach(body => {
+         const dist = Math.hypot(body.position.x - centerX, body.position.y - centerY);
+-        
+-        // If thrown too far OR fell below the ground significantly
++
+         if (dist > respawnThreshold || body.position.y > height + 100) {
+-          // Reset position to top of screen
+           Matter.Body.setPosition(body, {
+             x: Math.random() * (width - 150) + 75,
+             y: -50
+           });
+-          
+-          // Reset velocity and angle so it falls nicely again
+           Matter.Body.setVelocity(body, { x: 0, y: 0 });
+           Matter.Body.setAngularVelocity(body, 0);
+           Matter.Body.setAngle(body, 0);
+         }
+       });
+ 
+-      // Update React state for rendering text labels
+-      const positions = bodies.map(body => ({
++      setPillPositions(bodies.map(body => ({
+         id: body.label,
+         x: body.position.x,
+         y: body.position.y,
+         angle: body.angle
+-      }));
+-      setPillPositions(positions);
++      })));
+     });
+-    // --- RESPAWN END ---
+ 
+     Matter.Engine.run(engine);
+     Matter.Render.run(render);
+@@ -113,10 +108,14 @@ const TechStackPhysics = () => {
+       Matter.Engine.clear(engine);
+       if (render.canvas) render.canvas.remove();
+     };
+-  }, []);
++  }, [highContrast]);
+ 
+   return (
+-    <div ref={sceneRef} style={{ width: '100%', height: '400px', position: 'relative', overflow: 'hidden' }}>
++    <div
++      ref={sceneRef}
++      style={{ width: '100%', height: '400px', position: 'relative', overflow: 'hidden' }}
++      aria-label="Interactive technology stack. Drag and throw the labeled blocks."
++    >
+       {pillPositions.map((pos) => (
+         <div
+           key={pos.id}
+@@ -127,12 +126,12 @@ const TechStackPhysics = () => {
+             transform: `translate(-50%, -50%) rotate(${pos.angle}rad)`,
+             pointerEvents: 'none',
+             fontFamily: "'Space Mono', monospace",
+-            fontSize: '0.85rem',
+-            color: '#e2e8f0',
++            fontSize: '1rem',
++            color: '#FFFFFF',
+             whiteSpace: 'nowrap',
+-            fontWeight: 600,
++            fontWeight: 700,
+             userSelect: 'none',
+-            textShadow: '0 2px 4px rgba(0,0,0,0.5)'
++            textShadow: '0 2px 4px rgba(0,0,0,0.7)'
+           }}
+         >
+           {pos.id}
+@@ -142,4 +141,4 @@ const TechStackPhysics = () => {
+   );
+ };
+ 
+-export default TechStackPhysics;
+\ No newline at end of file
++export default TechStackPhysics;

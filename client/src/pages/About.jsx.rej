@@ -1,0 +1,104 @@
+diff a/client/src/pages/About.jsx b/client/src/pages/About.jsx	(rejected hunks)
+@@ -1,47 +1,66 @@
+ import React from 'react';
+ import TVFrame from '../components/TVFrame';
+-import TechStackPhysics from '../components/TechStackPhysics';
++import TechStackArchive from '../components/TechStackArchive';
+ import '../styles/about.css';
+ 
+ const About = () => {
+   return (
+-    <TVFrame brand="ZAMANI BROADCAST">
++    <TVFrame brand="ZAMANI" model="TIME CAPSULE">
+       <div className="about-container">
+         <header className="about-header">
++          <div className="about-record-line">
++            <span>ARCHIVE RECORD / ZM-001</span>
++            <span>STATUS: ACTIVE</span>
++          </div>
+           <h1>ABOUT ZAMANI</h1>
+-          <p className="subtitle">Kenya's Time Capsule</p>
++          <p className="subtitle">A digital recollection centre for moments worth preserving.</p>
+         </header>
+ 
+-        <section className="about-section">
+-          <h2>The Mission</h2>
+-          <p>
+-            ZAMANI is a digital time capsule that lets you tune into history.
+-            Select any date to explore global events, notable births, NASA's
+-            Astronomy Picture of the Day, or curated Kenyan historical moments.
+-            Built as a tribute to our past and a tool for future discovery.
+-          </p>
++        <section className="about-section mission-section">
++          <div className="about-section-index" aria-hidden="true">01</div>
++          <div className="about-section-body">
++            <span className="about-section-kicker">PURPOSE / THE MISSION</span>
++            <h2>The Mission</h2>
++            <p>
++              ZAMANI is a digital time capsule that lets you tune into history.
++              Select any date to explore global events, notable births, NASA's
++              Astronomy Picture of the Day, or curated Kenyan historical moments.
++              Built as a tribute to our past and a tool for future discovery.
++            </p>
++          </div>
+         </section>
+ 
+-        <section className="about-section">
+-          <h2>Tech Stack</h2>
+-          <p className="tech-instruction">DRAG & THROW</p>
+-          <TechStackPhysics />
++        <section className="about-section tech-stack-section">
++          <div className="about-section-index" aria-hidden="true">02</div>
++          <div className="about-section-body">
++            <span className="about-section-kicker">SYSTEMS / ARCHIVE CATALOGUE</span>
++            <h2>Tech Stack</h2>
++            <p className="tech-intro">
++              Instead of a conventional technology list, the ZAMANI stack is filed like an
++              archive register: each layer has a role in finding, preserving and presenting memory.
++            </p>
++            <TechStackArchive />
++          </div>
+         </section>
+ 
+-        <section className="about-section">
+-          <h2>Phase Roadmap</h2>
+-          <div className="phase-timeline">
+-            <div className="phase-item active">
+-              <span className="phase-tag">PHASE 1</span>
+-              <p>React Frontend + External APIs</p>
+-            </div>
+-            <div className="phase-item current">
+-              <span className="phase-tag">PHASE 2</span>
+-              <p>Flask Backend + PostgreSQL Database</p>
+-            </div>
+-            <div className="phase-item">
+-              <span className="phase-tag">PHASE 3</span>
+-              <p>User Authentication + Personal Capsules</p>
++        <section className="about-section roadmap-section">
++          <div className="about-section-index" aria-hidden="true">03</div>
++          <div className="about-section-body">
++            <span className="about-section-kicker">DEVELOPMENT / PRESERVATION PLAN</span>
++            <h2>Phase Roadmap</h2>
++            <div className="phase-timeline">
++              <div className="phase-item active">
++                <span className="phase-tag">PHASE 1</span>
++                <p>React Frontend + External APIs</p>
++              </div>
++              <div className="phase-item current">
++                <span className="phase-tag">PHASE 2</span>
++                <p>Flask Backend + PostgreSQL Database</p>
++              </div>
++              <div className="phase-item">
++                <span className="phase-tag">PHASE 3</span>
++                <p>User Authentication + Personal Capsules</p>
++              </div>
+             </div>
+           </div>
+         </section>
+@@ -50,4 +69,4 @@ const About = () => {
+   );
+ };
+ 
+-export default About;
+\ No newline at end of file
++export default About;

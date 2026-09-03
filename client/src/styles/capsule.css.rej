@@ -1,0 +1,429 @@
+diff a/client/src/styles/capsule.css b/client/src/styles/capsule.css	(rejected hunks)
+@@ -1,165 +1,193 @@
+ .capsule-container {
+   display: flex;
+   flex-direction: column;
+-  gap: 2rem;
++  gap: 1.75rem;
+   height: 100%;
+   overflow-y: auto;
+-  padding-right: 0.5rem;
++  padding-right: 0.4rem;
++  color: var(--ui-text);
+ }
+ 
+ .capsule-container::-webkit-scrollbar {
+   width: 6px;
+ }
++
+ .capsule-container::-webkit-scrollbar-track {
+-  background: rgba(0, 0, 0, 0.5);
++  background: var(--ui-bg);
+ }
++
+ .capsule-container::-webkit-scrollbar-thumb {
+-  background: #38bdf8;
++  background: var(--ui-muted);
+   border-radius: 3px;
+ }
+ 
+ .capsule-header {
+-  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+-  padding-bottom: 1.5rem;
+-  margin-bottom: 1rem;
++  padding: 1.25rem;
++  margin-bottom: 0.25rem;
++  border: 1px solid var(--ui-border);
++  border-left: 4px solid var(--ui-accent);
++  border-radius: 8px;
++  background: var(--ui-card);
+ }
+ 
+ .header-meta {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+-  margin-bottom: 0.5rem;
++  gap: 0.75rem;
++  margin-bottom: 0.75rem;
+ }
+ 
+ .broadcast-tag {
+-  font-size: 0.85rem;
+-  letter-spacing: 0.2em;
+-  color: #38bdf8;
+-  text-transform: uppercase;
++  display: inline-flex;
++  align-items: center;
++  gap: 0.55rem;
++  color: var(--ui-text);
++  font-size: 1rem;
+   font-weight: 700;
++  letter-spacing: 0.12em;
++  text-transform: uppercase;
++}
++
++.broadcast-tag::before {
++  content: '';
++  width: 10px;
++  height: 10px;
++  flex: 0 0 10px;
++  border-radius: 50%;
++  background: var(--ui-accent);
++  box-shadow: 0 0 10px var(--ui-accent-glow);
+ }
+ 
+ .capsule-date {
++  margin: 0.5rem 0;
++  color: var(--ui-text);
+   font-family: 'Inter', sans-serif;
+-  font-size: clamp(2.2rem, 6vw, 3.8rem);
++  font-size: clamp(2rem, 5vw, 3.6rem);
+   font-weight: 900;
+-  line-height: 1;
+-  text-transform: uppercase;
++  line-height: 1.05;
+   letter-spacing: -0.02em;
+-  margin: 0.5rem 0;
+-  color: #ffffff;
+-  text-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
++  text-transform: uppercase;
+ }
+ 
+ .mode-indicator {
+-  display: inline-block;
+-  padding: 0.3rem 0.8rem;
+-  background: rgba(0, 0, 0, 0.5);
+-  border: 1px solid rgba(255, 255, 255, 0.3);
+-  font-size: 0.85rem;
+-  letter-spacing: 0.15em;
+-  color: #ffffff;
++  display: inline-flex;
++  align-items: center;
++  min-height: 44px;
++  margin-top: 0.35rem;
++  padding: 0.55rem 0.8rem;
++  border: 1px solid var(--ui-border);
++  border-radius: 6px;
++  background: var(--ui-bg);
++  color: var(--ui-text);
++  font-size: 1rem;
++  font-weight: 700;
++  letter-spacing: 0.08em;
+   text-transform: uppercase;
+-  margin-top: 0.5rem;
+-  backdrop-filter: blur(8px);
+-  border-radius: 8px;
+ }
+ 
+ .capsule-grid {
+   display: grid;
+-  gap: 2.5rem;
++  gap: 2rem;
+ }
+ 
+ .section-title {
+-  font-size: 1.05rem;
+-  text-transform: uppercase;
+-  letter-spacing: 0.15em;
+-  color: #38bdf8;
+-  margin-bottom: 1rem;
+-  padding-bottom: 0.5rem;
+-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+   position: relative;
+-  padding-left: 1.2rem;
++  margin-bottom: 1rem;
++  padding: 0 0 0.65rem 1.4rem;
++  border-bottom: 1px solid var(--ui-border);
++  color: var(--ui-text);
++  font-size: 1.5rem;
+   font-weight: 700;
++  letter-spacing: 0.08em;
++  text-transform: uppercase;
+ }
+ 
+ .section-title::before {
+   content: '>';
+   position: absolute;
+   left: 0;
+-  color: #38bdf8;
++  color: var(--ui-accent);
+   font-weight: 700;
+ }
+ 
+ .events-list {
+   display: flex;
+   flex-direction: column;
+-  gap: 1.25rem;
++  gap: 1rem;
++}
++
++.event-card,
++.birth-card,
++.nasa-card {
++  border: 1px solid var(--ui-border);
++  border-radius: 8px;
++  background: var(--ui-card);
+ }
+ 
+ .event-card {
+   display: grid;
+-  grid-template-columns: 90px 1fr;
++  grid-template-columns: 110px 1fr;
+   gap: 1rem;
+   align-items: start;
++  padding: 1rem;
++}
++
++.event-year,
++.birth-year,
++.event-category {
++  color: var(--ui-text);
++  font-size: 1rem;
++  font-weight: 700;
+ }
+ 
+ .event-year {
++  padding-left: 0.7rem;
++  border-left: 3px solid var(--ui-accent);
+   font-family: 'Space Mono', monospace;
+-  font-weight: 700;
+-  color: #38bdf8;
+-  font-size: 1.1rem;
+ }
+ 
+-.event-text {
+-  font-size: 1.1rem;
+-  line-height: 1.6;
+-  color: #ffffff;
++.event-text,
++.explanation,
++.birth-desc {
++  color: var(--ui-text);
++  font-size: 1rem;
++  line-height: 1.7;
+ }
+ 
+ .kenya-card {
+   grid-template-columns: 1fr;
+-  background: rgba(0, 0, 0, 0.4);
+-  backdrop-filter: blur(8px);
+-  padding: 1.25rem;
+-  border-left: 4px solid #38bdf8;
+-  border-radius: 12px;
+-  border-top: 1px solid rgba(255, 255, 255, 0.2);
+-  border-right: 1px solid rgba(255, 255, 255, 0.2);
+-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
++  border-left: 4px solid var(--ui-accent);
+ }
+ 
+ .event-category {
+-  font-size: 0.8rem;
+-  text-transform: uppercase;
+-  letter-spacing: 0.1em;
+-  color: #38bdf8;
+-  margin-bottom: 0.35rem;
+   display: block;
+-  font-weight: 700;
++  margin-bottom: 0.35rem;
++  letter-spacing: 0.08em;
++  text-transform: uppercase;
+ }
+ 
+ .nasa-card {
+   display: flex;
+   flex-direction: column;
+   gap: 1.25rem;
++  padding: 1rem;
+ }
+ 
+ .image-wrapper {
+   width: 100%;
+-  aspect-ratio: 16/9;
+-  background: #000;
+-  border: 1px solid rgba(255, 255, 255, 0.3);
+-  border-radius: 12px;
++  aspect-ratio: 16 / 9;
+   overflow: hidden;
++  border: 1px solid var(--ui-border);
++  border-radius: 6px;
++  background: var(--ui-bg);
+ }
+ 
+ .image-wrapper img {
+   width: 100%;
+   height: 100%;
+-  object-fit: cover;
+   display: block;
+-  transition: transform 0.5s ease;
++  object-fit: cover;
+ }
+ 
+ .placeholder-text {
+@@ -168,79 +196,81 @@
+   display: flex;
+   align-items: center;
+   justify-content: center;
+-  color: rgba(255, 255, 255, 0.5);
++  padding: 1rem;
++  color: var(--ui-muted);
+   font-family: 'Space Mono', monospace;
+-  font-size: 0.9rem;
+-  letter-spacing: 1px;
++  font-size: 1rem;
++  letter-spacing: 0.06em;
++  text-align: center;
+ }
+ 
+ .nasa-info h3 {
++  margin-bottom: 0.75rem;
++  color: var(--ui-text);
+   font-family: 'Inter', sans-serif;
++  font-size: 1.5rem;
+   font-weight: 700;
+-  font-size: 1.25rem;
+-  margin-bottom: 0.75rem;
+-  color: #ffffff;
+-}
+-
+-.explanation {
+-  font-size: 1.1rem;
+-  line-height: 1.7;
+-  color: #ffffff;
+ }
+ 
+ .births-grid {
+   display: grid;
+   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+-  gap: 1.25rem;
++  gap: 1rem;
+ }
+ 
+ .birth-card {
+-  background: rgba(0, 0, 0, 0.4);
+-  backdrop-filter: blur(8px);
+-  padding: 1.25rem;
+-  border: 1px solid rgba(255, 255, 255, 0.25);
+-  border-radius: 12px;
++  padding: 1rem;
+ }
+ 
+ .birth-year {
+-  font-size: 0.95rem;
+-  color: #38bdf8;
+-  display: block;
+-  margin-bottom: 0.35rem;
+-  font-weight: 700;
++  display: inline-block;
++  margin-bottom: 0.5rem;
++  padding-bottom: 0.2rem;
++  border-bottom: 2px solid var(--ui-accent);
++}
++
++.birth-card strong {
++  color: var(--ui-text);
++  font-size: 1rem;
+ }
+ 
+ .birth-desc {
+-  font-size: 1.05rem;
+-  color: #ffffff;
+   margin-top: 0.5rem;
+-  line-height: 1.5;
+ }
+ 
+ .save-btn {
+-  background: rgba(0, 0, 0, 0.4);
+-  backdrop-filter: blur(8px);
+-  border: 1px solid rgba(255, 255, 255, 0.3);
+-  color: #ffffff;
+-  padding: 0.6rem 1.2rem;
+-  font-family: 'Space Mono', monospace;
+-  font-size: 0.9rem;
+-  font-weight: 700;
+-  cursor: pointer;
+-  transition: all 0.2s ease;
+-  border-radius: 12px;
++  flex: 0 0 auto;
+ }
+ 
+-.save-btn:hover {
+-  border-color: #38bdf8;
+-  background: rgba(56, 189, 248, 0.2);
+-  color: #ffffff;
++.empty-state,
++.capsule-loading,
++.error-container {
++  min-height: 240px;
++  display: flex;
++  flex-direction: column;
++  align-items: center;
++  justify-content: center;
++  gap: 0.75rem;
++  padding: 1.5rem;
++  border: 1px solid var(--ui-border);
++  border-radius: 8px;
++  background: var(--ui-card);
++  color: var(--ui-text);
++  text-align: center;
+ }
+ 
+-.save-btn.saved {
+-  background: #38bdf8 !important;
+-  color: #000000 !important;
+-  border-color: #38bdf8 !important;
++.empty-state > p:first-child,
++.tuning-text {
++  color: var(--ui-text);
++  font-size: 1.5rem;
++  font-weight: 700;
++  letter-spacing: 0.08em;
++}
++
++.empty-state .subtext,
++.date-display {
++  color: var(--ui-text);
++  font-size: 1rem;
+ }
+ 
+ @media (min-width: 768px) {
+@@ -248,11 +278,37 @@
+     flex-direction: row;
+     align-items: flex-start;
+   }
++
+   .image-wrapper {
+-    width: 50%;
++    width: 48%;
+     flex-shrink: 0;
+   }
++}
++
++@media (max-width: 767px) {
++  .capsule-container {
++    gap: 1.25rem;
++    padding-right: 0;
++  }
++
++  .capsule-header {
++    padding: 1rem;
++  }
++
++  .header-meta {
++    align-items: flex-start;
++    flex-direction: column;
++  }
++
++  .capsule-date {
++    font-size: clamp(2rem, 10vw, 3rem);
++  }
++
+   .event-card {
+-    grid-template-columns: 110px 1fr;
++    grid-template-columns: 1fr;
++  }
++
++  .births-grid {
++    grid-template-columns: 1fr;
+   }
+ }

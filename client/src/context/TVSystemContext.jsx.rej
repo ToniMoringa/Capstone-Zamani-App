@@ -1,0 +1,58 @@
+diff a/client/src/context/TVSystemContext.jsx b/client/src/context/TVSystemContext.jsx	(rejected hunks)
+@@ -2,9 +2,18 @@ import React, { createContext, useContext, useEffect, useRef, useState } from 'r
+ 
+ const TVSystemContext = createContext(null);
+ 
++const getStoredContrastPreference = () => {
++  try {
++    return window.localStorage.getItem('zamani-high-contrast') === 'true';
++  } catch {
++    return false;
++  }
++};
++
+ export const TVSystemProvider = ({ children }) => {
+   const [powerState, setPowerState] = useState('off');
+   const [vhsEnabled, setVhsEnabled] = useState(true);
++  const [highContrast, setHighContrast] = useState(getStoredContrastPreference);
+   const bootTimerRef = useRef(null);
+ 
+   useEffect(() => {
+@@ -15,6 +24,14 @@ export const TVSystemProvider = ({ children }) => {
+     };
+   }, []);
+ 
++  useEffect(() => {
++    try {
++      window.localStorage.setItem('zamani-high-contrast', String(highContrast));
++    } catch {
++      // The preference is optional; the UI still works when storage is blocked.
++    }
++  }, [highContrast]);
++
+   const powerOn = (onReady) => {
+     if (powerState !== 'off') return;
+ 
+@@ -37,9 +54,21 @@ export const TVSystemProvider = ({ children }) => {
+     setVhsEnabled((enabled) => !enabled);
+   };
+ 
++  const toggleHighContrast = () => {
++    setHighContrast((enabled) => !enabled);
++  };
++
+   return (
+     <TVSystemContext.Provider
+-      value={{ powerState, powerOn, powerOff, vhsEnabled, toggleVhs }}
++      value={{
++        powerState,
++        powerOn,
++        powerOff,
++        vhsEnabled,
++        toggleVhs,
++        highContrast,
++        toggleHighContrast,
++      }}
+     >
+       {children}
+     </TVSystemContext.Provider>

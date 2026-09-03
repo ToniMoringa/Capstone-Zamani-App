@@ -1,0 +1,45 @@
+diff a/client/src/components/TVFrame.jsx b/client/src/components/TVFrame.jsx	(rejected hunks)
+@@ -20,7 +20,15 @@ const getPageLabel = (pathname) => {
+ const TVFrame = ({ children, className = '', model = 'TIME CAPSULE' }) => {
+   const navigate = useNavigate();
+   const location = useLocation();
+-  const { powerState, powerOn, powerOff, vhsEnabled, toggleVhs } = useTVSystem();
++  const {
++    powerState,
++    powerOn,
++    powerOff,
++    vhsEnabled,
++    toggleVhs,
++    highContrast,
++    toggleHighContrast,
++  } = useTVSystem();
+   const isPoweredOn = powerState === 'on';
+   const isBooting = powerState === 'booting';
+ 
+@@ -57,7 +65,7 @@ const TVFrame = ({ children, className = '', model = 'TIME CAPSULE' }) => {
+   };
+ 
+   return (
+-    <div className="tv-perspective-container">
++    <div className={`tv-perspective-container ${highContrast ? 'high-contrast' : ''}`}>
+       <div className={`tv-frame tv-${powerState} ${className}`}>
+         <div className="tv-cabinet-highlight" aria-hidden="true" />
+ 
+@@ -103,6 +111,17 @@ const TVFrame = ({ children, className = '', model = 'TIME CAPSULE' }) => {
+                     </button>
+                   )}
+                   <span className="screen-page-label">{getPageLabel(location.pathname)}</span>
++
++                  <button
++                    type="button"
++                    className={`contrast-toggle ${highContrast ? 'active' : ''}`}
++                    onClick={toggleHighContrast}
++                    aria-label={`${highContrast ? 'Disable' : 'Enable'} high contrast mode`}
++                    aria-pressed={highContrast}
++                  >
++                    <span className="contrast-icon" aria-hidden="true">◐</span>
++                    <span className="contrast-label">CONTRAST</span>
++                  </button>
+                 </header>
+ 
+                 <div className="tv-screen-glow" aria-hidden="true" />

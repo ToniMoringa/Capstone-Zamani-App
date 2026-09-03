@@ -1,112 +1,266 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { getCapsules, deleteCapsule } from '../api/capsules';
+import { useSearchParams } from 'react-router-dom';
+
 import TVFrame from '../components/TVFrame';
+
+import {
+  getMyCapsules,
+  createCapsule,
+  updateCapsule,
+  deleteCapsule,
+} from '../api/capsules';
+
 import { formatDate } from '../utils/helpers';
+
 import '../styles/saved.css';
+
+const EMPTY_FORM = {
+  title: '',
+  date: '',
+  description: '',
+  personal_note: '',
+};
 
 const Saved = () => {
   const [capsules, setCapsules] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState('');
+  const [showForm, setShowForm] = useState(false);
+  const [editingId, setEditingId] = useState(null);
+  const [form, setForm] = useState(EMPTY_FORM);
+  const [saving, setSaving] = useState(false);
 
-  useEffect(() => {
-    const loadCapsules = async () => {
-      try {
-        setLoading(true);
-        const data = await getCapsules();
-        setCapsules(data);
-      } catch (err) {
-        console.error('Failed to fetch capsules:', err);
-        setError('No signal detected. Backend may be offline.');
-      } finally {
-        setLoading(false);
-      }
-    };
-    loadCapsules();
-  }, []);
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const handleDelete = async (id) => {
-    if (!window.confirm('Permanently delete this capsule?')) return;
+  const loadCapsules = async () => {
+    setLoading(true);
+    setError('');
+
     try {
-      await deleteCapsule(id);
-      setCapsules(prev => prev.filter(c => c.id !== id));
+      const data = await getMyCapsules();
+      setCapsules(data);
     } catch (err) {
-      alert('Failed to delete capsule');
+      setError(
+        err.response?.data?.error ||
+          'Could not load your personal capsules.'
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
-  if (loading) {
-    return (
-      <TVFrame brand="ZAMANI ARCHIVE">
-        <div className="saved-container">
-          <p>Loading archive...</p>
-        </div>
-      </TVFrame>
-    );
-  }
+  useEffect(() => {
+    loadCapsules();
+  }, []);
 
-  if (error) {
-    return (
-      <TVFrame brand="ZAMANI ARCHIVE">
-        <div className="saved-container">
-          <p>{error}</p>
-        </div>
-      </TVFrame>
-    );
-  }
+  useEffect(() => {
+    if (searchParams.get('new') === '1') {
+      openCreateForm();
+      setSearchParams({}, { replace: true });
+    }
+  }, [searchParams, setSearchParams]);
+
+  const handleChange = (event) => {
+    setForm({
+      ...form,
+      [event.target.name]: event.target.value,
+    });
+  };
+
+  const openCreateForm = () => {
+    setForm(EMPTY_FORM);
+    setEditingId(null);
+    setShowForm(true);
+  };
+
+  const openEditForm = (capsule) => {
+    setForm({
+      title: capsule.title,
+      date: capsule.date,
+      description: capsule.description,
+      personal_note: capsule.personal_note || '',
+    });
+
+    setEditingId(capsule.id);
+    setShowForm(true);
+  };
+
+  const closeForm = () => {
+    setShowForm(false);
+    setEditingId(null);
+    setForm(EMPTY_FORM);
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    setSaving(true);
+    setError('');
+
+    try {
+      if (editingId) {
+        const updated = await updateCapsule(editingId, form);
+
+        setCapsules((prev) =>
+          prev.map((capsule) =>
+            capsule.id === editingId ? updated : capsule
+          )
+        );
+      } else {
+        const created = await createCapsule({
+          ...form,
+          category: 'personal_memory',
+        });
+
+        setCapsules((prev) => [created, ...prev]);
+      }
+
+      closeForm();
+    } catch (err) {
+      setError(err.response?.data?.error || 'Could not save capsule.');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (!window.confirm('Delete this personal capsule?')) return;
+
+    try {
+      await deleteCapsule(id);
+      setCapsules((prev) => prev.filter((capsule) => capsule.id !== id));
+    } catch (err) {
+      alert(err.response?.data?.error || 'Could not delete capsule.');
+    }
+  };
 
   return (
-    <TVFrame brand="ZAMANI ARCHIVE">
+    <TVFrame model="PERSONAL CAPSULES">
       <div className="saved-container">
         <header className="saved-header">
-          <h1>Saved Capsules</h1>
-          <p>{capsules.length} entries in your archive</p>
+          <h1>My Capsules</h1>
+          <p>{capsules.length} personal archive entries</p>
         </header>
 
-        {capsules.length === 0 ? (
+        <div className="saved-toolbar">
+          <button type="button" className="quick-btn" onClick={openCreateForm}>
+            + NEW MEMORY
+          </button>
+
+          <button type="button" className="quick-btn" onClick={loadCapsules}>
+            REFRESH
+          </button>
+        </div>
+
+        {error && (
+          <div className="error-container">
+            <p>{error}</p>
+          </div>
+        )}
+
+        {showForm && (
+          <form className="saved-form" onSubmit={handleSubmit}>
+            <input
+              type="text"
+              name="title"
+              placeholder="Capsule title"
+              value={form.title}
+              onChange={handleChange}
+              required
+            />
+
+            <input
+              type="date"
+              name="date"
+              value={form.date}
+              onChange={handleChange}
+              required
+            />
+
+            <textarea
+              name="description"
+              placeholder="What happened on this date?"
+              value={form.description}
+              onChange={handleChange}
+              required
+            />
+
+            <textarea
+              name="personal_note"
+              placeholder="Personal note, optional"
+              value={form.personal_note}
+              onChange={handleChange}
+            />
+
+            <div className="saved-form-actions">
+              <button
+                type="submit"
+                className="mode-btn active"
+                disabled={saving}
+              >
+                {saving ? 'SAVING...' : editingId ? 'UPDATE' : 'CREATE'}
+              </button>
+
+              <button
+                type="button"
+                className="mode-btn"
+                onClick={closeForm}
+              >
+                CANCEL
+              </button>
+            </div>
+          </form>
+        )}
+
+        {loading ? (
+          <p>LOADING PERSONAL ARCHIVE...</p>
+        ) : capsules.length === 0 ? (
           <div className="empty-archive">
-            <p>No saved capsules yet.</p>
-            <Link to="/" className="browse-link">
-              Browse History →
-            </Link>
+            <p>No personal capsules yet.</p>
+            <button
+              type="button"
+              className="browse-link"
+              onClick={openCreateForm}
+            >
+              Create your first capsule
+            </button>
           </div>
         ) : (
           <div className="saved-grid">
             {capsules.map((capsule) => (
-              <div key={capsule.id} className="saved-card-wrapper" style={{ position: 'relative' }}>
-                <Link
-                  to={`/capsule/${capsule.date}/${capsule.category === 'event' ? 'kenya' : 'global'}`}
-                  className="saved-card"
-                >
-                  <span className="saved-mode">
-                    {capsule.category === 'event' ? '🇰🇪 KENYA' : '🌐 GLOBAL'}
-                  </span>
-                  <h2>{formatDate(capsule.date, 'full')}</h2>
-                  <p>{capsule.title}</p>
-                  <span className="saved-date">
-                    {new Date(capsule.createdAt || Date.now()).toLocaleDateString()}
-                  </span>
-                </Link>
-                <button
-                  onClick={() => handleDelete(capsule.id)}
-                  style={{
-                    position: 'absolute',
-                    top: '10px',
-                    right: '10px',
-                    background: 'rgba(255,0,0,0.2)',
-                    border: '1px solid red',
-                    color: 'red',
-                    padding: '0.25rem 0.5rem',
-                    cursor: 'pointer',
-                    borderRadius: '4px',
-                    fontSize: '0.75rem',
-                    zIndex: 2
-                  }}
-                >
-                  DELETE
-                </button>
-              </div>
+              <article key={capsule.id} className="saved-card">
+                <span className="saved-mode">PERSONAL</span>
+
+                <h2>{capsule.title}</h2>
+
+                <span className="saved-date">
+                  {formatDate(capsule.date, 'full')}
+                </span>
+
+                <p>{capsule.description}</p>
+
+                {capsule.personal_note && (
+                  <p>
+                    <strong>Note:</strong> {capsule.personal_note}
+                  </p>
+                )}
+
+                <div className="saved-card-actions">
+                  <button
+                    type="button"
+                    onClick={() => openEditForm(capsule)}
+                  >
+                    EDIT
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => handleDelete(capsule.id)}
+                  >
+                    DELETE
+                  </button>
+                </div>
+              </article>
             ))}
           </div>
         )}

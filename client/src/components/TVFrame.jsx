@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import AuthControls from './AuthControls';
+import { useAuth } from '../context/AuthContext';
 import { useTVSystem } from '../context/TVSystemContext';
+import { getCapsules } from '../api/capsules';
 import '../styles/tv.css';
 
 const NAV_ITEMS = [
@@ -20,7 +23,19 @@ const getPageLabel = (pathname) => {
 const TVFrame = ({ children, className = '', model = 'TIME CAPSULE' }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { powerState, powerOn, powerOff, vhsEnabled, toggleVhs } = useTVSystem();
+  const { isAuthenticated } = useAuth();
+  const seedDatesRef = useRef(null);
+
+  const {
+    powerState,
+    powerOn,
+    powerOff,
+    vhsEnabled,
+    toggleVhs,
+    highContrast,
+    toggleHighContrast,
+  } = useTVSystem();
+
   const isPoweredOn = powerState === 'on';
   const isBooting = powerState === 'booting';
 
@@ -33,6 +48,40 @@ const TVFrame = ({ children, className = '', model = 'TIME CAPSULE' }) => {
   const handleNav = (item) => {
     if (!isPoweredOn) return;
     navigate(item.path, { state: item.state });
+  };
+
+  const handleTune = async () => {
+    if (!isPoweredOn) return;
+
+    // Load seeded Kenyan dates once, then surf randomly
+    try {
+      if (!seedDatesRef.current) {
+        const all = await getCapsules();
+        seedDatesRef.current = (all || []).map((c) => c.date);
+      }
+    } catch {
+      seedDatesRef.current = [];
+    }
+
+    const seeds = seedDatesRef.current || [];
+    const useSeed = seeds.length > 0 && Math.random() < 0.5;
+
+    let date;
+    let mode;
+    if (useSeed) {
+      // Land on curated Kenyan seed data
+      date = seeds[Math.floor(Math.random() * seeds.length)];
+      mode = 'kenya';
+    } else {
+      // Surf a random date across 1900 -> today
+      const start = new Date('1900-01-01').getTime();
+      date = new Date(start + Math.random() * (Date.now() - start))
+        .toISOString()
+        .split('T')[0];
+      mode = 'global';
+    }
+
+    navigate(`/capsule/${date}/${mode}`);
   };
 
   const handleBack = () => {
@@ -57,7 +106,7 @@ const TVFrame = ({ children, className = '', model = 'TIME CAPSULE' }) => {
   };
 
   return (
-    <div className="tv-perspective-container">
+    <div className={`tv-perspective-container ${highContrast ? 'high-contrast' : ''}`}>
       <div className={`tv-frame tv-${powerState} ${className}`}>
         <div className="tv-cabinet-highlight" aria-hidden="true" />
 
@@ -103,6 +152,19 @@ const TVFrame = ({ children, className = '', model = 'TIME CAPSULE' }) => {
                     </button>
                   )}
                   <span className="screen-page-label">{getPageLabel(location.pathname)}</span>
+
+                  <AuthControls />
+
+                  <button
+                    type="button"
+                    className={`contrast-toggle ${highContrast ? 'active' : ''}`}
+                    onClick={toggleHighContrast}
+                    aria-label={`${highContrast ? 'Disable' : 'Enable'} high contrast mode`}
+                    aria-pressed={highContrast}
+                  >
+                    <span className="contrast-icon" aria-hidden="true">◐</span>
+                    <span className="contrast-label">CONTRAST</span>
+                  </button>
                 </header>
 
                 <div className="tv-screen-glow" aria-hidden="true" />
@@ -129,10 +191,13 @@ const TVFrame = ({ children, className = '', model = 'TIME CAPSULE' }) => {
                 key={item.label}
                 type="button"
                 className={`tv-control-button ${isActive(item.path, item.label) ? 'active' : ''}`}
-                onClick={() => handleNav(item)}
+                onClick={() => (item.label === 'Tune' ? handleTune() : handleNav(item))}
                 aria-label={item.label}
                 aria-current={isPoweredOn && isActive(item.path, item.label) ? 'page' : undefined}
-                disabled={!isPoweredOn}
+                disabled={
+                  !isPoweredOn ||
+                  (item.label === 'Saved' && !isAuthenticated)
+                }
               >
                 <span className="control-short">{item.shortLabel}</span>
                 <span className="control-label">{item.label}</span>
