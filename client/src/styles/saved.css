@@ -1,13 +1,68 @@
-/* ========================================
-   MEMORY FORM — dark TV styling (no grey boxes)
-   ======================================== */
+.saved-container {
+  width: 100%;
+  min-height: 100%;
+  padding: 0.5rem;
+}
+
+.saved-header {
+  margin-bottom: 1.25rem;
+  padding: 1.2rem;
+  border: 1px solid var(--ui-border);
+  border-left: 4px solid var(--ui-accent);
+  border-radius: 8px;
+  background: var(--ui-card);
+}
+
+.saved-header h1 {
+  margin-bottom: 0.35rem;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(1.8rem, 5vw, 3rem);
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.saved-toolbar {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.quick-btn {
+  min-width: auto;
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0 0.8rem;
+  border: 1px solid var(--ui-border);
+  border-radius: 6px;
+  background: var(--ui-surface);
+  color: var(--ui-text);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.68rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.quick-btn.icon-only {
+  width: 42px;
+  padding: 0;
+}
+
+.quick-btn:hover,
+.saved-card-actions button:hover,
+.saved-card-actions a:hover {
+  border-color: var(--ui-accent);
+  box-shadow: 0 0 12px var(--ui-accent-glow);
+}
+
 .saved-form {
   display: grid;
-  gap: 0.8rem;               /* equal padding between every field */
-  width: 100%;
+  gap: 0.75rem;
   max-width: 640px;
-  margin: 0 0 1.5rem;
-  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
   border: 1px solid var(--ui-border);
   border-left: 4px solid var(--ui-accent);
   border-radius: 8px;
@@ -17,167 +72,31 @@
 .saved-form input,
 .saved-form textarea {
   width: 100%;
-  min-height: 46px;
-  padding: 0.7rem 0.85rem;
-  border: 1px solid var(--ui-border);
-  border-radius: 6px;
-  background: var(--ui-surface);   /* matches UI, not browser grey */
-  color: var(--ui-text);
-  font-family: 'Space Mono', monospace;
-  font-size: 0.9rem;
-  color-scheme: dark;              /* makes date-picker icon visible */
-}
-
-.saved-form input::placeholder,
-.saved-form textarea::placeholder {
-  color: var(--ui-muted);
-}
-
-.saved-form input:focus-visible,
-.saved-form textarea:focus-visible {
-  outline: 3px solid var(--ui-accent);
-  outline-offset: 2px;
-}
-
-.saved-form textarea {
-  min-height: 96px;
-  max-height: 240px;
-  resize: vertical;   /* can grow down only — can NEVER break layout width */
-}
-
-.saved-form-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-}
-
-/* ========================================
-   EQUAL PADDING ON ALL SAVED-PAGE BUTTONS
-   ======================================== */
-.saved-toolbar .quick-btn,
-.saved-card-actions button,
-.saved-card-actions a {
-  min-height: 44px;
-  padding: 0.6rem 1.1rem;
+  padding: 0.7rem;
   border: 1px solid var(--ui-border);
   border-radius: 6px;
   background: var(--ui-surface);
   color: var(--ui-text);
   font-family: 'Space Mono', monospace;
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-decoration: none;
-  cursor: pointer;
-  transition: border-color 160ms ease, box-shadow 160ms ease;
 }
 
-.saved-toolbar .quick-btn:hover,
-.saved-card-actions button:hover,
-.saved-card-actions a:hover {
-  border-color: var(--ui-accent);
-  box-shadow: 0 0 14px var(--ui-accent-glow);
+.saved-form textarea {
+  min-height: 90px;
+  resize: vertical;
 }
 
-.saved-card-actions .danger { color: #FF9B8A; }
-
-/* ========================================
-   TOOLBAR — fixes NEW MEMORY / REFRESH spacing
-   ======================================== */
-.saved-toolbar {
+.saved-form-actions {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  margin-bottom: 1.25rem;
-}
-
-/* ========================================
-   EDIT / DELETE / VIEW / REMOVE buttons
-   ======================================== */
-.saved-card-actions {
-  display: flex;
-  gap: 0.6rem;
-  margin-top: auto;
-  padding-top: 0.75rem;
-}
-
-/* ========================================
-   ARCHIVE SECTION (saved Kenyan/Global)
-   ======================================== */
-.saved-section-title {
-  margin: 2rem 0 1rem;
-  color: var(--ui-text);
-  font-family: 'Space Mono', monospace;
-  font-size: 1rem;
-  letter-spacing: 0.1em;
-}
-
-.saved-hint {
-  color: var(--ui-muted);
-  font-size: 0.9rem;
-}
-
-/* ========================================
-   SAVED CONTAINER & CARD LAYOUTS
-   ======================================== */
-.saved-container {
-  width: 100%;
-  min-height: 100%;
-  padding: 0.5rem;
-  color: var(--ui-text);
-}
-
-.saved-header {
-  margin-bottom: 1.5rem;
-  padding: 1.25rem;
-  border: 1px solid var(--ui-border);
-  border-left: 4px solid var(--ui-accent);
-  border-radius: 8px;
-  background: var(--ui-card);
-}
-
-.saved-header h1 {
-  margin-bottom: 0.35rem;
-  color: var(--ui-text);
-  font-family: 'Inter', sans-serif;
-  font-size: clamp(2rem, 5vw, 3rem);
-  font-weight: 900;
-  line-height: 1.1;
-  text-transform: uppercase;
-}
-
-.saved-header p {
-  color: var(--ui-text);
-  font-size: 1rem;
-}
-
-.empty-archive {
-  display: flex;
-  min-height: 240px;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  padding: 2rem 1rem;
-  border: 1px solid var(--ui-border);
-  border-radius: 8px;
-  background: var(--ui-card);
-  color: var(--ui-text);
-  text-align: center;
-}
-
-.browse-link {
-  margin-top: 0.25rem;
+  gap: 0.5rem;
 }
 
 .saved-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(260px, 1fr)
+  );
   gap: 1rem;
-}
-
-.saved-card-wrapper {
-  position: relative;
 }
 
 .saved-card {
@@ -185,106 +104,78 @@
   min-height: 190px;
   display: flex;
   flex-direction: column;
-  gap: 0.7rem;
-  padding: 1.25rem 4.25rem 1.25rem 1.25rem;
-  overflow: hidden;
+  gap: 0.65rem;
+  padding: 1.15rem;
   border: 1px solid var(--ui-border);
   border-radius: 8px;
   background: var(--ui-card);
-  color: var(--ui-text);
-  text-decoration: none;
-  transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
 }
 
 .saved-card::before {
   content: '';
   position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
+  inset: 0 auto 0 0;
   width: 4px;
   background: var(--ui-accent);
 }
 
-.saved-card:hover {
-  border-color: var(--ui-accent);
-  transform: translateY(-2px);
-  box-shadow: 0 0 18px var(--ui-accent-glow);
-}
-
-.saved-card:focus-visible {
-  outline: 3px solid var(--ui-accent);
-  outline-offset: 2px;
-}
-
 .saved-mode,
 .saved-date {
-  color: var(--ui-text);
-  font-size: 1rem;
   font-family: 'Space Mono', monospace;
+  font-size: 0.9rem;
 }
 
 .saved-mode {
   font-weight: 700;
   letter-spacing: 0.08em;
-  text-transform: uppercase;
 }
 
 .saved-card h2 {
   margin: 0;
-  color: var(--ui-text);
   font-family: 'Inter', sans-serif;
-  font-size: 1.5rem;
-  font-weight: 700;
-  line-height: 1.3;
+  font-size: 1.45rem;
+  line-height: 1.25;
 }
 
 .saved-card p {
-  color: var(--ui-text);
-  font-size: 1rem;
-  line-height: 1.6;
+  line-height: 1.5;
 }
 
-.saved-delete-btn {
-  position: absolute;
-  top: 0.75rem;
-  right: 0.75rem;
-  z-index: 2;
-  width: 44px;
-  height: 44px;
-  display: grid;
-  place-items: center;
-  border: 1px solid var(--ui-accent);
+.saved-card-actions {
+  display: flex;
+  gap: 0.45rem;
+  margin-top: auto;
+  padding-top: 0.5rem;
+}
+
+.saved-card-actions button,
+.saved-card-actions a {
+  width: 38px;
+  height: 36px;
+  min-width: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid var(--ui-border);
   border-radius: 6px;
   background: var(--ui-surface);
   color: var(--ui-text);
-  font-family: 'Space Mono', monospace;
-  font-size: 0.75rem;
-  font-weight: 700;
+  text-decoration: none;
   cursor: pointer;
 }
 
-.saved-delete-btn::before {
-  content: '×';
-  color: var(--ui-accent);
-  font-size: 1.25rem;
-  line-height: 1;
+.saved-card-actions .danger {
+  color: #ff9b8a;
 }
 
-.saved-delete-label {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-
-.saved-delete-btn:hover {
-  box-shadow: 0 0 16px var(--ui-accent-glow);
+.saved-section-title {
+  margin: 2rem 0 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--ui-border);
+  font-family: 'Space Mono', monospace;
+  font-size: 1rem;
+  letter-spacing: 0.1em;
 }
 
 @media (max-width: 767px) {
@@ -294,5 +185,32 @@
 
   .saved-grid {
     grid-template-columns: 1fr;
+  }
+
+  .quick-btn {
+    height: 34px;
+    padding: 0 0.65rem;
+    font-size: 0.6rem;
+  }
+
+  .quick-btn.icon-only {
+    width: 36px;
+  }
+
+  .saved-card {
+    padding: 1rem;
+  }
+
+  .saved-card-actions button,
+  .saved-card-actions a {
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 980px) {
+  .saved-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }

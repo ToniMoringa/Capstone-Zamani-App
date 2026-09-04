@@ -2,13 +2,14 @@ from datetime import date
 from config import db
 from models import Capsule, Tag
 
+# Using YouTube for video content and Pexels/Images for static visuals
 KENYAN_BIRTHS = [
     {
         "date": date(1987, 6, 15),
         "title": "Bien-Aimé Baraza (Bien)",
         "description": "Lead vocalist of Sauti Sol; Grammy-nominated Afro-pop artist.",
         "category": "birth",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Bien_Aime_Baraza.jpg/440px-Bien_Aime_Baraza.jpg",
+        "image_url": "https://rwandahd.com/wp-content/uploads/2026/07/WhatsApp-Image-2026-07-30-at-10.30.54.jpeg",
         "tags": ["music", "sauti sol"]
     },
     {
@@ -16,7 +17,7 @@ KENYAN_BIRTHS = [
         "title": "Eliud Kipchoge",
         "description": "Marathon world record holder; first human to run sub-2-hour marathon.",
         "category": "birth",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Eliud_Kipchoge_2019.jpg/440px-Eliud_Kipchoge_2019.jpg",
+        "image_url": "https://athleticsillustrated.com/wp-content/uploads/2023/09/Kipchoge_Eluid1a-Berlin22.jpg",
         "tags": ["sports", "athletics"]
     },
     {
@@ -24,7 +25,7 @@ KENYAN_BIRTHS = [
         "title": "Faith Kipyegon",
         "description": "Olympic gold medalist; 1500m world record holder.",
         "category": "birth",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Faith_Kipyegon_2022.jpg/440px-Faith_Kipyegon_2022.jpg",
+        "image_url": "https://hips.hearstapps.com/hmg-prod/images/paris-france-10-august-2024-faith-kipyegon-of-team-c2-a0kenya-news-photo-1723315497.jpg?crop=0.692xw:1.00xh;0.250xw,0&resize=640:*",
         "tags": ["sports", "athletics"]
     }
 ]
@@ -35,16 +36,15 @@ HISTORICAL_EVENTS = [
         "title": "Kenya Independence Day",
         "description": "Kenya gains full independence from British colonial rule.",
         "category": "event",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Kenya_Flag_Raising_1963.jpg/440px-Kenya_Flag_Raising_1963.jpg",
+        "image_url": "https://youtu.be/NscUIwDqxjk",
         "tags": ["politics", "independence"]
     },
-    
     {
         "date": date(2024, 6, 25),
         "title": "Gen Z Protests Peak",
         "description": "Nationwide youth-led demonstrations against Finance Bill reach historic scale.",
         "category": "event",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Gen_Z_Protest_Nairobi_2024.jpg/440px-Gen_Z_Protest_Nairobi_2024.jpg",
+        "image_url": "https://ichef.bbci.co.uk/news/480/cpsprodpb/d72d/live/164f20b0-2e5f-11ef-90be-b75b34b0bbb2.jpg.webp",
         "tags": ["politics", "youth"]
     },
     {
@@ -52,7 +52,7 @@ HISTORICAL_EVENTS = [
         "title": "Madaraka Day",
         "description": "Kenya achieved internal self-government, transitioning from colonial rule.",
         "category": "event",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Kenya_Flag_Raising_1963.jpg/440px-Kenya_Flag_Raising_1963.jpg",
+        "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrvoFmtgFoxrlMd7apzfAowiIVaSQYN2iY-s8TyRXgFvWiCGXFKJi0PBQ&s=10",
         "tags": ["politics", "independence"]
     },
     {
@@ -60,7 +60,7 @@ HISTORICAL_EVENTS = [
         "title": "New Constitution Promulgated",
         "description": "Kenya's new constitution was promulgated, introducing devolution and bill of rights.",
         "category": "event",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Kenya_Flag_Raising_1963.jpg/440px-Kenya_Flag_Raising_1963.jpg",
+        "image_url": "https://youtu.be/MdNI6atsqVQ",
         "tags": ["politics", "constitution"]
     },
     {
@@ -68,7 +68,7 @@ HISTORICAL_EVENTS = [
         "title": "Douglas Wakiihuri Olympic Gold",
         "description": "Won Kenya's first Olympic marathon gold medal in Seoul.",
         "category": "birth",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Eliud_Kipchoge_2019.jpg/440px-Eliud_Kipchoge_2019.jpg",
+        "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfzOEsSyGTtZSejZ1SGclHujdLSiNr3dLNCIIOKXyP6zwoXEGMuTdotViI&s=10",
         "tags": ["sports", "athletics"]
     },
     {
@@ -76,7 +76,7 @@ HISTORICAL_EVENTS = [
         "title": "US Embassy Bombing",
         "description": "Al-Qaeda bombed the US Embassy in Nairobi, killing 213 people.",
         "category": "event",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Gen_Z_Protest_Nairobi_2024.jpg/440px-Gen_Z_Protest_Nairobi_2024.jpg",
+        "image_url": "https://images.pexels.com/photos/39108183/pexels-photo-39108183/free-photo-of-serene-swan-reflecting-in-golden-afternoon-light.jpeg?auto=compress&w=600",
         "tags": ["security", "history"]
     },
     {
@@ -84,20 +84,22 @@ HISTORICAL_EVENTS = [
         "title": "SGR Launch",
         "description": "The Standard Gauge Railway between Mombasa and Nairobi officially launched.",
         "category": "event",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Gen_Z_Protest_Nairobi_2024.jpg/440px-Gen_Z_Protest_Nairobi_2024.jpg",
+        "image_url": "https://youtu.be/9iyA50VmJ10",
         "tags": ["infrastructure", "development"]
     }
 ]
 
 def seed_database():
-    """Populate DB with verified Kenyan data"""
+    """Populate DB with verified Kenyan data, updating existing records."""
     print("𓇢 Seeding ZAMANI database...")
-    
+
     # Create tags first
+    entries = KENYAN_BIRTHS + HISTORICAL_EVENTS
     tag_names = set()
-    for entry in KENYAN_BIRTHS + HISTORICAL_EVENTS:
-        tag_names.update(entry.get('tags', []))
     
+    for entry in entries:
+        tag_names.update(entry.get('tags', []))
+
     tags_map = {}
     for name in tag_names:
         tag = Tag.query.filter_by(name=name).first()
@@ -106,40 +108,35 @@ def seed_database():
             db.session.add(tag)
         tags_map[name] = tag
     
-    db.session.commit()
-    
-    # Seed births
-    for birth in KENYAN_BIRTHS:
-        existing = Capsule.query.filter_by(date=birth['date'], title=birth['title']).first()
-        if not existing:
+    db.session.flush() # Ensure tags have IDs before linking
+
+    # Seed births and events
+    for entry in entries:
+        capsule = Capsule.query.filter_by(
+            date=entry['date'], 
+            title=entry['title']
+        ).first()
+
+        if not capsule:
             capsule = Capsule(
-                date=birth['date'],
-                title=birth['title'],
-                description=birth['description'],
-                category=birth['category'],
-                image_url=birth['image_url'],
+                date=entry['date'],
+                title=entry['title'],
+                description=entry['description'],
+                category=entry['category'],
+                image_url=entry['image_url'],
                 historical_content=True
             )
-            for tag_name in birth.get('tags', []):
-                capsule.tags.append(tags_map[tag_name])
             db.session.add(capsule)
-    
-    # Seed events
-    for event in HISTORICAL_EVENTS:
-        existing = Capsule.query.filter_by(date=event['date'], title=event['title']).first()
-        if not existing:
-            capsule = Capsule(
-                date=event['date'],
-                title=event['title'],
-                description=event['description'],
-                category=event['category'],
-                image_url=event['image_url'],
-                historical_content=True
-            )
-            for tag_name in event.get('tags', []):
-                capsule.tags.append(tags_map[tag_name])
-            db.session.add(capsule)
-    
+        else:
+            # Update existing record with new media/description
+            capsule.description = entry['description']
+            capsule.image_url = entry['image_url']
+            capsule.category = entry['category']
+            capsule.historical_content = True
+
+        # Sync tags
+        capsule.tags = [tags_map[tag_name] for tag_name in entry.get('tags', [])]
+
     db.session.commit()
     print(f"✔ Seeded {len(KENYAN_BIRTHS)} births and {len(HISTORICAL_EVENTS)} events")
 

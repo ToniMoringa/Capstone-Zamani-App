@@ -6,33 +6,38 @@ import '../styles/datepicker.css';
 
 const DatePickerComponent = ({ onDateSelect, initialDate }) => {
   const navigate = useNavigate();
+
   const [selectedDate, setSelectedDate] = useState(
     initialDate ? new Date(initialDate) : new Date(),
   );
+
   const [mode, setMode] = useState('global');
 
   const handleDateChange = (date) => {
-    if (date) {
-      setSelectedDate(date);
+    if (!date) return;
 
-      const formattedDate = date.toISOString().split('T')[0];
+    setSelectedDate(date);
 
-      if (onDateSelect) {
-        onDateSelect(date);
-      }
+    const formattedDate = date.toISOString().split('T')[0];
 
-      navigate(`/capsule/${formattedDate}/${mode}`);
+    if (onDateSelect) {
+      onDateSelect(date);
     }
+
+    navigate(`/capsule/${formattedDate}/${mode}`);
   };
 
   const CustomInput = ({ value, onClick }) => (
     <button
+      type="button"
       className="date-picker-input"
       onClick={onClick}
       aria-label="Select a date"
     >
       <span className="date-icon">📅</span>
+
       <span className="date-value">{value || 'SELECT DATE'}</span>
+
       <span className="date-arrow">▼</span>
     </button>
   );
@@ -41,13 +46,16 @@ const DatePickerComponent = ({ onDateSelect, initialDate }) => {
     <div className="date-picker-container">
       <div className="mode-toggle">
         <button
+          type="button"
           className={`mode-btn ${mode === 'global' ? 'active' : ''}`}
           onClick={() => setMode('global')}
           aria-pressed={mode === 'global'}
         >
           🌍 GLOBAL
         </button>
+
         <button
+          type="button"
           className={`mode-btn ${mode === 'kenya' ? 'active' : ''}`}
           onClick={() => setMode('kenya')}
           aria-pressed={mode === 'kenya'}
@@ -75,12 +83,15 @@ const DatePickerComponent = ({ onDateSelect, initialDate }) => {
 
       <div className="quick-dates">
         <button
+          type="button"
           className="quick-btn"
           onClick={() => handleDateChange(new Date('1963-12-12'))}
         >
           Independence Day
         </button>
+
         <button
+          type="button"
           className="quick-btn"
           onClick={() => handleDateChange(new Date())}
         >
@@ -89,7 +100,8 @@ const DatePickerComponent = ({ onDateSelect, initialDate }) => {
       </div>
 
       <div className="selected-date-display">
-        <p className="display-label">SELECTED:</p>
+        <p className="display-label">TODAY:</p>
+
         <p className="display-date">
           {selectedDate.toLocaleDateString('en-US', {
             weekday: 'long',

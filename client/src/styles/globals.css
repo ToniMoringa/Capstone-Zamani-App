@@ -1,3 +1,5 @@
+/* client/src/styles/globals.css */
+
 @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;600;900&display=swap');
 
 :root {
@@ -317,15 +319,19 @@ h6,
   display: block;
 }
 
+/* MOVED TO BOTTOM: Text overlay now sits at the bottom with a gradient */
 .carousel-info-overlay {
   position: absolute;
-  top: 1rem;
-  left: 1rem;
-  right: 1rem;
+  bottom: 0; /* Changed from top: 1rem */
+  left: 0;
+  right: 0;
   z-index: 10;
   pointer-events: none;
   font-family: 'Space Mono', monospace;
   color: #ffffff;
+  /* Gradient background for readability over images */
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.6) 60%, transparent 100%);
+  padding: 2rem 1rem 1rem 1rem; /* Extra top padding for the fade */
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
 }
 
@@ -334,20 +340,22 @@ h6,
   font-size: 0.75rem;
   letter-spacing: 0.1em;
   opacity: 0.85;
+  color: var(--ui-accent); /* Make frame number pop */
 }
 
 .carousel-info-overlay strong {
   display: block;
   margin-top: 0.2rem;
-  font-size: 0.9rem;
-  color: var(--ui-accent);
+  font-size: 1.1rem; /* Slightly larger title */
+  color: #fff;
 }
 
 .carousel-info-overlay p {
   margin: 0.2rem 0 0;
-  font-size: 0.75rem;
-  line-height: 1.3;
+  font-size: 0.85rem;
+  line-height: 1.4;
   opacity: 0.9;
+  color: #ddd;
 }
 
 /* ========================================
@@ -510,8 +518,8 @@ h6,
   }
 
   .home-image-placeholder {
-    height: 160px;
-    max-height: 160px;
+    height: 300px; /* Increased from 160px for better visibility on tablets */
+    max-height: 300px;
   }
 }
 
@@ -553,11 +561,20 @@ h6,
     line-height: 1.6;
   }
 
+  /* MOBILE FIX: Force image container to be tall and fill space */
   .home-image-placeholder {
-    height: 140px;
-    min-height: 140px;
-    max-height: 140px;
-    flex: 0 0 140px;
+    height: 400px !important; /* Taller for mobile as requested */
+    min-height: 400px !important;
+    max-height: 400px !important;
+    flex: 0 0 400px !important;
+    width: 100%;
+  }
+  
+  /* Ensure image fills the container completely */
+  .carousel-slide-item img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
   }
 }
 
@@ -566,5 +583,101 @@ h6,
   *::before,
   *::after {
     scroll-behavior: auto !important;
-  } 
+  }
+}
+
+/* ========================================
+MOBILE PROFILE CARD FIX
+Reduce from 320x495 to a compact dropdown
+======================================== */
+@media (max-width: 767px) {
+  /* Target the user dropdown menu specifically */
+  .user-dropdown, 
+  [role="menu"].user-dropdown {
+    top: 4rem !important;
+    right: 0.5rem !important;
+    width: 200px !important;
+    max-height: none !important;
+    padding: 0.4rem !important;
+    gap: 0.15rem !important;
+    border-radius: 8px !important;
+  }
+
+  /* Compact avatar inside the dropdown */
+  .dropdown-avatar {
+    width: 48px !important;
+    height: 48px !important;
+    max-width: 48px !important;
+    margin: 0 auto 0.2rem !important;
+  }
+
+  /* Smaller email text */
+  .user-dropdown-email {
+    font-size: 0.6rem !important;
+    padding: 0.2rem !important;
+    text-align: center !important;
+  }
+
+  /* Compact menu buttons */
+  .user-dropdown button {
+    min-height: 32px !important;
+    padding: 0.3rem 0.5rem !important;
+    font-size: 0.65rem !important;
+  }
+}
+
+/* ========================================
+REMOVE GOOGLE DRIVE FAB
+======================================== */
+.new-memory-btn,
+.fab,
+.floating-action-button {
+  display: none !important;
+  position: static !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+/* Ensure the Saved page toolbar uses inline buttons instead */
+.saved-toolbar {
+  display: flex !important;
+  gap: 0.5rem !important;
+  justify-content: flex-start !important;
+}
+
+/* ========================================
+FIX TUNING SIGNAL GLITCH
+Ensure loading text is contained and clean
+======================================== */
+.capsule-loading {
+  position: relative !important;
+  z-index: 10 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 1rem !important;
+  min-height: 200px !important;
+  background: transparent !important;
+}
+
+.tuning-text {
+  font-family: 'Space Mono', monospace !important;
+  font-size: 1.2rem !important;
+  letter-spacing: 0.15em !important;
+  color: var(--ui-accent) !important;
+  text-transform: uppercase !important;
+  margin: 0 !important;
+  white-space: nowrap !important;
+}
+
+.date-display {
+  font-size: 0.9rem !important;
+  color: var(--ui-muted) !important;
+  margin-top: 0.5rem !important;
+}
+
+/* Ensure spinner doesn't overlap text */
+.spinner-container {
+  margin-bottom: 0.5rem !important;
 }

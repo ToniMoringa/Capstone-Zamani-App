@@ -6,16 +6,28 @@ import { useTVSystem } from '../context/TVSystemContext';
 import { getCapsules } from '../api/capsules';
 import '../styles/tv.css';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faHouse,
+  faTowerBroadcast,
+  faFloppyDisk,
+  faCircleInfo,
+  faFilm,
+  faPowerOff,
+} from '@fortawesome/free-solid-svg-icons';
+
 const NAV_ITEMS = [
-  { label: 'Home', shortLabel: 'HM', path: '/' },
-  { label: 'Tune', shortLabel: 'CH', path: '/', state: { focusDate: true } },
-  { label: 'Saved', shortLabel: 'SV', path: '/saved' },
-  { label: 'About', shortLabel: 'IN', path: '/about' },
+  { label: 'Home', path: '/', icon: faHouse },
+  { label: 'Tune', path: '/', state: { focusDate: true }, icon: faTowerBroadcast },
+  { label: 'Saved', path: '/saved', icon: faFloppyDisk },
+  { label: 'About', path: '/about', icon: faCircleInfo },
 ];
 
 const getPageLabel = (pathname) => {
   if (pathname.startsWith('/capsule/')) return 'TUNED ARCHIVE';
   if (pathname.startsWith('/saved')) return 'SAVED CAPSULES';
+  if (pathname.startsWith('/profile')) return 'ARCHIVIST PROFILE';
+  if (pathname.startsWith('/help')) return 'OPERATOR MANUAL';
   if (pathname.startsWith('/about')) return 'ABOUT';
   return 'HOME';
 };
@@ -40,8 +52,14 @@ const TVFrame = ({ children, className = '', model = 'TIME CAPSULE' }) => {
   const isBooting = powerState === 'booting';
 
   const isActive = (path, label) => {
-    if (label === 'Tune') return location.pathname.startsWith('/capsule/');
-    if (path === '/') return location.pathname === '/' && label === 'Home';
+    if (label === 'Tune') {
+      return location.pathname.startsWith('/capsule/');
+    }
+
+    if (path === '/') {
+      return location.pathname === '/';
+    }
+
     return location.pathname.startsWith(path);
   };
 
@@ -52,8 +70,6 @@ const TVFrame = ({ children, className = '', model = 'TIME CAPSULE' }) => {
 
   const handleTune = async () => {
     if (!isPoweredOn) return;
-
-    // Load seeded Kenyan dates once, then surf randomly
     try {
       if (!seedDatesRef.current) {
         const all = await getCapsules();
@@ -66,32 +82,22 @@ const TVFrame = ({ children, className = '', model = 'TIME CAPSULE' }) => {
     const seeds = seedDatesRef.current || [];
     const useSeed = seeds.length > 0 && Math.random() < 0.5;
 
-    let date;
-    let mode;
     if (useSeed) {
-      // Land on curated Kenyan seed data
-      date = seeds[Math.floor(Math.random() * seeds.length)];
-      mode = 'kenya';
-    } else {
-      // Surf a random date across 1900 -> today
-      const start = new Date('1900-01-01').getTime();
-      date = new Date(start + Math.random() * (Date.now() - start))
-        .toISOString()
-        .split('T')[0];
-      mode = 'global';
+      const date = seeds[Math.floor(Math.random() * seeds.length)];
+      navigate(`/capsule/${date}/kenya`);
+      return;
     }
 
-    navigate(`/capsule/${date}/${mode}`);
+    const start = new Date('1900-01-01').getTime();
+    const date = new Date(start + Math.random() * (Date.now() - start))
+      .toISOString()
+      .split('T')[0];
+    navigate(`/capsule/${date}/global`);
   };
 
   const handleBack = () => {
     if (!isPoweredOn) return;
-
-    if (window.history.length > 1) {
-      navigate(-1);
-    } else {
-      navigate('/');
-    }
+    window.history.length > 1 ? navigate(-1) : navigate('/');
   };
 
   const handlePower = () => {
@@ -99,10 +105,7 @@ const TVFrame = ({ children, className = '', model = 'TIME CAPSULE' }) => {
       powerOff();
       return;
     }
-
-    if (powerState === 'off') {
-      powerOn(() => navigate('/'));
-    }
+    if (powerState === 'off') powerOn(() => navigate('/'));
   };
 
   return (
@@ -119,7 +122,7 @@ const TVFrame = ({ children, className = '', model = 'TIME CAPSULE' }) => {
         <div className="tv-screen-bezel">
           <div className={`tv-screen ${vhsEnabled ? 'vhs-enabled' : 'vhs-disabled'}`}>
             {powerState === 'off' && (
-              <div className="tv-off-screen" aria-live="polite">
+              <div className="tv-off-screen">
                 <span className="standby-pixel" aria-hidden="true" />
                 <p>STANDBY</p>
                 <span>PRESS POWER TO START</span>
@@ -127,9 +130,9 @@ const TVFrame = ({ children, className = '', model = 'TIME CAPSULE' }) => {
             )}
 
             {isBooting && (
-              <div className="tv-boot-sequence" aria-live="polite">
-                <div className="boot-static" aria-hidden="true" />
-                <div className="boot-beam" aria-hidden="true" />
+              <div className="tv-boot-sequence">
+                <div className="boot-static" />
+                <div className="boot-beam" />
                 <div className="boot-copy">
                   <strong>ZAMANI</strong>
                   <span>TIME CAPSULE</span>
@@ -142,24 +145,17 @@ const TVFrame = ({ children, className = '', model = 'TIME CAPSULE' }) => {
               <>
                 <header className="tv-screen-header">
                   {location.pathname !== '/' && (
-                    <button
-                      type="button"
-                      className="screen-back-button"
-                      onClick={handleBack}
-                      aria-label="Go back"
-                    >
-                      <span aria-hidden="true">←</span>
+                    <button type="button" className="screen-back-button" onClick={handleBack} aria-label="Go back">
+                      ←
                     </button>
                   )}
                   <span className="screen-page-label">{getPageLabel(location.pathname)}</span>
-
                   <AuthControls />
-
                   <button
                     type="button"
                     className={`contrast-toggle ${highContrast ? 'active' : ''}`}
                     onClick={toggleHighContrast}
-                    aria-label={`${highContrast ? 'Disable' : 'Enable'} high contrast mode`}
+                    aria-label="Toggle high contrast"
                     aria-pressed={highContrast}
                   >
                     <span className="contrast-icon" aria-hidden="true">◐</span>
@@ -183,7 +179,7 @@ const TVFrame = ({ children, className = '', model = 'TIME CAPSULE' }) => {
         </div>
 
         <div className="tv-console">
-          <div className="tv-brand" aria-label="Project name">ZAMANI</div>
+          <div className="tv-brand" aria-label="Zamani">ZAMANI</div>
 
           <nav className="tv-controls" aria-label="Time Capsule controls">
             {NAV_ITEMS.map((item) => (
@@ -194,26 +190,23 @@ const TVFrame = ({ children, className = '', model = 'TIME CAPSULE' }) => {
                 onClick={() => (item.label === 'Tune' ? handleTune() : handleNav(item))}
                 aria-label={item.label}
                 aria-current={isPoweredOn && isActive(item.path, item.label) ? 'page' : undefined}
-                disabled={
-                  !isPoweredOn ||
-                  (item.label === 'Saved' && !isAuthenticated)
-                }
+                disabled={!isPoweredOn || (item.label === 'Saved' && !isAuthenticated)}
               >
-                <span className="control-short">{item.shortLabel}</span>
+                <FontAwesomeIcon icon={item.icon} className="control-icon" />
                 <span className="control-label">{item.label}</span>
               </button>
             ))}
 
             <button
               type="button"
-              className={`tv-control-button tv-vhs-button ${vhsEnabled ? 'active' : ''}`}
+              className={`tv-control-button tv-vhs-button ${vhsEnabled ? 'vhs-on' : ''}`}
               onClick={toggleVhs}
-              aria-label={`${vhsEnabled ? 'Disable' : 'Enable'} VHS effect`}
+              aria-label={vhsEnabled ? 'Disable VHS effect' : 'Enable VHS effect'}
               aria-pressed={vhsEnabled}
               disabled={!isPoweredOn}
             >
-              <span className="control-short">VHS</span>
-              <span className="control-label">FX</span>
+              <FontAwesomeIcon icon={faFilm} className="control-icon" />
+              <span className="control-label">VHS</span>
             </button>
 
             <div className="tv-status" aria-label={`Television ${powerState}`}>
@@ -228,7 +221,7 @@ const TVFrame = ({ children, className = '', model = 'TIME CAPSULE' }) => {
               onClick={handlePower}
               disabled={isBooting}
             >
-              <span aria-hidden="true">⏻</span>
+              <FontAwesomeIcon icon={faPowerOff} />
             </button>
           </nav>
         </div>

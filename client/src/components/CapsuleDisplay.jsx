@@ -1,11 +1,11 @@
-import { fetchCapsuleData } from '../api/wikipedia';
-import { fetchVisualArtifact } from '../api/nasa';
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import TVFrame from './TVFrame';
 import LoadingSpinner from './LoadingSpinner';
 import ErrorMessage from './ErrorMessage';
 import SaveButton from './SaveButton';
+import { fetchCapsuleData } from '../api/wikipedia';
+import { fetchVisualArtifact } from '../api/visuals'; 
 import { formatDate } from '../utils/helpers';
 import '../styles/capsule.css';
 
@@ -13,41 +13,37 @@ const CapsuleDisplay = () => {
   const { date, mode } = useParams();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [data, setData] = useState({
-    events: [],
-    births: [],
-    visual: null,
-  });
+  const [data, setData] = useState({ events: [], births: [], visual: null });
 
   useEffect(() => {
-    const loadCapsuleData = async () => {
+    const loadData = async () => {
       setLoading(true);
       setError(null);
       try {
         const capsuleData = await fetchCapsuleData(date, mode);
-
-        if (capsuleData.source === 'error') {
-          throw new Error(capsuleData.error || 'Archive unavailable');
-        }
-
+        if (capsuleData.source === 'error') throw new Error(capsuleData.error || 'Archive unavailable');
+        
         const allItems = [...capsuleData.events, ...capsuleData.births];
         const visual = await fetchVisualArtifact(allItems);
-
+        
         setData({
           events: capsuleData.events,
           births: capsuleData.births,
-          visual: visual,
+          visual,
         });
       } catch (err) {
-        console.error('Broadcast Error:', err);
         setError(err.message || 'Signal Lost: Unable to retrieve archive.');
       } finally {
         setTimeout(() => setLoading(false), 800);
       }
     };
-
-    if (date) loadCapsuleData();
+    if (date) loadData();
   }, [date, mode]);
+
+  const getYouTubeEmbedUrl = (url) => {
+    const videoId = url.split('v=')[1]?.split('&')[0] || url.split('/').pop();
+    return `https://www.youtube.com/embed/${videoId}`;
+  };
 
   if (loading) {
     return (
@@ -64,16 +60,12 @@ const CapsuleDisplay = () => {
   if (error) {
     return (
       <TVFrame brand="ZAMANI BROADCAST">
-        <ErrorMessage
-          message={error}
-          onRetry={() => window.location.reload()}
-        />
+        <ErrorMessage message={error} onRetry={() => window.location.reload()} />
       </TVFrame>
     );
   }
 
   const hasNoData = data.events.length === 0 && data.births.length === 0;
-  const primaryEvent = data.events[0] || null;
 
   return (
     <TVFrame brand={`ZAMANI • ${mode.toUpperCase()} MODE`}>
@@ -81,11 +73,11 @@ const CapsuleDisplay = () => {
         <header className="capsule-header">
           <div className="header-meta">
             <span className="broadcast-tag">ON THIS DAY</span>
-            <SaveButton date={date} mode={mode} currentEvent={primaryEvent} />
+            <SaveButton date={date} mode={mode} currentEvent={data.events[0]} />
           </div>
           <h1 className="capsule-date">{formatDate(date, 'full')}</h1>
           <div className="mode-indicator">
-            {mode === 'global' ? '🌍 GLOBAL ARCHIVE' : '🇰🇪 KENYA ARCHIVE'}
+            {mode === 'global' ? '🌍 GLOBAL ARCHIVE' : '🇰 KENYA ARCHIVE'}
           </div>
         </header>
 
@@ -93,8 +85,8 @@ const CapsuleDisplay = () => {
           <div className="empty-state">
             <p>NO SIGNAL DETECTED</p>
             <p className="subtext">
-              {mode === 'kenya'
-                ? 'No Kenyan records found for this date in our archive.'
+              {mode === 'kenya' 
+                ? 'No Kenyan records found for this date.' 
                 : 'Try selecting another date or switching modes.'}
             </p>
           </div>
@@ -107,19 +99,21 @@ const CapsuleDisplay = () => {
                 <h2 className="section-title">VISUAL ARTIFACT</h2>
                 <div className="nasa-card">
                   <div className="image-wrapper">
-                    <img
-                      src={data.visual.url}
-                      alt={data.visual.title}
-                      loading="lazy"
-                      referrerPolicy={
-                        data.visual.referrerPolicy || 'no-referrer'
-                      }
-                      onError={(e) => {
-                        e.target.style.display = 'none';
-                        e.target.parentElement.innerHTML =
-                          '<div class="placeholder-text">IMAGE UNAVAILABLE</div>';
-                      }}
-                    />
+                    {data.visual.url.includes('youtube.com') || data.visual.url.includes('youtu.be') ? (
+                      <iframe
+                        width="100%" height="100%"
+                        src={getYouTubeEmbedUrl(data.visual.url)}
+                        title="YouTube video player" frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen style={{ borderRadius: '6px' }}
+                      />
+                    ) : (
+                      <img
+                        src={data.visual.url} alt={data.visual.title}
+                        loading="lazy" referrerPolicy="no-referrer"
+                        onError={(e) => { e.target.style.display = 'none'; e.target.parentElement.innerHTML = '<div class="placeholder-text">IMAGE UNAVAILABLE</div>'; }}
+                      />
+                    )}
                   </div>
                   <div className="nasa-info">
                     <h3>{data.visual.title}</h3>
@@ -135,12 +129,8 @@ const CapsuleDisplay = () => {
                 <div className="events-list">
                   {data.events.slice(0, 5).map((event, idx) => (
                     <article key={idx} className="event-card">
-                      <span className="event-year">
-                        {event.year || event.date}
-                      </span>
-                      <p className="event-text">
-                        {event.text || event.description}
-                      </p>
+                      <span className="event-year">{event.year || event.date}</span>
+                      <p className="event-text">{event.text || event.description}</p>
                     </article>
                   ))}
                 </div>
@@ -153,13 +143,9 @@ const CapsuleDisplay = () => {
                 <div className="births-grid">
                   {data.births.slice(0, 6).map((person, idx) => (
                     <div key={idx} className="birth-card">
-                      <span className="birth-year">
-                        {person.year || person.date}
-                      </span>
+                      <span className="birth-year">{person.year || person.date}</span>
                       <strong>{person.name || person.title}</strong>
-                      <p className="birth-desc">
-                        {person.text || person.description}
-                      </p>
+                      <p className="birth-desc">{person.text || person.description}</p>
                     </div>
                   ))}
                 </div>

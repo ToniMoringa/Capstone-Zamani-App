@@ -90,7 +90,7 @@ const Home = () => {
     }
   }, [location.state]);
 
-  // Fast preloading for immediate slide availability
+  // Preload image assets to prevent visual flickering during transitions
   useEffect(() => {
     HOME_ARCHIVE_SLIDES.forEach((slide) => {
       const img = new Image();
@@ -98,7 +98,7 @@ const Home = () => {
     });
   }, []);
 
-  // Interval timer for carousel auto-slide
+  // Timer for vertical auto-sliding
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % HOME_ARCHIVE_SLIDES.length);
@@ -131,7 +131,6 @@ const Home = () => {
     }
   };
 
-  // Traps scroll wheel inside the placeholder div
   const handleWheel = (e) => {
     e.stopPropagation();
     e.preventDefault();
@@ -157,7 +156,7 @@ const Home = () => {
           <section className="home-copy">
             <span className="broadcast-kicker">
               <span className="live-dot" aria-hidden="true" />
-              DIGITAL RECOLLECTION CENTRE
+              Explore. Learn. Remember.
             </span>
             <h1>
               TUNE INTO <span>HISTORY</span>
@@ -171,7 +170,6 @@ const Home = () => {
             </div>
           </section>
 
-          {/* Original outer container preserved */}
           <div 
             className="home-image-placeholder"
             onTouchStart={handleTouchStart}
@@ -185,7 +183,7 @@ const Home = () => {
                 style={{ transform: `translateY(-${currentIndex * 100}%)` }}
               >
                 {HOME_ARCHIVE_SLIDES.map((slide, idx) => (
-                  <div className="carousel-slide-item" key={slide.src}>
+                  <div className="carousel-slide-item" key={`${slide.src}-${idx}`}>
                     <img
                       src={slide.src}
                       alt={slide.alt}

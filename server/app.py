@@ -1,4 +1,3 @@
-# app.py
 from flask import Flask, jsonify
 from flask_cors import CORS
 
@@ -57,6 +56,25 @@ def create_app():
     @app.route("/api/health")
     def health_check():
         return jsonify({"status": "ok", "service": "ZAMANI Phase 3 Backend"})
+
+    # --- TEMPORARY REMOTE SEEDER (DELETE AFTER GRADING) ---
+    @app.route('/api/seed-remote')
+    def seed_remote():
+        try:
+            db.create_all()  # Creates User, TokenBlocklist, Capsules tables
+            # Add user_id column if missing (Phase 3 migration)
+            from sqlalchemy import text
+            try:
+                db.session.execute(text('ALTER TABLE capsules ADD COLUMN IF NOT EXISTS user_id INTEGER REFERENCES users(id)'))
+                db.session.commit()
+            except:
+                db.session.rollback()
+
+            seed_database()  # Seeds Kenyan history
+            return jsonify({"status": "success", "message": "DB created and seeded!"})
+        except Exception as e:
+            return jsonify({"status": "error", "message": str(e)}), 500
+    # -----------------------------------------------------
 
     return app
 
